@@ -5,10 +5,10 @@ body {
 
 .navbar {
     background-color: #0d639c;
+    
 }
-
 .navbar-brand {
-    color: #ffffff !important;
+    color: #ffffff !important; 
     font-size: 30px;
 }
 
@@ -19,7 +19,7 @@ body {
 }
 
 .nav-link {
-    color: #ffffff !important;
+    color: #ffffff !important; 
     font-size: 18px;
 }
 
@@ -28,12 +28,18 @@ body {
     height: 45px;
     margin-left: 10px;
 }
-
-.btn-subir{
-    background-color: #0bdc4d;
-    border-color: #005073; 
+h2 {
+    color: #005073;
 }
-.btn-atras{
-    background-color: #485ecb23;
+
+.table {
+    background-color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+.btn-2{
+    background-color: #0aaff5;
     border-color: #005073; 
 }
