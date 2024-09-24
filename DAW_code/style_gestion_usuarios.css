@@ -47,14 +47,26 @@ h2 {
 }
 
 .btn-2{
-    background-color: #005073;
+    background-color: #0aaff5;
     border-color: #005073; 
 }
 .btn-2-1{
     background-color: #00ff59;
     border-color: #005073; 
 }
-.btn-2-2{
-    background-color: #00ff59;
+
+.boton-desplegable{
+    height: 35px;
+    width: 35px;
+    font-size: 15px;
+    border-radius: 5px;
+}
+.btn-editar{
+    background-color: #85a0c8;
     border-color: #005073; 
+}
+.btn-eliminar{
+    background-color: #c80e0e;
+    border-color: #005073; 
+
 }
