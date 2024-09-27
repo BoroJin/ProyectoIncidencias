@@ -5,10 +5,10 @@ body {
 
 .navbar {
     background-color: #0d639c;
+    
 }
-
 .navbar-brand {
-    color: #ffffff !important;
+    color: #ffffff !important; 
     font-size: 30px;
 }
 
@@ -19,7 +19,7 @@ body {
 }
 
 .nav-link {
-    color: #ffffff !important;
+    color: #ffffff !important; 
     font-size: 18px;
 }
 
@@ -28,7 +28,6 @@ body {
     height: 45px;
     margin-left: 10px;
 }
-
 h2 {
     color: #005073;
 }
@@ -40,33 +39,7 @@ h2 {
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: #f2f2f2;
 }
-
-.btn-primary {
-    background-color: #005073;
-    border-color: #005073;
-}
-
 .btn-2{
     background-color: #0aaff5;
     border-color: #005073; 
-}
-.btn-2-1{
-    background-color: #00ff59;
-    border-color: #005073; 
-}
-
-.boton-desplegable{
-    height: 35px;
-    width: 35px;
-    font-size: 15px;
-    border-radius: 5px;
-}
-.btn-editar{
-    background-color: #85a0c8;
-    border-color: #005073; 
-}
-.btn-eliminar{
-    background-color: #c80e0e;
-    border-color: #005073; 
-
 }

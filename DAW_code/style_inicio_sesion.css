@@ -1,0 +1,32 @@
+body{
+    background-color: #0d639c;
+    font-family: Serif;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+    margin-top: 10px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    width: 600px;
+    height: 600px;
+    
+}
+.btn-1{
+    background-color: #0aaff5;
+    border-color: #005073; 
+    margin-top: 10px;
+}
+
+.logo-muni{
+    width: 150px;
+    height: 150px;
+    margin-top: 110px;
+}
