@@ -1,5 +1,6 @@
 body {
-    background-color: #171717;
+    font-family: Serif;
+    background-color: #e6f7ff;
 }
 
 .navbar {
@@ -44,8 +45,7 @@ body {
 }
 
 .Registros {
-    background-color: #333;
-    color: #fff;
+    background-color: #FFFFFF;
 }
 
 .table thead {
