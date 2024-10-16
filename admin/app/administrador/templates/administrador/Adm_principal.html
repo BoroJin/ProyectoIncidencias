@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Administrador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light sidebar">
+            <!-- actualizar logo de manera dinamica -->
+            <a class="navbar-brand" href="{% url 'adm_principal' %}">
+                <img src="{{ logo }}" alt="Logo Muni">
+                {{ nombre_municipalidad }}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Bienvenido Administrador
+                            <img
+                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container text-center mt-4">
+        <h2>Seleccione una operacion a realizar</h2>
+    </div>
+
+    <main role="main" class="col-md-9 ">
+        <div class="row">
+            <div class="col-md-4">
+
+                <a href="{% url 'adm_actualizar_logo' %}" class="card mb-4 text-decoration-none">
+                    <img src="https://www.svgrepo.com/show/73131/edit-button.svg" class="card-img-top" alt="editar">
+                    <div class="card-body">
+                        <h5 class="card-title">Actualizar logo</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+
+                <a href="{% url 'adm_gestion_usuarios' %}" class="card mb-4 text-decoration-none">
+                    <img src="https://www.svgrepo.com/show/486504/user-management-filled.svg" class="card-img-top"
+                        alt="gestion">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestion de usuarios</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+
+                <a href="{% url 'adm_ticket' %}" class="card mb-4 text-decoration-none">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeujOaRWnmiTkG15-RkZrieVZ_JKumVf1CPQ&s"
+                        class="card-img-top" alt="notificaciones">
+                    <div class="card-body">
+                        <h5 class="card-title">Tickets</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center py-4">
+        <p>Si puede leer esto es que funcionó :D</p>
+        <p>si no, Error de capa 8 D:</p>
+    </footer>
+</body>
+
+<!-- Enlace a jQuery y Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
