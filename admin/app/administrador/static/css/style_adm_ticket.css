@@ -1,0 +1,45 @@
+body {
+    font-family: Serif;
+    background-color: #e6f7ff;
+}
+
+.navbar {
+    background-color: #0d639c;
+    
+}
+.navbar-brand {
+    color: #ffffff !important; 
+    font-size: 30px;
+}
+
+.navbar-brand img {
+    width: 65px;
+    height: 65px;
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: #ffffff !important; 
+    font-size: 18px;
+}
+
+.nav-link img {
+    width: 45px;
+    height: 45px;
+    margin-left: 10px;
+}
+h2 {
+    color: #005073;
+}
+
+.table {
+    background-color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+.btn-2{
+    background-color: #0aaff5;
+    border-color: #005073; 
+}
