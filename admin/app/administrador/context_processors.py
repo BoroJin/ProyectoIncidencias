@@ -1,3 +1,4 @@
+#maxi
 from .models import Logo
 
 def logo_context(request):

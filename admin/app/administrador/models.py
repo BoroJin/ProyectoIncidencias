@@ -1,3 +1,5 @@
+#maxi
+
 from django.db import models
 
 #se crea la tabla en la base de datos para almacenar usuarios

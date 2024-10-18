@@ -126,9 +126,6 @@ USE_TZ = True
 #origina# STATIC_URL = 'static/' ##se modifico
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -138,3 +135,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #para que se pueda importar las imagenes desde la carpeta
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # O tu directorio específico si está en una app
+    os.path.join(BASE_DIR, 'static')
+]
