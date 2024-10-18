@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Administrador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_adm_ticket.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light sidebar">
+            <!-- actualizar logo de manera dinamica -->
+            <a class="navbar-brand" href="{% url 'adm_principal' %}">
+                <img src="{{ logo }}" alt="Logo Muni">
+                {{ nombre_municipalidad }}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Bienvenido Administrador
+                            <img
+                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2>Tickets</h2>
+            </div>
+
+            <div class="col-md-4">
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar usuario">
+            </div>
+        </div>
+
+        <table class="table tabla">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 1%;">ID</th>
+                    <th scope="col" style="width: 10%;">Nombre</th>
+                    <th scope="col" style="width: 10%;">Correo Electrónico</th>
+                    <th scope="col" style="width: 10%;">Rol</th>
+                    <th scope="col" style="width: 10%;">Tema</th>
+                    <th scope="col" style="width: 10%;">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="tabla_usuarios">
+                <!-- Aquí irán los usuarios -->
+                <tr>
+                    <td>1</td>
+                    <td>Juan Pérez</td>
+                    <td>juan.perez@gmail.com</td>
+                    <td>Gestor Territorial</td>
+                    <td>Se me olvido la contraseña de inicio de sesion</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Ver</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>María Gómez</td>
+                    <td>maria.gomez@gmail.com</td>
+                    <td>Resolutor</td>
+                    <td>Se me cambio el color de mi perfil de usuario</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Ver</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Pedro Fernández</td>
+                    <td>pedro.fernandez@gmail.com</td>
+                    <td>Director</td>
+                    <td>No dice mi nombre en mi usuario cuando ingreso</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Ver</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="col-md-4">
+            <a href="{% url 'adm_principal' %}" class="btn btn-2">Volver</a>
+        </div>
+
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

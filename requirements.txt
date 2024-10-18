@@ -11,6 +11,6 @@
 #### Se deben agregar todas las dependencias - librerias que se esten utilizando en el proyedcto.
 
 django
-
-
+psycopg2
+pillow
 

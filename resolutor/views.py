@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def dashboard_resolutor(request):
+    return render(request, 'resolutor/dashboard_resolutor.html')
