@@ -1,3 +1,5 @@
+#maxi
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Usuario, Logo  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
@@ -15,6 +17,9 @@ def adm_principal(request):
 
 def adm_ticket(request):
     return render(request, 'administrador/Adm_ticket.html')
+
+def registro_auditoria(request):
+    return render(request, 'administrador/Registros_de_auditoria.html')
 
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
@@ -61,3 +66,18 @@ def eliminar_usuario(request, usuario_id):
         usuario.delete()
         messages.success(request, 'Usuario eliminado correctamente.')
     return redirect('adm_gestion_usuarios')  # Redirige de vuelta a la gestión de usuarios
+
+def editar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    
+    if request.method == 'POST':
+        usuario.nombre = request.POST['nombre']
+        usuario.correo_electronico = request.POST['correo']
+        usuario.rol = request.POST['rol']
+        usuario.contrasena = request.POST['contrasena']
+        usuario.save()
+        
+        messages.success(request, 'Usuario actualizado correctamente.')
+        return redirect('adm_gestion_usuarios')
+    
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})

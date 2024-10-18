@@ -80,12 +80,14 @@ h2 {
     border-radius: 5px;
 }
 .btn-editar{
-    background-color: #4375bf;
+    background-color: #266fdc;
     border-color: #005073; 
+    width: 100px;
 }
 .btn-eliminar{
-    background-color: #951f1f;
+    background-color: #d21111;
     border-color: #005073; 
+    width: 100px;
 }
 .btn-eliminar:hover{
     background-color: #2f4e9cb6;

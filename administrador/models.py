@@ -1,3 +1,5 @@
+#maxi
+
 from django.db import models
 
 #se crea la tabla en la base de datos para almacenar usuarios
@@ -5,6 +7,7 @@ class Usuario(models.Model):
     rol = models.CharField(max_length=1000, choices=[('admin', 'Administrador'), ('g.t', 'Gestor Territorial'), ('d', 'Director'), ('dep', 'Departamento de obras'), ('r', 'Resolutor')])
     nombre = models.CharField(max_length=100)
     correo_electronico = models.EmailField()
+    contrasena = models.CharField(max_length=100, default='12345')
     
     def __str__(self):
         return self.nombre

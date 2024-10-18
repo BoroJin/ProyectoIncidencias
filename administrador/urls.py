@@ -1,3 +1,5 @@
+#maxi
+
 from django.urls import path
 from . import views  # Importa las vistas de tu aplicación
 
@@ -11,5 +13,8 @@ urlpatterns = [
     path('adm_inicio_session/', views.adm_inicio_sesion, name='adm_inicio_session'), 
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),  # Nueva URL para eliminar
     path('adm_recuperacion/', views.adm_recuperacion, name='adm_recuperacion'), 
+    path('adm_auditoria/', views.registro_auditoria, name='adm_auditoria'), 
+    path('editar_usuario/<int:usuario_id>/', views.editar_usuario, name='editar_usuario'),
+
     
 ]
