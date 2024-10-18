@@ -67,3 +67,17 @@ def eliminar_usuario(request, usuario_id):
         messages.success(request, 'Usuario eliminado correctamente.')
     return redirect('adm_gestion_usuarios')  # Redirige de vuelta a la gestión de usuarios
 
+def editar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    
+    if request.method == 'POST':
+        usuario.nombre = request.POST['nombre']
+        usuario.correo_electronico = request.POST['correo']
+        usuario.rol = request.POST['rol']
+        usuario.contrasena = request.POST['contrasena']
+        usuario.save()
+        
+        messages.success(request, 'Usuario actualizado correctamente.')
+        return redirect('adm_gestion_usuarios')
+    
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})

@@ -19,7 +19,7 @@
                 <img src="{{ logo }}" alt="Logo Muni">
                 {{ nombre_municipalidad }}
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -36,13 +36,14 @@
             </div>
         </nav>
     </header>
-    
+
     <form method="post" enctype="multipart/form-data" class="p-4 border rounded">
         {% csrf_token %}
         <!-- Campo para actualizar el nombre de la municipalidad -->
         <div class="form-group">
             <label for="nombre_municipalidad">Nombre de la Municipalidad</label>
-            <input type="text" class="form-control" id="nombre_municipalidad" name="nombre_municipalidad" value="{{ form.nombre_municipalidad.value|default_if_none:"Municipalidad X" }}" required>
+            <input type="text" class="form-control" id="nombre_municipalidad" name="nombre_municipalidad"
+                value="{{ form.nombre_municipalidad.value|default_if_none:" Municipalidad X" }}" required>
         </div>
         <!-- Campo para actualizar el logo -->
         <div class="form-group">
@@ -53,14 +54,15 @@
         <div class="form-group mt-3">
             <a href="{% url 'adm_principal' %}" class="btn btn-atras">Atrás</a>
             <button type="submit" class="btn btn-subir">Subir</button>
-            
+
         </div>
     </form>
-    
 
+
+
+    <!-- Enlace a jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<!-- Enlace a jQuery y Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
