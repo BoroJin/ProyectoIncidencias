@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -39,4 +41,52 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Estilos para la ventana de notificaciones */
+.notification-menu {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9); /* Fondo ligeramente translúcido */
+  backdrop-filter: blur(20px); /* Mayor desenfoque de fondo */
+  border-radius: 16px; /* Bordes redondeados para un estilo moderno */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Sombra más prominente */
+  padding: 1rem;
+  z-index: 1000;
+  width: 320px; /* Ancho un poco mayor para más espacio */
+  right: 0;
+  top: 100%;
+}
+
+/* Estilo del encabezado de notificaciones */
+.notification-menu h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000000; /* Texto en negro */
+  margin-bottom: 0.5rem;
+}
+
+/* Estilo del botón "Borrar todo" */
+.notification-menu .btn-link {
+  color: #0078d4; /* Azul similar al de Windows 11 */
+  font-size: 0.9rem;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-menu .btn-link:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para la lista de notificaciones */
+.notification-menu .list-group-item {
+  border: none;
+  padding: 0.75rem 1rem;
+  background: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.notification-menu .list-group-item:hover {
+  background-color: rgba(0, 0, 0, 0.05); /* Fondo al hacer hover */
+  border-radius: 8px;
 }

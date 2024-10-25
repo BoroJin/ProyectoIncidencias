@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { FaBell } from "react-icons/fa"; // Importa el icono de campana
 
 const App = () => {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false); // Estado para mostrar/ocultar notificaciones
   const mapRef = useRef(null);
   const leafletMarkersRef = useRef({});
 
@@ -89,6 +91,11 @@ const App = () => {
     setSelectedMarker(null);
   };
 
+  const clearNotifications = () => {
+    // Aquí podrías agregar lógica para borrar todas las notificaciones si fuera necesario.
+    console.log("Borrar todas las notificaciones");
+  };
+
   return (
     <div className="d-flex flex-column vh-100">
       {/* Header */}
@@ -98,12 +105,54 @@ const App = () => {
             <div className="col">
               <h1 className="h4 mb-0">Municipalidad X</h1>
             </div>
-            <div className="col-auto">
-              <span className="me-2">User name</span>
-              <div
-                className="rounded-circle bg-white"
-                style={{ width: "32px", height: "32px" }}
-              ></div>
+            <div className="col-auto d-flex align-items-center">
+              <div className="position-relative me-3">
+                <FaBell
+                  className="text-white cursor-pointer"
+                  size={24}
+                  onClick={() => setShowNotifications(!showNotifications)}
+                />
+                {showNotifications && (
+                  <div
+                    className="notification-menu position-absolute bg-white border rounded p-2"
+                    style={{
+                      right: 0,
+                      top: "100%",
+                      zIndex: 1000,
+                      width: "300px",
+                    }}
+                  >
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h5 className="mb-0">Notificaciones</h5>
+                      <button
+                        className="btn btn-link text-decoration-none p-0"
+                        onClick={clearNotifications}
+                      >
+                        Borrar todo
+                      </button>
+                    </div>
+                    <ul className="list-group list-group-flush">
+                      <li className="list-group-item">
+                        Actualización de progreso de una incidencia
+                      </li>
+                      <li className="list-group-item">
+                        Se completó una incidencia pendiente
+                      </li>
+                      <li className="list-group-item">
+                        Notificar la llegada de un nuevo formulario de
+                        incidencias que haya sido llenado
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div>
+                <span className="me-2">User name</span>
+                <div
+                  className="rounded-circle bg-white"
+                  style={{ width: "32px", height: "32px" }}
+                ></div>
+              </div>
             </div>
           </div>
         </div>
@@ -169,28 +218,11 @@ const App = () => {
               ) : (
                 <div className="card mb-3">
                   <div className="card-body">
-                    <h5 className="card-title">Ultimas Notificaciones</h5>
-                    <ul className="list-group list-group-flush">
-                      <li className="list-group-item">
-                        Actualización de progreso de una incidencia
-                      </li>
-                      <li className="list-group-item">
-                        Se completó una incidencia pendiente
-                      </li>
-                      <li className="list-group-item">
-                        Notificar la llegada de un nuevo formulario de
-                        incidencias que haya sido llenado
-                      </li>
-                    </ul>
+                    <h5 className="card-title">Marcadores añadidos</h5>
+                    <p>Número de incidencias: {markers.length}</p>
                   </div>
                 </div>
               )}
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">Marcadores añadidos</h5>
-                  <p>Número de incidencias: {markers.length}</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
