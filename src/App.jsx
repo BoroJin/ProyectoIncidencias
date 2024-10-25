@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { FaBell } from "react-icons/fa"; // Importa el icono de campana
+import { FaBell, FaTools } from "react-icons/fa";
+import "./App.css"; // Asegúrate de que la ruta sea correcta
 
 const App = () => {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false); // Estado para mostrar/ocultar notificaciones
+  const [showNotifications, setShowNotifications] = useState(false);
   const mapRef = useRef(null);
   const leafletMarkersRef = useRef({});
 
@@ -92,7 +93,6 @@ const App = () => {
   };
 
   const clearNotifications = () => {
-    // Aquí podrías agregar lógica para borrar todas las notificaciones si fuera necesario.
     console.log("Borrar todas las notificaciones");
   };
 
@@ -106,9 +106,19 @@ const App = () => {
               <h1 className="h4 mb-0">Municipalidad X</h1>
             </div>
             <div className="col-auto d-flex align-items-center">
+              {/* Botón de Soporte Técnico */}
+              <div className="position-relative me-3">
+                <FaTools
+                  className="soporte-icon"
+                  size={24}
+                  onClick={() =>
+                    (window.location.href = "/soporte-tecnico")
+                  } /* Cambiar el /soporte-tecnico por la pagina a donde redirigira */
+                />
+              </div>
               <div className="position-relative me-3">
                 <FaBell
-                  className="text-white cursor-pointer"
+                  className="notification-icon"
                   size={24}
                   onClick={() => setShowNotifications(!showNotifications)}
                 />
@@ -120,6 +130,8 @@ const App = () => {
                       top: "100%",
                       zIndex: 1000,
                       width: "300px",
+                      background: "rgba(200, 200, 200, 0.85)", // Fondo gris translúcido
+                      backdropFilter: "blur(10px)", // Efecto de transparencia suave
                     }}
                   >
                     <div className="d-flex justify-content-between align-items-center mb-2">
