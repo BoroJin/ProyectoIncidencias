@@ -22,7 +22,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('administrador.urls')),  # 'administrador' es el nombre de tu app
-    path('resolutor', include('resolutor.urls')), 
+    path('resolutor', include('resolutor.urls')),
+    path('gestor_territorial/', include('gestor_territorial.urls')),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

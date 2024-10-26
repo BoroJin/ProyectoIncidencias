@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'administrador', ##se agrego
     'resolutor',
+    'gestor_territorial',
 ]
 
 MIDDLEWARE = [
@@ -81,9 +82,9 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'usuarios',
+        'NAME': 'server1',
         'USER': 'postgres',
-        'PASSWORD': 'lolandmine1',
+        'PASSWORD': 'password123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
