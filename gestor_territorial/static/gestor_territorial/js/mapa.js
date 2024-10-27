@@ -18,7 +18,7 @@ map.on('click', function(e) {
 
     document.getElementById("buttons").style.display = "flex";
 
-    marker.bindPopup("<b>Ubicación seleccionada</b>").openPopup();
+    marker.bindPopup("<b>Ubicación de la Incidencia</b>").openPopup();
 });
 
 document.getElementById("removeMarker").addEventListener("click", function() {
