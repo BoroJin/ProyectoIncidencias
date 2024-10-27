@@ -49,12 +49,13 @@ h2 {
 .btn-2{
     background-color: #0aaff5;
     border-color: #005073;
-    margin-right: 700px; 
+    margin-right: 600px; 
 }
 .btn-2-1{
     background-color: #00ff59;
     border-color: #005073;
     margin-right: 10px; 
+    white-space: nowrap;
 }
 .boton-a{
     background-color: #00ff59;

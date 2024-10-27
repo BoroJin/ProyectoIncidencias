@@ -28,8 +28,7 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Bienvenido Administrador
-                            <img
-                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
+                            <img src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
                         </a>
                     </li>
                 </ul>
@@ -37,22 +36,20 @@
         </nav>
     </header>
 
-    <form method="post" enctype="multipart/form-data" class="p-4 border rounded">
+    <form method="POST" enctype="multipart/form-data" onsubmit="validarFormulario(event)">
+        {% csrf_token %}
         <div class="form-group">
-            <label for="file">Busque el archivo a subir</label>
-            <input type="file" class="form-control-file" id="file" name="file" accept=".xlsx, .csv, .xml">
+            <label for="file">Seleccionar archivo:</label>
+            <input type="file" class="form-control-file" id="file" name="file" accept=".csv, .xlsx" required>
         </div>
-        <div class="form-group mt-3">
-            <a href="{% url 'adm_gestion_usuarios' %}" class="btn btn-atras">atras</a>
-            <a href="{% url 'adm_cargar_masiva' %}" class="btn btn-subir">subir</a>
-
-        </div>
+        <button type="submit" class="btn btn-primary mt-3">Subir</button>
     </form>
-
-
-
-
+    
+    <div id="popup" style="display: none;">
+        ¡Formulario enviado correctamente!
+      </div>
     <!-- Enlace a jQuery y Bootstrap JS -->
+    <script src="{% static 'administrador/popUp_condicional' %}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -15,6 +15,12 @@ urlpatterns = [
     path('adm_recuperacion/', views.adm_recuperacion, name='adm_recuperacion'), 
     path('adm_auditoria/', views.registro_auditoria, name='adm_auditoria'), 
     path('editar_usuario/<int:usuario_id>/', views.editar_usuario, name='editar_usuario'),
+    path('exportar_csv/', views.exportar_csv, name='exportar_csv'),
+    path('exportar_usr_vista/', views.exportar_usr_vista, name='exportar_usr_vista'),
+    path('importar_usr_vista/', views.importar_usr_vista, name='importar_usr_vista'),
+    path('recibir_y_validar/', views.recibir_y_validar_csv, name='recibir_y_validar'),
+    path('agregar_usuarios_desde_csv/', views.agregar_usuarios_desde_csv, name='agregar_usuarios_desde_csv'),
+    
 
     
 ]

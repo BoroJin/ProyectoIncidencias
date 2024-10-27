@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'usuarios',
+        'NAME': 'DesarrolloWeb',
         'USER': 'postgres',
         'PASSWORD': 'lolandmine1',
         'HOST': 'localhost',
