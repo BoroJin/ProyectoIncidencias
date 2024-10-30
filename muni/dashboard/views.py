@@ -38,12 +38,25 @@ def crear_atributo(request):
             data = json.loads(request.body)  # Cargar los datos JSON
             titulo = data.get('titulo')
             nombree = data.get('nombree')
+            opcion=data.get('opcion')
             
             print(titulo)
             print(nombree)
-            with connection.cursor() as cursor:
-                sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
-                cursor.execute(sql)
+            print(opcion)
+            if opcion=='texto':
+                with connection.cursor() as cursor:
+                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
+                    cursor.execute(sql)
+
+            if opcion=='numero':
+                with connection.cursor() as cursor:
+                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} INTEGER;"
+                    cursor.execute(sql)
+
+            if opcion=='estado':
+                with connection.cursor() as cursor:
+                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
+                    cursor.execute(sql)
 
 
             return JsonResponse({'mensaje': 'Columna agregada exitosamente'})
