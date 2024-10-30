@@ -47,35 +47,40 @@
 
         <div class="form-container">
           <form id="formulario" method="POST">
+            <h2>Formulario</h2>
+
             <div>
-              <h2>Formulario</h2>
-
               <label for="titulo">Titulo del campo:</label>
-
               <input
                 type="text"
                 id="titulo"
                 placeholder="Titulo para los registros"
               />
-
-              <span class="error" id="error_nombre"></span>
             </div>
 
             <div>
-              <label for="nombree">Nombre del campo:</label>
+              <label for="nombree"
+                >Nombre del campo:[ESTE SE AGREGARA A LA BD]</label
+              >
               <input
                 type="text"
                 id="nombree"
                 placeholder="Texto visible para el usuario"
               />
-              <span class="error" id="error_titulo"></span>
             </div>
-
+            <div id="option">
+              <label for="tipoCampo">Tipo de campo </label>
+              <select id="tipoCampo">
+                <option value="texto">Texto</option>
+                <option value="numero">Numeros</option>
+                <option value="estado">Activo/Inactivo</option>
+              </select>
+            </div>
             <button type="button" id="btnAgregar" onClick="">
               Visualizar campo
             </button>
 
-            <button type="button" id="btnEnviar" onClick="tomarAtributo()">
+            <button type="button" class="btnEnviar" onClick="tomarAtributo()">
               Enviar
             </button>
           </form>

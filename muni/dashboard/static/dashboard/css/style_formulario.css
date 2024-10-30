@@ -132,7 +132,6 @@ form {
 
 
 
-
 input, textarea, select {
     width: 100%;
     margin: 10px 0;
@@ -151,7 +150,10 @@ input, textarea, select {
     border-radius: 4px;
     cursor: pointer;
     margin-bottom: 0px;
+    visibility: hidden;
+    
 }
+
 #btnAgregar:hover {
     background-color: #105c20;
 }
@@ -159,6 +161,7 @@ input, textarea, select {
 
 #btnEnviar{
     align-items: left;
+    cursor: pointer;
     padding: 10px;
     
 }
