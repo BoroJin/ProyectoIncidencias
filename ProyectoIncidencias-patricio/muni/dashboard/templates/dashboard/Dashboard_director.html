@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'dashboard/css/style_dashboard_director.css' %}">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="{% static 'dashboard/js/Dashboard.js' %}"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+        <header class="header">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad">
+                <a href="#">Municipalidad</a>
+            </div>
+            <div class="user">
+                <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png" class="user-pic" alt="Usuario"
+                id="Usuario">
+            </div>
+        </header>
+
+        <main class="main-container">
+            <aside class="sidebar">
+                <ul>
+                    <li>
+                        <a href="{% url 'dashboard' %}">Dashboard</a>
+                        <a href="{% url 'incidencias' %}">Incidencias</a>
+                        <a href="{% url 'formulario' %}">formulario</a>
+                    </li>
+                </ul>
+            </aside>
+            <section class="content">
+                <div class="container-box">
+                    <div class="col-md-8">
+                        <h2>Incidencias</h2>
+                    </div>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Ubicación</th>
+                                <th>Estado</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Incidencia 1</td>
+                                <td>Santiago</td>
+                                <td>Activo</td>
+                                <td>Tipo A</td>
+                                <td>2024-10-15</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Incidencia 2</td>
+                                <td>La Florida</td>
+                                <td>Inactivo</td>
+                                <td>Tipo B</td>
+                                <td>2024-10-14</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Incidencia 3</td>
+                                <td>Renca</td>
+                                <td>Activo</td>
+                                <td>Tipo C</td>
+                                <td>2024-10-13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+        </main>
+
+        <script>
+            function toggleSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.toggle('active');
+            }
+        </script>
+        
+</body>
+</html>

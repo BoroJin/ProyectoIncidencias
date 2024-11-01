@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'dashboard/css/style_incidencias.css' %}"
+    />
+    <title>incidencias</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png"
+          alt="Logo Municipalidad"
+        />
+        <a href="#">Municipalidad</a>
+      </div>
+      <div class="user">
+        <img
+          src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png"
+          class="user-pic"
+          alt="Usuario"
+        />
+      </div>
+    </header>
+    <main class="main-container">
+      <aside class="sidebar">
+        <ul>
+          <li>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'incidencias' %}">Incidencias</a>
+            <a href="{% url 'formulario' %}">formulario</a>
+          </li>
+        </ul>
+      </aside>
+      <section class="content">
+        <div class="container-box">
+          <div class="col-md-8">
+            <h2>Incidencias</h2>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                {% for columna in columnas1 %}
+                <th>{{ columna }}</th>
+                <!-- Muestra el nombre de la columna -->
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="{{ columnas|length }}">
+                  No hay datos disponibles.
+                </td>
+                <!-- Mensaje en caso de no haber datos -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
