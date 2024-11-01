@@ -96,3 +96,5 @@ def Eliminar_columna(request):
             columnas.remove(valor_seleccionado)
         
     return render(request, 'dashboard/formulario.html', {'columnas': columnas})
+
+#probando commit
