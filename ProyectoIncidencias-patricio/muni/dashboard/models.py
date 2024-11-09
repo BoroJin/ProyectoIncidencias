@@ -8,7 +8,7 @@ class Usuario(models.Model):
         return self.nombre
     
 class Incidencia(models.Model):
-    nombreIndicencia = models.CharField(max_length=100) #charfield es texto maximo 255
+    nombre = models.CharField(max_length=100) #charfield es texto maximo 255
     fkUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # relación con la tabla uategoria
     fecha = models.DateField(auto_now_add=True)
     hora = models.TimeField(auto_now_add=True)
@@ -18,5 +18,6 @@ class Incidencia(models.Model):
     
 
     def __str__(self):
-        return self.nombre    
+        texto="{0}({1})"
+        return texto.format(self.nombre, self.latitud)    
 

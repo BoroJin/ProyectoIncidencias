@@ -65,7 +65,7 @@ body{
     display: flex;
     margin-top: 85px;
     height: 100%;
-    justify-content: center;
+    justify-content: right;
 }
 
 .sidebar {

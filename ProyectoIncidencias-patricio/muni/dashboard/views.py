@@ -58,6 +58,7 @@ def crear_atributo(request):
 
                     sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
                     cursor.execute(sqlComentario)
+                    return render(request, 'dashboard/formulario.html') 
 
 
             if opcion=='numero':
@@ -67,6 +68,7 @@ def crear_atributo(request):
                     
                     sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
                     cursor.execute(sqlComentario)
+                    return render(request, 'dashboard/formulario.html') 
             if opcion=='estado':
                 with connection.cursor() as cursor:
                     sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
@@ -74,12 +76,13 @@ def crear_atributo(request):
 
                     sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
                     cursor.execute(sqlComentario)
-
+                    return render(request, 'dashboard/formulario.html') 
             return JsonResponse({'mensaje': 'Columna agregada exitosamente'})
-        
+            
         except Exception as e:
             # Devolver el error en caso de fallo
             return JsonResponse({'error': str(e)}, status=500)
+       
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
 
