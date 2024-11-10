@@ -21,10 +21,12 @@ function tomarAtributo() {
     const titulo = document.getElementById('titulo').value;
     const nombree = document.getElementById('nombree').value;
     const opcion = document.getElementById('opcion').value;
+    const obligatorio = document.getElementById('obligatorio').value;
     
     console.log(titulo);
     console.log(nombree); 
     console.log(opcion); 
+    console.log(obligatorio); 
     
    
     
@@ -33,7 +35,7 @@ function tomarAtributo() {
     //el fetch enviara los datos a la vista 'crear_atributo'
     fetch(urlCrearAtributo, {
         method: 'POST',
-        body: JSON.stringify({titulo: titulo, nombree: nombree,opcion:opcion }),
+        body: JSON.stringify({titulo: titulo, nombree: nombree,opcion:opcion, obligatorio:obligatorio }),
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken')

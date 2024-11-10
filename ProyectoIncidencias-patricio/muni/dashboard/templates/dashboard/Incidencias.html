@@ -49,12 +49,16 @@
                 <th>{{ columna }}</th>
                 <!-- Muestra el nombre de la columna -->
                 {% endfor %}
+                <th>opciones</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td colspan="{{ columnas|length }}">
-                  No hay datos disponibles.
+                </td>
+                <td>
+                  <a href="#" class="button btn-info ">Asignar</a>
+                  <a href="#" class="button btn-danger">Rechazar</a>
                 </td>
                 <!-- Mensaje en caso de no haber datos -->
               </tr>

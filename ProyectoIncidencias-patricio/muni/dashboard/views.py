@@ -47,12 +47,13 @@ def crear_atributo(request):
             titulo = data.get('titulo')
             nombree = data.get('nombree')
             opcion=data.get('opcion')
+            obligatorio=data.get('obligatorio')
             
 
 
             
             with connection.cursor() as cursor:
-                sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion};"
+                sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion} {obligatorio};"
                 cursor.execute(sql)
                 sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
                 cursor.execute(sqlComentario)
@@ -64,6 +65,7 @@ def crear_atributo(request):
        
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+    return render(request,'dashboard/formulario.html')
 
 @csrf_exempt
 def Eliminar_columna(request):
