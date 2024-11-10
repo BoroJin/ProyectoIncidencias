@@ -87,8 +87,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "muni3",
-        "USER": "postgres",
-        "PASSWORD": "123",
+        "USER": "admin",
+        "PASSWORD": "admin1234",
         "HOST": "localhost",
         "PORT": "5432",
     }

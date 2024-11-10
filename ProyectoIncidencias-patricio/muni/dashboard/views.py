@@ -14,15 +14,21 @@ def dashboard(request):
 def incidencias(request):
     global columnas1
     columnas1 = []
+    datos = Incidencia.objects.all().values()
     try:
         with connection.cursor() as cursor:
             # Consulta para obtener los nombres de las columnas
             cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'dashboard_incidencia';")
             columnas1 = [row[0] for row in cursor.fetchall()]
             print(columnas1)
+            print(datos)
+
+            cursor.execute("SELECT * FROM dashboard_incidencia;")
+            datos_incidencias = cursor.fetchall()  # Esto devuelve una lista de tuplas con los datos
+            print("Datos:", datos_incidencias)
     finally:
         connection.close()
-    return render(request, 'dashboard/incidencias.html',{'columnas1': columnas1})
+    return render(request, 'dashboard/incidencias.html',{'columnas1': columnas1,'datos_incidencias': datos_incidencias})
 
 def formulario(request):
     global columnas
@@ -51,13 +57,20 @@ def crear_atributo(request):
             
 
 
-            
-            with connection.cursor() as cursor:
-                sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion} {obligatorio};"
-                cursor.execute(sql)
-                sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
-                cursor.execute(sqlComentario)
-                return render(request, 'dashboard/formulario.html') 
+            if opcion == 'VARCHAR(255)':
+                with connection.cursor() as cursor:
+                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion} {obligatorio} DEFAULT 'Vacío';"
+                    cursor.execute(sql)
+                    sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
+                    cursor.execute(sqlComentario)
+                    return render(request, 'dashboard/formulario.html') 
+            if opcion == 'INTEGER':
+                with connection.cursor() as cursor:
+                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion} {obligatorio} DEFAULT 0;"
+                    cursor.execute(sql)
+                    sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
+                    cursor.execute(sqlComentario)
+                    return render(request, 'dashboard/formulario.html')     
   
         except Exception as e:
             # Devolver el error en caso de fallo
@@ -82,3 +95,6 @@ def Eliminar_columna(request):
     return render(request, 'dashboard/formulario.html', {'columnas': columnas})
 
 #probando commit
+
+def printIncidencias(request):
+    pass

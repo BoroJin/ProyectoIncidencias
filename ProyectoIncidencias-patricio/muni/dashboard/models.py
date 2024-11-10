@@ -8,13 +8,13 @@ class Usuario(models.Model):
         return self.nombre
     
 class Incidencia(models.Model):
-    nombre = models.CharField(max_length=100) #charfield es texto maximo 255
-    fkUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # relación con la tabla uategoria
-    fecha = models.DateField(auto_now_add=True)
-    hora = models.TimeField(auto_now_add=True)
-    estado=models.BooleanField()
+    id_Formulario = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    fecha_hora = models.DateTimeField(auto_now_add=True, null=True)
+    estado=models.CharField( max_length=10 ,default='Inactivo')
     latitud = models.FloatField()  
     longitud = models.FloatField()
+    descripcion = models.TextField()
     
 
     def __str__(self):
