@@ -48,37 +48,16 @@ def crear_atributo(request):
             nombree = data.get('nombree')
             opcion=data.get('opcion')
             
-            print(titulo)
-            print(nombree)
-            print(opcion)
-            if opcion=='texto':
-                with connection.cursor() as cursor:
-                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
-                    cursor.execute(sql)
-
-                    sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
-                    cursor.execute(sqlComentario)
-                    return render(request, 'dashboard/formulario.html') 
 
 
-            if opcion=='numero':
-                with connection.cursor() as cursor:
-                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} INTEGER;"
-                    cursor.execute(sql)
-                    
-                    sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
-                    cursor.execute(sqlComentario)
-                    return render(request, 'dashboard/formulario.html') 
-            if opcion=='estado':
-                with connection.cursor() as cursor:
-                    sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} VARCHAR(255);"
-                    cursor.execute(sql)
-
-                    sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
-                    cursor.execute(sqlComentario)
-                    return render(request, 'dashboard/formulario.html') 
-            return JsonResponse({'mensaje': 'Columna agregada exitosamente'})
             
+            with connection.cursor() as cursor:
+                sql = f"ALTER TABLE dashboard_incidencia ADD COLUMN {nombree} {opcion};"
+                cursor.execute(sql)
+                sqlComentario = f"COMMENT ON COLUMN dashboard_incidencia.{nombree} IS '{titulo}';"
+                cursor.execute(sqlComentario)
+                return render(request, 'dashboard/formulario.html') 
+  
         except Exception as e:
             # Devolver el error en caso de fallo
             return JsonResponse({'error': str(e)}, status=500)

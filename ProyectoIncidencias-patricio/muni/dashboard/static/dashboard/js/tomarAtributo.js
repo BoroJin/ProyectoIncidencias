@@ -21,6 +21,7 @@ function tomarAtributo() {
     const titulo = document.getElementById('titulo').value;
     const nombree = document.getElementById('nombree').value;
     const opcion = document.getElementById('opcion').value;
+    
     console.log(titulo);
     console.log(nombree); 
     console.log(opcion); 
