@@ -1,7 +1,7 @@
 #maxi
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Usuario, Logo  # Suponiendo que tienes un modelo llamado Usuario
+from .models import Logo  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from rest_framework.views import APIView
@@ -10,7 +10,7 @@ from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
 from django.http import JsonResponse
 from django.http import HttpResponse
-
+from cuenta.models import Usuario
 
 
 def adm_recuperacion(request):
@@ -87,9 +87,10 @@ def editar_usuario(request, usuario_id):
     
     if request.method == 'POST':
         usuario.nombre = request.POST['nombre']
-        usuario.contrasena = request.POST['contrasena']
         usuario.correo_electronico = request.POST['correo']
         usuario.rol = request.POST['rol']
+        usuario.password = request.POST.get('password')
+
         usuario.save()
         
         messages.success(request, 'Usuario actualizado correctamente.')
