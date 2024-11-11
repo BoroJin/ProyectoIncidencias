@@ -1,6 +1,6 @@
-from django.shortcuts import render
-from .forms import incidencia
-from .models import Incidencia #esto es de la bd
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Incidencia 
 
 from django.db import connection
 from django.http import JsonResponse
@@ -96,5 +96,19 @@ def Eliminar_columna(request):
 
 #probando commit
 
-def printIncidencias(request):
-    pass
+def rechazarIncidencia(request, incidencia_id):
+    incidencia = get_object_or_404(Incidencia, id_Formulario=incidencia_id)
+
+    if request.method == 'POST':
+        justificacion = request.POST.get('justificacion_rechazo')
+        
+        if justificacion:
+            incidencia.estado = 'rechazado'
+            incidencia.justificacion_rechazo = justificacion
+            incidencia.save()
+
+            # Mensaje de éxito
+            messages.success(request, "Incidencia rechazada con éxito.")
+            return redirect('incidencias')
+
+    return render(request, 'dashboard/incidencias.html', {'incidencia': incidencia})

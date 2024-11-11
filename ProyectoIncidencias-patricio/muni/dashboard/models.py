@@ -9,6 +9,7 @@ class Usuario(models.Model):
     
 class Incidencia(models.Model):
     id_Formulario = models.AutoField(primary_key=True)
+    fkUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # relación con la tabla uategoria
     nombre = models.CharField(max_length=100)
     fecha_hora = models.DateTimeField(auto_now_add=True, null=True)
     estado=models.CharField( max_length=10 ,default='Inactivo')

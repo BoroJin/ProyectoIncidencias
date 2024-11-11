@@ -8,5 +8,6 @@ urlpatterns = [
     path('formulario/', views.formulario, name='formulario'), 
     path('crear_atributo/', views.crear_atributo, name='crear_atributo'),     # Vista de formulario
     path('Eliminar_columna', views.Eliminar_columna,name="Eliminar_columna"),
+    path('rechazarIncidencia/<int:incidencia_id>',views.rechazarIncidencia, name='rechazar_incidencia'),
         
 ]
