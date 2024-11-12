@@ -94,7 +94,9 @@ function Login() {
                         </div>
                         <button type="submit" className='btn'>Ingresar</button>
                     </form>
-
+                    <div>
+                        <a href="http://127.0.0.1:8000/" class="recuperacontra"> ¿Has olvidado tu contraseña? </a>
+                    </div>
                     <img src={`http://localhost:8000${config.imagen}`} alt="Logo" />
 
                     {error && <p>{error}</p>}
