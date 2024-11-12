@@ -54,37 +54,38 @@
             <table class="table">
               <thead>
                 <tr>
-                  {% for columna in columnas1 %}
-                  <th>{{ columna }}</th>
-                  <!-- Muestra el nombre de la columna -->
-                  {% endfor %}
-                  <th>opciones</th>
-                </tr>    
+                  <th>#</th>
+                  <th>Direccion de multimedia</th>
+                  <th>Título</th>
+                  <th>Estado de Incidencia</th>
+                  <th>Descripcion</th>
+                  <th>Fecha de Creacion</th>
+                  <th>Ubicación</th>
+                  <th>Nivel de urgencia</th>
+                  <th>Usuario Asignado</th>
+                  <th>Opciones</th>
+                </tr>   
               </thead>
             </thead>
             <tbody>
-              {% for fila in datos_incidencias %}
-              <tr>
-                {% for dato in fila %}
-                  <td>{{ dato }}</td>
+                {% for i in incidencia %}
+                <tr>
+                  <td>{{ i.id_incidencia }}</td>
+                  <td>{{ i.direccion_multimedia }}</td>
+                  <td>{{ i.titulo }}</td>
+                  <td>{{ i.estado_incidencia }}</td>
+                  <td>{{ i.descripcion }}</td>
+                  <td>{{ i.fecha_creacion }}</td>
+                  <td>{{ i.ubicacion }}</td>
+                  <td>{{ i.nivel_urgencia }}</td>
+                  <td>{{ i.usuario_asignado}}</td>
+                  <td>
+                    <!-- Botón de Rechazar que muestra el formulario de justificación -->
+                    <a href="/rechazoIncidencia/{{i.id_incidencia}}" class="btn btn-danger">Rechazar</a>
+                  </td>
                 {% endfor %}
-                <td>
-                  <!-- Botón de Rechazar que muestra el formulario de justificación -->
-                  <a href="#" class="btn btn-danger btn-sm" data-toggle="collapse" data-target="#formularioRechazo{{ fila.0 }}">Rechazar</a>
-                </td>
               </tr>
-              <tr id="formularioRechazo{{ fila.0 }}" class="collapse">
-                <td colspan="5">
-                  <!-- Formulario de Justificación -->
-                  <form method="post" action="{% url 'rechazar_incidencia' fila.0 %}">
-                    {% csrf_token %}
-                    <textarea name="justificacion_rechazo" rows="3" cols="50" placeholder="Escribe la justificación aquí..." required></textarea>
-                    <br>
-                    <button type="submit" class="btn btn-danger btn-sm">Confirmar Rechazo</button>
-                  </form>
-                </td>
-              </tr>
-              {% endfor %}
+              
             </tbody>
             </table>
           </div>

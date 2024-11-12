@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Incidencia 
+from django.utils import timezone
+from .models import Incidencia , Usuario,RegistroAuditoriaAsignacion
 
 from django.db import connection
 from django.http import JsonResponse
@@ -12,23 +13,8 @@ def dashboard(request):
     return render(request, 'dashboard/dashboard_director.html')
 
 def incidencias(request):
-    global columnas1
-    columnas1 = []
-    datos = Incidencia.objects.all().values()
-    try:
-        with connection.cursor() as cursor:
-            # Consulta para obtener los nombres de las columnas
-            cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'dashboard_incidencia';")
-            columnas1 = [row[0] for row in cursor.fetchall()]
-            print(columnas1)
-            print(datos)
-
-            cursor.execute("SELECT * FROM dashboard_incidencia;")
-            datos_incidencias = cursor.fetchall()  # Esto devuelve una lista de tuplas con los datos
-            print("Datos:", datos_incidencias)
-    finally:
-        connection.close()
-    return render(request, 'dashboard/incidencias.html',{'columnas1': columnas1,'datos_incidencias': datos_incidencias})
+    incidencia = Incidencia.objects.all()
+    return render(request,'dashboard/incidencias.html',{'incidencia':incidencia})
 
 def formulario(request):
     global columnas
@@ -95,20 +81,32 @@ def Eliminar_columna(request):
     return render(request, 'dashboard/formulario.html', {'columnas': columnas})
 
 #probando commit
+def rechazoIncidencia (request,id_incidencia):
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
 
-def rechazarIncidencia(request, incidencia_id):
-    incidencia = get_object_or_404(Incidencia, id_Formulario=incidencia_id)
+    if incidencia.estado_incidencia == 'Rechazada':
+        return redirect('/incidencias/')
+    return render(request, 'dashboard/rechazo_de_incidencias.html', {'incidencia': incidencia})
 
-    if request.method == 'POST':
-        justificacion = request.POST.get('justificacion_rechazo')
-        
-        if justificacion:
-            incidencia.estado = 'rechazado'
-            incidencia.justificacion_rechazo = justificacion
-            incidencia.save()
 
-            # Mensaje de éxito
-            messages.success(request, "Incidencia rechazada con éxito.")
-            return redirect('incidencias')
+def rechazarIncidencia(request):
+    id_incidencia = request.POST.get('ID')
+    id_incidencia1 = int(id_incidencia)
 
-    return render(request, 'dashboard/incidencias.html', {'incidencia': incidencia})
+
+    justificacion = request.POST.get('justificacion')
+
+    nombre_usuario = request.POST.get('user')
+    usuario = Usuario.objects.get(nombre = nombre_usuario)
+    id_usuario = usuario.id_usuario
+
+    fecha_asignacion = timezone.now()
+
+
+    estado = 'Rechazada'
+    registro = RegistroAuditoriaAsignacion.objects.create(id_incidencia_id = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
+
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia.estado_incidencia = 'Rechazada'
+    incidencia.save()
+    return redirect('/incidencias/')
