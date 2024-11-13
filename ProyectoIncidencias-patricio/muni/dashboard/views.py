@@ -83,6 +83,8 @@ def Eliminar_columna(request):
 def asignarIncidencia (request,id_incidencia):
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
     usuarios = Usuario.objects.all()
+    if incidencia.usuario_asignado is not None:
+        return redirect('/incidencias/')
     return render(request,'dashboard/asignar_incidencia.html', {'incidencia':incidencia, 'usuarios':usuarios})
 
 def asignarUsuario (request):
@@ -104,6 +106,7 @@ def rechazoIncidencia (request,id_incidencia):
     return render(request, 'dashboard/rechazo_de_incidencias.html', {'incidencia': incidencia})
 
 def rechazarIncidencia(request):
+
     id_incidencia = request.POST.get('ID')
     id_incidencia1 = int(id_incidencia)
 
@@ -123,4 +126,12 @@ def rechazarIncidencia(request):
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
     incidencia.estado_incidencia = 'Rechazada'
     incidencia.save()
+    return redirect('/incidencias/')
+
+def deshacerAsignacion(request,id_incidencia):
+
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia.usuario_asignado_id = None
+    incidencia.save()
+
     return redirect('/incidencias/')

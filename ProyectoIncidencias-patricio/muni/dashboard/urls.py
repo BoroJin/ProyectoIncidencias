@@ -10,6 +10,7 @@ urlpatterns = [
     path('Eliminar_columna', views.Eliminar_columna,name="Eliminar_columna"),
     path('asignarIncidencia/<id_incidencia>',views.asignarIncidencia),
     path('asignarUsuario/', views.asignarUsuario),
+    path('deshacerAsignacion/<id_incidencia>',views.deshacerAsignacion),
     path('rechazoIncidencia/<id_incidencia>',views.rechazoIncidencia),
     path('rechazarIncidencia/', views.rechazarIncidencia),
         

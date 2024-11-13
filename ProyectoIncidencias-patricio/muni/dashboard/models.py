@@ -24,7 +24,7 @@ class Incidencia(models.Model):
     fecha_creacion = models.DateField()
     ubicacion = models.CharField(max_length=100)
     nivel_urgencia = models.CharField(max_length=8)
-    usuario_asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario_asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = 'Incidencia'
