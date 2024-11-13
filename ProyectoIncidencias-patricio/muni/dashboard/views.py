@@ -80,14 +80,28 @@ def Eliminar_columna(request):
         
     return render(request, 'dashboard/formulario.html', {'columnas': columnas})
 
-#probando commit
+def asignarIncidencia (request,id_incidencia):
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    usuarios = Usuario.objects.all()
+    return render(request,'dashboard/asignar_incidencia.html', {'incidencia':incidencia, 'usuarios':usuarios})
+
+def asignarUsuario (request):
+    id_incidencia = request.POST.get('ID')
+
+    usuario_id = request.POST.get('usuario_id')
+
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia.usuario_asignado_id = usuario_id
+    incidencia.save()
+
+    return redirect('/incidencias/')
+
 def rechazoIncidencia (request,id_incidencia):
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
 
     if incidencia.estado_incidencia == 'Rechazada':
         return redirect('/incidencias/')
     return render(request, 'dashboard/rechazo_de_incidencias.html', {'incidencia': incidencia})
-
 
 def rechazarIncidencia(request):
     id_incidencia = request.POST.get('ID')

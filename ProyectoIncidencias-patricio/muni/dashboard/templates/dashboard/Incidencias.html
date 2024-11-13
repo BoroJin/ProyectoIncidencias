@@ -81,6 +81,7 @@
                   <td>{{ i.usuario_asignado}}</td>
                   <td>
                     <!-- Botón de Rechazar que muestra el formulario de justificación -->
+                    <a href="/asignarIncidencia/{{i.id_incidencia}}" class="btn btn-info">Asignar</a>
                     <a href="/rechazoIncidencia/{{i.id_incidencia}}" class="btn btn-danger">Rechazar</a>
                   </td>
                 {% endfor %}
