@@ -11,7 +11,7 @@ function Login() {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/configuracion/');
+                const response = await fetch('http://localhost:8000/administrador/api/configuracion/');
                 if (response.ok) {
                     const data = await response.json();
                     setConfig(data);
@@ -30,7 +30,7 @@ function Login() {
         e.preventDefault();
         setError('');
 
-        const response = await fetch('http://localhost:8000/api/cuenta/login/', {
+        const response = await fetch('http://localhost:8000/cuenta/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function Login() {
                         <button type="submit" className='btn'>Ingresar</button>
                     </form>
                     <div>
-                        <a href="http://127.0.0.1:8000/" class="recuperacontra"> ¿Has olvidado tu contraseña? </a>
+                        <a href="http://127.0.0.1:8000/cuenta/recuperacion/" class="recuperacontra"> ¿Has olvidado tu contraseña? </a>
                     </div>
                     <img src={`http://localhost:8000${config.imagen}`} alt="Logo" />
 

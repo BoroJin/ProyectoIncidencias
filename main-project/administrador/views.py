@@ -12,12 +12,6 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from cuenta.models import Usuario
 
-def adm_recuperacion(request):
-    return render(request, 'administrador/recupera_contraseña.html')
-
-def adm_inicio_sesion(request):
-    return render(request, 'administrador/Adm_inicio_sesion.html')
-
 def adm_principal(request):
     return render(request, 'administrador/Adm_principal.html')
 
