@@ -335,4 +335,26 @@ body {
   text-align: center;
 }
 
+.incidencias-header,
+.incidencia-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr 1fr 2fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+.incidencias-header {
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  background-color: #f1f1f1;
+}
+
+.incidencia-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.incidencia-row span {
+  padding: 5px 0;
+}
+
 /* FIN HOME */

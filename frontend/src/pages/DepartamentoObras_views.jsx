@@ -42,9 +42,20 @@ const DepartamentoObrasView = () => {
       </Card>
 
       <BigCard title="Incidencias">
+        <div className="incidencias-header">
+          <span>ID</span>
+          <span>Título</span>
+          <span>Descripción</span>
+          <span>Estado</span>
+          <span>Encargado</span>
+        </div>
         {incidencias.map((incidencia) => (
-          <div key={incidencia.id}>
-            <h2>{incidencia.titulo_Incidencia}</h2>
+          <div key={incidencia.id} className="incidencia-row">
+            <span>{incidencia.id}</span>
+            <span>{incidencia.titulo_Incidencia}</span>
+            <span>{incidencia.descripcion}</span>
+            <span>{incidencia.estado}</span>
+            <span>{incidencia.usuario_Asignado || "No asignado"}</span>
           </div>
         ))}
       </BigCard>
