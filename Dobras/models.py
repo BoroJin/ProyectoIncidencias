@@ -39,7 +39,9 @@ class Incidencia(models.Model):
     urgencia = models.CharField(max_length=10, choices=URGENCIA_CHOICES, default='media')  # Nivel de urgencia, cambiar la por defecto a sin asignar
     usuario_Asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)  # Usuario asignado, esta tambien deberia ser una id de usuario un
      # Resolutor asignado, esta tambien deberia ser una id de usuario unica.
-    
+    def __str__(self):
+        return self.titulo_Incidencia
+
 class RegistroAsignacion(models.Model):
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idIncidencia = models.ForeignKey(Incidencia, on_delete=models.CASCADE)
@@ -55,9 +57,12 @@ class RegistroAsignacion(models.Model):
         ]
     estado = models.CharField(max_length=15, choices=ESTADO_CHOICES, default='pendiente')
     comentario = models.TextField()     # Comentarios adicionales, los comentarios deberian decir por quien fueron realizados, es una marca temporal del proceso que sufre la incidencia
-
+    def __str__(self):
+        return self.idIncidencia.titulo_Incidencia
 class Notificaciones(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     idincidencia = models.ForeignKey(Incidencia, on_delete=models.CASCADE)
     idusuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.titulo

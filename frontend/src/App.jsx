@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
@@ -22,7 +23,7 @@ function MainContent() {
       {!noSidebarRoutes.includes(location.pathname) && <Sidebar />}
       <div style={{ flex: 1, padding: "20px" }}>
         <Routes>
-          <Route path="/" element={<HomeView />} />
+          <Route path="/" element={<Navigate to="/depto-obras" />} />
           <Route path="/depto-obras" element={<DepartamentoObrasView />} />
         </Routes>
       </div>
