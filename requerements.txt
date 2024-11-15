@@ -1,0 +1,2 @@
+pip install djangorestframework django-cors-headers coreapi node django psycopg2
+npm i react router-dom react-hot-toast axios react-hook-form leaflet @vitejs/plugin-react-swc react-router-dom

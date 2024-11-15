@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'urban_sensor',
         'USER': 'postgres',
-        'PASSWORD': 'alo123',
+        'PASSWORD': 'postgres',
     }
 }
 
@@ -136,3 +136,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#py manage.py makemigrations Dobras
