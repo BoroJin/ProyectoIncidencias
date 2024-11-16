@@ -20,15 +20,42 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="password">Nueva Contraseña</label>
-                        <input type="text" class="form-control" id="password" name="password" required>
+                        <input type="text" class="form-control" id="password" minlength="8"
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$"
+                        name="password"
+                            required>
                     </div>
                     <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
                 </form>
+                <div class="justify-content-start">
+                    <table class="w-100 text-start">
+                        <thead>
+                            <tr>
+                                <th>La contraseña debe contener:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mínimo 8 caracteres</td>
+                            </tr>
+                            <tr>
+                                <td>Al menos una letra en minúscula</td>
+                            </tr>
+                            <tr>
+                                <td>Al menos un número</td>
+                            </tr>
+                            <tr>
+                                <td>Al menos un carácter especial (!@#$%^&*)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
         </div>
+        
     </main>
     </div>
 </body>
 
 </html>
-
