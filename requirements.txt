@@ -1,0 +1,8 @@
+djangorestframework 
+django-cors-headers 
+coreapi 
+node 
+django 
+psycopg2
+
+#ejecutar el pip install -r requirements.txt y luego hacer un cd frontend, y una vez dentro de esa carpeta ejecutar npm install de esta manera estaran todos los requerimientos instalados

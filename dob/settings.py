@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'urban_sensor',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'alo123',
     }
 }
 
