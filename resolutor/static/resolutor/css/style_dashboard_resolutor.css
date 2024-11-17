@@ -1,104 +1,262 @@
-body{
-    /*display: flex;*/
-    /*height: 100%;*/
-    /*margin: 0;*/
+:root {
+    /* Colores de la barra de navegación */
+    --navbar-bg-color: #0c4f6d; /* Celeste oscuro suave para el fondo de la barra de navegación */
+    --navbar-text-color: #e8f6ff; /* Celeste claro para el texto en la barra de navegación */
+
+    /* Colores de la barra lateral */
+    --sidebar-bg-color: #125e82; /* Celeste oscuro claro para la barra lateral */
+    --sidebar-text-color: #c2e2f0; /* Celeste claro para el texto en la barra lateral */
+    --sidebar-link-active-color: #67d3f4; /* Celeste brillante para el enlace activo */
+
+    /* Colores de fondo */
+    --body-bg-color: #094357; /* Celeste oscuro ligeramente más claro para el fondo general de la página */
+    --content-bg-color: #145d7f; /* Celeste medio oscuro para el fondo de los elementos de contenido */
+
+    /* Colores de botones */
+    --btn-primary-color: #2189b2; /* Celeste oscuro intermedio para el fondo del botón primario */
+    --btn-primary-text-color: #ffffff; /* Blanco para el texto del botón primario */
+    --btn-warning-color: #ffc864; /* Naranja claro para el botón de advertencia */
+    --btn-warning-text-color: #1a1a1a; /* Gris oscuro para el texto del botón de advertencia */
+    --btn-success-color: #3da09b; /* Verde azulado más claro para el botón de éxito */
+    --btn-success-text-color: #ffffff; /* Blanco para el texto del botón de éxito */
+
+    /* Colores de notificaciones */
+    --notification-icon-color: #ff7070; /* Rojo claro para el ícono de notificación */
+    --notification-badge-color: #ff7070; /* Rojo claro para el fondo del badge de notificación */
+    --notification-badge-text-color: #ffffff; /* Blanco para el texto del badge de notificación */
+
+    /* Colores de la lista de incidencias */
+    --list-item-bg-color: #f9f9f9; /* Color de fondo claro para los elementos de la lista */
+    --list-item-hover-bg-color: #f0f4f7; /* Color de fondo en hover de los elementos de la lista */
+    --list-item-title-color: #303e50; /* Azul oscuro para el título de la incidencia */
+    --list-item-text-color: #606d7a; /* Gris oscuro suave para el texto de la descripción */
+
+    /* Colores del modal */
+    --modal-bg-color: #ffffff; /* Color claro para el fondo del modal */
+    --modal-header-color: #2c3e50; /* Azul oscuro para el texto del título del modal */
+    --modal-footer-bg-color: #f0f4f7; /* Color claro para el fondo del footer del modal */
+
+    /* Colores de los mensajes de estado */
+    --success-message-bg-color: #d9f2e5; /* Verde claro para el fondo del mensaje de éxito */
+    --success-message-text-color: #166534; /* Verde oscuro para el texto del mensaje de éxito */
+    --error-message-color: #d32f2f; /* Rojo para el mensaje de error */
 }
-.barra_superior{
-    justify-content: space-between;
-    display: flex;
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--body-bg-color);
+    color: var(--list-item-text-color);
+}
+
+/* Barra de navegación superior */
+.navbar {
+    background-color: var(--navbar-bg-color) !important;
+    color: var(--navbar-text-color);
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-brand:hover {
+    color: var(--navbar-text-color);
+    font-weight: bold;
+}
+
+.navbar .navbar-brand img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.navbar .dropdown .btn-link {
+    color: var(--navbar-text-color);
+}
+
+.navbar .dropdown .btn-link:hover {
+    color: var(--navbar-text-color);
+    text-decoration: none;
+}
+
+.navbar .dropdown-menu {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: var(--modal-bg-color);
+    color: var(--list-item-text-color);
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .badge {
+    background-color: var(--notification-badge-color);
+    color: var(--notification-badge-text-color);
+}
+
+.navbar .d-flex .rounded-circle {
+    border: 2px solid var(--navbar-text-color);
+}
+
+.navbar .dropdown-menu .dropdown-item {
+    color: var(--list-item-text-color);
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+    background-color: var(--list-item-hover-bg-color);
+}
+
+.navbar .dropdown-menu .dropdown-header {
+    color: var(--list-item-text-color);
+}
+
+/* Barra lateral */
+#sidebarMenu {
+    background-color: var(--sidebar-bg-color) !important;
+    color: var(--sidebar-text-color);
     position: fixed;
-    height: 70px;
-    width: 100%;
-    padding: 10px;
-    background-color: rgb(84, 114, 199);
-    top: 0px;
-    z-index: 1;
-}
-.barra_superior img {
-    height: 50px; /* Ajusta el tamaño del logo */
-    border-radius: 25%; /* Redondea la imagen para que parezca un avatar */
-    /*margin-right: 10px;*/
-}
-.barra_superior h2{
-    padding-top: 10px;
-    padding-left:10px ;
-    font-size: 20px;
-    font-family: Arial;
-    color: rgb(0, 0, 0); /*este es el color de las letras*/
-    
-}
-.main {
-    background-color: rgb(0, 0, 0);
-    height: 100vh;
-    margin-left: 200px;
-    margin-top:70px;
-    display: flex;
-    /*height: 100%;*/
-     /* Altura de la barra superior */
-    /*width: 100%;*/
-}
-.side_bar{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(145, 166, 212);
-    height: 100vh;
-    width: 200px; /* Ajusta el ancho según tus necesidades */
-    padding: 20px;
-    position: fixed;
-    color: black;
+    top: 80px; /* Altura de la navbar */
     left: 0;
-    top: 70px;
+    width: 200px;
+    height: calc(100vh - 80px);
+    padding-top: 20px;
 }
-.side_bar img{
-    height: 50px;
+
+#sidebarMenu .nav-link {
+    color: var(--sidebar-text-color);
+    font-size: 1.1rem;
+    padding: 15px 20px;
+    border-radius: 8px; /* Bordes más redondeados */
+    transition: background-color 0.3s, border-radius 0.3s;
 }
-.btn {
-    width: 180px;
-    background-color: rgb(105, 170, 170);
-    border-color: rgb(146, 170, 168);
-    margin: 7px 0; /* Espacio entre botones */
+
+#sidebarMenu .nav-link.active,
+#sidebarMenu .nav-link:hover {
+    background-color: var(--sidebar-link-active-color);
+    color: var(--btn-primary-text-color);
 }
-#derecha{
-    background-color: rgb(255, 255, 255);
-    height: 100vh;
-    width: 50%;
-    padding: 13px;
-    
+
+#sidebarMenu .nav-link i {
+    margin-right: 10px;
 }
-#izquierda{
-    background-color: rgb(255, 255, 255);
-    height: 100vh;
-    width: 50%;
-    padding: 10px;
-    padding-bottom: 19px;
+
+/* Contenido principal */
+main {
+    margin-left: 200px; /* Ancho de la sidebar */
+    padding: 20px;
+    background-color: var(--content-bg-color);
 }
-#mapa , #grafico{
-    width: 100%;
-    height: 50%;
-    flex-grow: 1;
-    margin: 3px;
-    object-fit: cover;
-    border-top-left-radius: 20%;
+
+h2 {
+    color: var(--navbar-text-color);
+    margin-bottom: 20px;
 }
-#izquierda img {
-    width: 100%;
-    height: 100%;
-    border-bottom-left-radius: 20%;
-}
-#incidencias{
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width: 100%;
-    height:100%;
-    background-color: rgb(145, 166, 212);
-    border-top-right-radius: 20%;
-    border-bottom-right-radius: 20%;
-    
-}
-#incidencias button{
-    margin: 7px 0;
+
+/* Mapa */
+#mapa {
     border-radius: 10px;
-    width: 75%;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de incidencias */
+.list-group-item {
+    border: 1px solid #dee2e6;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: var(--list-item-bg-color);
+    color: var(--list-item-text-color);
+}
+
+.list-group-item:hover {
+    background-color: var(--list-item-hover-bg-color);
+}
+
+.list-group-item h5 {
+    color: var(--list-item-title-color);
+}
+
+.list-group-item small {
+    color: var(--list-item-text-color);
+}
+
+.list-group-item p {
+    color: var(--list-item-text-color);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 10px;
+    background-color: var(--modal-bg-color);
+    color: var(--list-item-text-color);
+}
+
+.modal-header {
+    background-color: var(--navbar-bg-color);
+    color: var(--modal-header-color);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-footer {
+    background-color: var(--modal-footer-bg-color);
+}
+
+.modal-footer .btn {
+    min-width: 120px;
+}
+
+.modal-footer .btn-secondary {
+    background-color: var(--btn-primary-color);
+    border: none;
+    color: var(--btn-primary-text-color);
+}
+
+.modal-footer .btn-warning {
+    background-color: var(--btn-warning-color);
+    border: none;
+    color: var(--btn-warning-text-color);
+}
+
+.modal-footer .btn-success {
+    background-color: var(--btn-success-color);
+    border: none;
+    color: var(--btn-success-text-color);
+}
+
+.modal-footer .btn-primary {
+    background-color: var(--btn-primary-color);
+    border: none;
+    color: var(--btn-primary-text-color);
+}
+
+#incidenciaModal .modal-body #errorMessage {
+    font-weight: bold;
+    color: var(--error-message-color);
+}
+
+#incidenciaModal .modal-body #successMessage {
+    font-weight: bold;
+    background-color: var(--success-message-bg-color);
+    color: var(--success-message-text-color);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Notificaciones */
+#notificationCount {
+    font-size: 0.75em;
+    background-color: var(--notification-badge-color) !important;
+    color: var(--notification-badge-text-color) !important;
+}
+
+/* Diseño responsivo */
+@media (max-width: 992px) {
+    #sidebarMenu {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        margin-left: 0;
+    }
 }
