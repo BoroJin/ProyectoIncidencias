@@ -11,6 +11,7 @@ import "leaflet/dist/leaflet.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import DepartamentoObrasView from "./pages/DepartamentoObras_views";
+import AsignarResolutor from "./pages/AsignarResolutor";
 
 function MainContent() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function MainContent() {
         <Routes>
           <Route path="/" element={<Navigate to="/depto-obras" />} />
           <Route path="/depto-obras" element={<DepartamentoObrasView />} />
+          <Route path="/depto-obras/option1" element={<AsignarResolutor />} />
         </Routes>
       </div>
     </div>
