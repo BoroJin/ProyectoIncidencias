@@ -10,7 +10,8 @@ import json
 
 
 def dashboard(request):
-    return render(request, 'dashboard/dashboard_director.html')
+    incidencia = Incidencia.objects.filter(estado_incidencia='Activo')
+    return render(request, 'dashboard/dashboard_director.html',{'incidencia':incidencia})
 
 def incidencias(request):
     incidencia = Incidencia.objects.all()

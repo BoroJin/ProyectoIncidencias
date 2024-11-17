@@ -41,38 +41,22 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>
+                                <th>Titulo</th>
                                 <th>Ubicación</th>
                                 <th>Estado</th>
-                                <th>Tipo</th>
                                 <th>Fecha</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for i in incidencia %}
                             <tr>
-                                <td>1</td>
-                                <td>Incidencia 1</td>
-                                <td>Santiago</td>
-                                <td>Activo</td>
-                                <td>Tipo A</td>
-                                <td>2024-10-15</td>
+                            <td>{{ i.id_incidencia }}</td>
+                            <td>{{ i.titulo }}</td>
+                            <td>{{ i.ubicacion }}</td>
+                            <td>{{ i.estado_incidencia }}</td>
+                            <td>{{ i.fecha_creacion }}</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Incidencia 2</td>
-                                <td>La Florida</td>
-                                <td>Inactivo</td>
-                                <td>Tipo B</td>
-                                <td>2024-10-14</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Incidencia 3</td>
-                                <td>Renca</td>
-                                <td>Activo</td>
-                                <td>Tipo C</td>
-                                <td>2024-10-13</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
