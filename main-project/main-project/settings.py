@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'cuenta',
+    'resolutor',
+    'gestor_territorial',
+    'director',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +99,7 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'goku',
+        'NAME': 'megaman',
         'USER': 'postgres',
         'PASSWORD': 'operacion7',
         'HOST': 'localhost',
@@ -141,7 +144,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/static/'  # Carpeta donde se recopilarán los archivos estáticos cuando ejecutes collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static'))
 ]

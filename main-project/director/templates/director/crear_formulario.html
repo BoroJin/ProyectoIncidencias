@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Formulario</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; }
+        h1 { text-align: center; color: #333; }
+        form { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
+        label { display: block; margin: 15px 0 5px; }
+        input, textarea { width: 300px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; }
+        button { background-color: #0056b3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #004494; }
+    </style>
+</head>
+<body>
+<h1>Crear nuevo formulario</h1>
+<form method="POST" action="{% url 'director:crear_formulario' %}">
+    {% csrf_token %}
+    <label for="nombre">Nombre del formulario:</label>
+    <input type="text" name="nombre" id="nombre" required>
+    <label for="descripcion">Descripción:</label>
+    <textarea name="descripcion" id="descripcion"></textarea>
+    <button type="submit">Crear Formulario</button>
+</form>
+</body>
+</html>
+

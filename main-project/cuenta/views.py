@@ -27,8 +27,12 @@ class LoginView(APIView):
                 redirect_url = ''
                 if user.rol == 'Administrador':
                     redirect_url = 'http://127.0.0.1:8000/administrador/adm_principal/'
-                elif user.rol == 'Director': 
-                    redirect_url = 'http://127.0.0.1:8000/exportar_usr_vista/'
+                elif user.rol == 'Resolutor': 
+                    redirect_url = 'http://127.0.0.1:8000/resolutor/'
+                elif user.rol == 'Director':  
+                    redirect_url = 'http://127.0.0.1:8000/director/'
+                elif user.rol == 'Gestor Territorial':    
+                    redirect_url = 'http://127.0.0.1:8000/gestor_territorial/'
 
                 return Response({
                     'refresh': str(refresh),
