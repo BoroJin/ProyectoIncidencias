@@ -1,5 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { CgDanger } from "react-icons/cg";
 
+const limpiar = () => {
+  document.getElementById("Asunto").value = "";
+  document.getElementById("Descripcion").value = "";
+};
 const Tickets = () => {
   return (
     <div className="todoApp">
@@ -11,14 +17,35 @@ const Tickets = () => {
         <div className="card-body">
           <div className="secciones">
             <div className="seccionLabel">
-              <h className="subtituloTicket">
+              <h className="textoTit">
                 {" "}
                 Utiliza este modulo cuando tengas algún problema que estimes,
                 necesita la asistencia de personal técnico con respecto a tu
-                usuario o a la aplicación.
+                usuario o a la aplicación:
               </h>
+              <ul className="listaErrores">
+                <li className="listaItem">
+                  Error en la carga de archivos <CgDanger />
+                </li>
+                <li className="listaItem">
+                  Problemas de visualización <CgDanger />
+                </li>
+                <li className="listaItem">
+                  Falta de permisos <CgDanger />
+                </li>
+                <li className="listaItem">
+                  Información desactualizada <CgDanger />
+                </li>
+                <li className="listaItem">
+                  Retraso en los procesos <CgDanger />
+                </li>
+                <li className="listaItem">
+                  Otros <CgDanger />
+                </li>
+              </ul>
+
               <div className="labelGeneral">
-                <label className="labelAsunto" for="Asunto">
+                <label className="textoTit" for="Asunto">
                   Ingresa el asunto (Error de diseño, funciones erróneas, error
                   de carga, etc):
                 </label>
@@ -32,10 +59,12 @@ const Tickets = () => {
                   />
                 </div>
                 <div className="areaDesc">
-                  {" "}
-                  Ingresa la descripción e tu problema. Te pedimos que seas lo
-                  más explicito posible para que la resolución de este sea más
-                  sencilla:
+                  <div className="textoTit">
+                    {" "}
+                    Ingresa la descripción e tu problema. Te pedimos que seas lo
+                    más explicito posible para que la resolución de este sea más
+                    sencilla:
+                  </div>
                   <div className="textArea">
                     <textarea
                       id="Descripcion"
@@ -48,9 +77,16 @@ const Tickets = () => {
                   {" "}
                   Enviar Ticket{" "}
                 </button>
-                <button className="btn btn-secondary" id="boton2 ">
+                <button
+                  className="btn btn-secondary"
+                  id="boton2"
+                  onClick={limpiar}
+                >
                   {" "}
                   Limpiar campos{" "}
+                </button>
+                <button className="btn btn-secondary" id="boton2 ">
+                  <Link to="/chatSoporte"> Chat de soporte </Link>
                 </button>
               </div>
             </div>

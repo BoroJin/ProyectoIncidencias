@@ -19,7 +19,7 @@ const Aplicacion = () => {
         <div className="card-body">
           <div className="secciones">
             <div className="seccion1">
-              <h className="subtituloSec">
+              <h className="textoTit">
                 {" "}
                 <PiNumberCircleOneFill /> - Manejo de usuarios <FaUser /> :
               </h>
@@ -30,7 +30,7 @@ const Aplicacion = () => {
               </div>
             </div>
             <div className="seccion2">
-              <h className="subtituloSec">
+              <h className="textoTit">
                 {" "}
                 <PiNumberCircleTwoFill /> - Control total de incidencias{" "}
                 <MdReportProblem /> :
@@ -42,7 +42,7 @@ const Aplicacion = () => {
               </div>
             </div>
             <div className="seccion3">
-              <h className="subtituloSec">
+              <h className="textoTit">
                 {" "}
                 <PiNumberCircleThreeFill /> - Acceso a información crítica{" "}
                 <FaNewspaper /> :
@@ -54,7 +54,7 @@ const Aplicacion = () => {
               </div>
             </div>
             <div className="seccion4">
-              <h className="subtituloSec">
+              <h className="textoTit">
                 {" "}
                 <PiNumberCircleFourFill /> - Manejo de datos <AiFillDatabase />{" "}
                 :

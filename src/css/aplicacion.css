@@ -4,7 +4,7 @@
 }
 
 .card-body {
-  background-color: rgb(212, 211, 213);
+  background-color: rgb(255, 255, 255);
   justify-items: center;
   padding: 0 !important;
 }
@@ -48,6 +48,7 @@
   background-color: rgb(178, 204, 235);
   display: flex;
   font-family: "Times New Roman", Times, serif;
+  margin-top: 0.7rem;
 }
 
 .textoInc {
@@ -62,6 +63,7 @@
   background-color: rgb(178, 204, 235);
   display: flex;
   font-family: "Times New Roman", Times, serif;
+  margin-top: 0.7rem;
 }
 
 .textoInf {
@@ -76,6 +78,7 @@
   background-color: rgb(178, 204, 235);
   display: flex;
   font-family: "Times New Roman", Times, serif;
+  margin-top: 0.7rem;
 }
 .textoDat {
   padding: 10px;
@@ -89,6 +92,7 @@
   background-color: rgb(178, 204, 235);
   display: flex;
   font-family: "Times New Roman", Times, serif;
+  margin-top: 0.7rem;
 }
 
 .todoApp {
