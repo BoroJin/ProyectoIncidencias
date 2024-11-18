@@ -1,0 +1,4 @@
+- Recibir notificaciones cuando el director le asigne una incidencia HU_VD_09 (No hecha)
+- Clasificar incidencias recibidas HU_GI_09 (No hecha)
+- Derivar tareas a resolutores HU_GI_08  (No hecha)
+- Filtro de resolutores, para asignar tareas HU_CP_07 (No hecha)

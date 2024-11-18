@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'resolutor',
     'gestor_territorial',
     'director',
+    'Dobras',
+    'coreapi',
 ]
 
 MIDDLEWARE = [
@@ -63,11 +65,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
 }
 AUTH_USER_MODEL = 'cuenta.Usuario'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # URL del cliente React
+    "http://localhost:3001",# URL del Login
+    "http://localhost:3002",# URL del ticket
+    "http://localhost:5173",# URL del Dep obras(carpetas Dobras,fontend,venv y incidencias)
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 

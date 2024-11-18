@@ -30,6 +30,7 @@ urlpatterns = [
     path('resolutor/', include('resolutor.urls')),
     path('director/', include('director.urls')),
     path('gestor_territorial/', include('gestor_territorial.urls')),
+    path('urls/', include('Dobras.urls'))
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

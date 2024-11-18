@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import uuid
-from administrador.models import Usuario, RegistroAsignacion, Notificacion
+from administrador.models import Usuario
+from Dobras.models import RegistroAsignacion, Notificaciones
 from gestor_territorial.models import Incidencia
 from django.http import JsonResponse
 from django.core.files.storage import default_storage
@@ -89,10 +90,10 @@ def get_notificaciones(request):
     incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
 
     # Filtrar todas las notificaciones
-    notificaciones = Notificacion.objects.filter(
+    notificaciones = Notificaciones.objects.filter(
         idUsuario=mi_id
     ).union(
-        Notificacion.objects.filter(
+        Notificaciones.objects.filter(
             incidenciaId__in=incidencias_ids
         )
     )
@@ -118,11 +119,11 @@ def get_notificaciones_no_leidas(request):
     incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
 
     # Filtrar notificaciones no leídas
-    notificaciones_no_leidas = Notificacion.objects.filter(
+    notificaciones_no_leidas = Notificaciones.objects.filter(
         estado_lectura=False,
         idUsuario=mi_id
     ).union(
-        Notificacion.objects.filter(
+        Notificaciones.objects.filter(
             incidenciaId__in=incidencias_ids,
             estado_lectura=False
         )
@@ -148,11 +149,11 @@ def get_notificaciones_leidas(request):
     incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
 
     # Filtrar notificaciones leídas
-    notificaciones_leidas = Notificacion.objects.filter(
+    notificaciones_leidas = Notificaciones.objects.filter(
         estado_lectura=True,
         idUsuario=mi_id
     ).union(
-        Notificacion.objects.filter(
+        Notificaciones.objects.filter(
             incidenciaId__in=incidencias_ids,
             estado_lectura=True
         )
@@ -177,6 +178,6 @@ def mark_as_read(request):
     notification_ids = data.get('notification_ids', [])
 
     # Filtra las notificaciones por ID y usuario actual y marca como leídas
-    Notificacion.objects.filter(idNotificacion__in=notification_ids, idUsuario=request.user).update(estado_lectura=True)
+    Notificaciones.objects.filter(idNotificacion__in=notification_ids, idUsuario=request.user).update(estado_lectura=True)
     
     return JsonResponse({'status': 'success'})
