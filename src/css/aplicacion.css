@@ -1,89 +1,96 @@
-.card{
-    
-    width: 85%;
-    display: flex;
-    
-
+.card {
+  width: 85%;
+  display: flex;
 }
 
-.card-body{
-    background-color: rgb(224, 214, 231);
-    justify-items: center;
-    padding: 0 !important;
+.card-body {
+  background-color: rgb(212, 211, 213);
+  justify-items: center;
+  padding: 0 !important;
 }
-.card-header{
-    text-align: center;
-    color: black;
-    font-style: oblique;
-    font-size: large;
-    font-size: 50px;
-    background-color: rgb(215, 190, 233) !important;
-}
-
-.secciones{  
-    
-    width: 90%;
-    justify-items: center;
-    padding: 30px;
-    height: max-content;
-}
-.seccion1, .seccion2 , .seccion3, .seccion4{
-    margin-bottom: 10px;
+.card-header {
+  text-align: center;
+  background-color: #2c3e50 !important;
+  font-style: oblique;
+  font-size: large;
+  font-size: 50px;
+  color: white;
 }
 
-.subtituloSec{
-    font-size: 20px;
-    font-style: oblique;
-    font-weight: 1000;
+.secciones {
+  width: 95%;
+  justify-items: center;
+  padding: 30px;
+  height: max-content;
+}
+.seccion1,
+.seccion2,
+.seccion3,
+.seccion4 {
+  margin-bottom: 10px;
 }
 
-.textoUser{
-    padding: 10px;
-    width: 100%;
-    font-size: 25px;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    height: max-content;
-    background-color: rgb(173, 164, 219);
-    display: flex;
+.subtituloSec {
+  font-size: 20px;
+  font-style: oblique;
+  font-weight: 1000;
 }
 
-.textoInc{
-    padding: 10px;
-    width: 100%;
-    font-size: 25px;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    height: max-content;
-    background-color: rgb(173, 164, 219);
-    display: flex;
+.textoUser {
+  padding: 10px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 550;
+  border-style: solid;
+  border-radius: 10px;
+  text-align: center;
+  height: max-content;
+  background-color: rgb(178, 204, 235);
+  display: flex;
+  font-family: "Times New Roman", Times, serif;
 }
 
-.textoInf{
-    padding: 10px;
-    width: 100%;
-    font-size: 25px;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    height: max-content;
-    background-color: rgb(173, 164, 219);
-    display: flex;
-}
-.textoDat{
-    padding: 10px;
-    width: 100%;
-    font-size: 25px;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    height: max-content;
-    background-color: rgb(173, 164, 219);
-    display: flex;
+.textoInc {
+  padding: 10px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 550;
+  border-style: solid;
+  border-radius: 10px;
+  text-align: center;
+  height: max-content;
+  background-color: rgb(178, 204, 235);
+  display: flex;
+  font-family: "Times New Roman", Times, serif;
 }
 
-.todoApp{
-    justify-items: center;
+.textoInf {
+  padding: 10px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 550;
+  border-style: solid;
+  border-radius: 10px;
+  text-align: center;
+  height: max-content;
+  background-color: rgb(178, 204, 235);
+  display: flex;
+  font-family: "Times New Roman", Times, serif;
+}
+.textoDat {
+  padding: 10px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: 550;
+  border-style: solid;
+  border-radius: 10px;
+  text-align: center;
+  height: max-content;
+  background-color: rgb(178, 204, 235);
+  display: flex;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.todoApp {
+  justify-items: center;
 }

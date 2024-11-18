@@ -24,9 +24,10 @@ h2 {
 .sidebar-menu {
   list-style:none;
   padding: 10px;
-  margin-top: 40px;
+  margin-top: 30px;
   border-style:double;
   text-decoration: none;
+  align-items: center;
 }
 
 .sidebar-item {
@@ -34,7 +35,7 @@ h2 {
   padding: 10px 0;
   cursor: pointer;
   border-style: double;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: left;
   padding-left: 10px;
   text-decoration: none;

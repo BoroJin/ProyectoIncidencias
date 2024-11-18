@@ -1,12 +1,13 @@
-h1{
-    text-align: center;
-    color: black;
-    font-style: oblique;
-    
+.textoGen{
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 550;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-p{
-    text-align: center;
-    color: black;
-    
+.subtituloGen{
+    font-size: 20px;
+    font-style: oblique;
+    font-weight: 1000;
 }
