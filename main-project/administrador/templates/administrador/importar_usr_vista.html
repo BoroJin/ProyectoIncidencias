@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importar CSV</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style_exportar_importar_usr.css' %}">
+</head>
+
+<body>
+    <main>
+        <div class="contenedor">
+            <h2>Importar usuarios desde CSV</h2>
+            <p>Haga click en importar usuarios para subir un archivo CSV
+            <br>
+            Nota: El csv debe mantener el sigueinte formato: 
+            <br>
+            <strong>usuario,contrasena,correo,rol</strong></p>
+
+            <form action="{% url 'recibir_y_validar' %}"  method="POST" enctype="multipart/form-data" id="contenedor-form"> <!-- -->
+                {% csrf_token %}
+                <input type="file" name="file" accept=".csv" required>
+                <div id="parDeBotones">
+                    <a href="{% url 'adm_gestion_usuarios' %}" class="btn btn-2">Volver</a>
+                    <button id="btnSubir" class="btn" type="button">Subir</button>
+                </div>
+            </form> 
+
+        </div>
+<!-- Modal -->
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="miModalLabel">Resultado del envío</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-body-content">
+                    <!-- Aquí se mostrará el mensaje devuelto por la vista -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                <button type="button" class="btn btn-primary" id="btnContinuar">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/popUp_condicional.js' %}"> </script>
+</body>
+
+</html>
+

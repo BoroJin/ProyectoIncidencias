@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa con Leaflet y Visualización de Incidencias</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #crearIncidencia {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #incidenciasContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .incidenciaCard {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            width: 30%;
+        }
+        .rechazada {
+            background-color: #ffcccc; /* Light red */
+        }
+        .finalizada {
+            background-color: #ccffcc; /* Light green */
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+<p id="position">Click en el mapa para obtener la posición del marcador.</p>
+<button id="crearIncidencia">Crear Incidencia</button>
+
+<div id="incidenciasContainer">
+    <!-- Incidencias will be appended here by JavaScript -->
+</div>
+<script>
+    var incidenciasData = JSON.parse('{{ incidencias_json|escapejs }}');
+</script>
+<script src="{% static 'js/incidencias.js' %}"></script>
+<script src="{% static 'js/mapa.js' %}"></script>
+
+</body>
+</html>

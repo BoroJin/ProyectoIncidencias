@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Campos</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; }
+        h1 { text-align: center; color: #333; }
+        form { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
+        label { display: block; margin: 15px 0 5px; }
+        input, select, textarea { width: 300px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; }
+        button { background-color: #0056b3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #004494; }
+        .campo { background-color: #e9ecef; padding: 10px; margin-top: 10px; border-radius: 4px; }
+        a { display: inline-block; margin-top: 20px; color: #0056b3; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<h1>Gestionar Campos del Formulario: {{ formulario.nombre }}</h1>
+<a href="{% url 'director:ver_formularios' %}">Volver a Listado de Formularios</a>
+<form method="POST" id="formAgregarCampo">
+    {% csrf_token %}
+    <label for="nombre_campo">Nombre del Campo:</label>
+    <input type="text" name="nombre_campo" id="nombre_campo" required>
+    <label for="tipo_campo">Tipo de Campo:</label>
+    <select name="tipo_campo" id="tipo_campo" onchange="mostrarOpciones()">
+        <option value="texto">Texto</option>
+        <option value="checkbox">Checkbox</option>
+        <option value="select">Desplegable</option>
+    </select>
+    <div id="opciones" style="display:none;">
+        <label>Opciones:</label>
+        <button type="button" onclick="agregarOpcion()">Agregar Opción</button>
+        <div id="opciones-container"></div>
+    </div>
+    <button type="submit" name="agregar">Agregar Campo</button>
+</form>
+
+<h2>Campos Actuales</h2>
+{% for campo in campos %}
+    <div class="campo">
+        <span>{{ campo.nombre }} ({{ campo.tipo }})</span>
+        {% for opcion in campo.opciones.all %}
+            <div>{{ opcion.nombre }}: {{ opcion.valor }}</div>
+        {% endfor %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="campo_id" value="{{ campo.id }}">
+            <button type="submit" name="eliminar">Eliminar</button>
+        </form>
+    </div>
+{% endfor %}
+
+<script>
+function mostrarOpciones() {
+    var tipoCampo = document.getElementById('tipo_campo').value;
+    var opcionesDiv = document.getElementById('opciones');
+    if (tipoCampo === 'checkbox' || tipoCampo === 'select') {
+        opcionesDiv.style.display = 'block';
+    } else {
+        opcionesDiv.style.display = 'none';
+        document.getElementById('opciones-container').innerHTML = ''; // Limpiar opciones anteriores
+    }
+}
+
+function agregarOpcion() {
+    var opcionesContainer = document.getElementById('opciones-container');
+    var nuevaOpcion = document.createElement('div');
+    nuevaOpcion.innerHTML = '<input type="text" name="opcion_nombre[]" placeholder="Nombre de la opción">' +
+                            '<input type="text" name="opcion_valor[]" placeholder="Valor de la opción">';
+    opcionesContainer.appendChild(nuevaOpcion);
+}
+</script>
+</body>
+</html>
+
