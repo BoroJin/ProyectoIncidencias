@@ -10,7 +10,7 @@ import json
 
 
 def dashboard(request):
-    incidencia = Incidencia.objects.filter(estado_incidencia='Activo')
+    incidencia = Incidencia.objects.filter(estado_incidencia='En proceso')
     return render(request, 'dashboard/dashboard_director.html',{'incidencia':incidencia})
 
 def incidencias(request):
@@ -95,6 +95,7 @@ def asignarUsuario (request):
 
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
     incidencia.usuario_asignado_id = usuario_id
+    incidencia.estado_incidencia = 'En proceso'
     incidencia.save()
 
     return redirect('/incidencias/')
@@ -102,7 +103,7 @@ def asignarUsuario (request):
 def rechazoIncidencia (request,id_incidencia):
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
 
-    if incidencia.estado_incidencia == 'Rechazada':
+    if incidencia.estado_incidencia == 'Cancelada':
         return redirect('/incidencias/')
     return render(request, 'dashboard/rechazo_de_incidencias.html', {'incidencia': incidencia})
 
@@ -121,11 +122,12 @@ def rechazarIncidencia(request):
     fecha_asignacion = timezone.now()
 
 
-    estado = 'Rechazada'
+    estado = 'Cancelada'
     registro = RegistroAuditoriaAsignacion.objects.create(id_incidencia_id = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
 
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
-    incidencia.estado_incidencia = 'Rechazada'
+    incidencia.estado_incidencia = 'Cancelada'
+    incidencia.usuario_asignado_id = None
     incidencia.save()
     return redirect('/incidencias/')
 
@@ -133,6 +135,7 @@ def deshacerAsignacion(request,id_incidencia):
 
     incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
     incidencia.usuario_asignado_id = None
+    incidencia.estado_incidencia = 'Pendiente'
     incidencia.save()
 
     return redirect('/incidencias/')
