@@ -60,38 +60,24 @@
             </thead>
 
             <tbody id="tabla_usuarios">
-                <!-- Aquí irán los usuarios -->
+                {% for ticket in tickets %}
                 <tr>
-                    <td>1</td>
-                    <td>Juan Pérez</td>
-                    <td>juan.perez@gmail.com</td>
-                    <td>Gestor Territorial</td>
-                    <td>Se me olvido la contraseña de inicio de sesion</td>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.usuario.nombre }}</td>
+                    <td>{{ ticket.usuario.correo_electronico }}</td>
+                    <td>{{ ticket.usuario.get_rol_display }}</td>
+                    <td>{{ ticket.asunto }}</td>
                     <td>
                         <button class="btn btn-primary btn-sm">Ver</button>
                     </td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td>2</td>
-                    <td>María Gómez</td>
-                    <td>maria.gomez@gmail.com</td>
-                    <td>Resolutor</td>
-                    <td>Se me cambio el color de mi perfil de usuario</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Ver</button>
-                    </td>
+                    <td colspan="6">No hay tickets registrados.</td>
                 </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Pedro Fernández</td>
-                    <td>pedro.fernandez@gmail.com</td>
-                    <td>Director</td>
-                    <td>No dice mi nombre en mi usuario cuando ingreso</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Ver</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
+            
         </table>
 
         <div class="col-md-4">

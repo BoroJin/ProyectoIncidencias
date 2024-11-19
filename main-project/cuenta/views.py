@@ -39,7 +39,6 @@ def crear_ticket(request):
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
-
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')

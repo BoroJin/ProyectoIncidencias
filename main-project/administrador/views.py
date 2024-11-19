@@ -10,13 +10,15 @@ from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
 from django.http import JsonResponse
 from django.http import HttpResponse
-from cuenta.models import Usuario
+from cuenta.models import Usuario, Ticket
+
 
 def adm_principal(request):
     return render(request, 'administrador/Adm_principal.html')
 
 def adm_ticket(request):
-    return render(request, 'administrador/Adm_ticket.html')
+    tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
+    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
 
 def registro_auditoria(request):
     return render(request, 'administrador/Registros_de_auditoria.html')
@@ -97,7 +99,6 @@ class ConfiguracionMunicipalidadView(APIView):
         serializer = ConfiguracionMunicipalidadSerializer(configuracion)
         return Response(serializer.data)
     
-
     
 def importar_usr_vista(request):
     return render(request, 'administrador/importar_usr_vista.html')
