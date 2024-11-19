@@ -151,7 +151,7 @@ def exportar_csv(request):
     usuarios = Usuario.objects.all()
     for usuario in usuarios:
         # Escribe cada usuario en el archivo CSV
-        writer.writerow([usuario.nombre,usuario.contrasena,usuario.correo_electronico,usuario.rol])
+        writer.writerow([usuario.nombre,usuario.password,usuario.correo_electronico,usuario.rol])
     return response #Retorna el csv para descargar
 
 # #Esta funcion busca validar nombres de usuarios, en aspectos como:
