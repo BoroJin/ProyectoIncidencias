@@ -164,7 +164,7 @@ def exportar_csv(request):
     #    -Si tiene un punto luego del arroba
     # - Rol
     #    -Que el rol, sea valido (Administrador)(Gestor Territorial)(Director)(Departamento de obras)(Resolutor)
-def validar_csv_entrada(ruta,longitud_max=10,longitud_min=3):
+def validar_csv_entrada(ruta,longitud_max=1000,longitud_min=3):
     #Obtener una lista de los usuarios en uso
     usuarios_en_uso = Usuario.objects.values_list('nombre', flat=True)
     errores = []
