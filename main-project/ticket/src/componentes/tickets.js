@@ -1,12 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CgDanger } from "react-icons/cg";
 
-const limpiar = () => {
-  document.getElementById("Asunto").value = "";
-  document.getElementById("Descripcion").value = "";
-};
 const Tickets = () => {
+  const [correoElectronico, setCorreoElectronico] = useState("");
+  const [asunto, setAsunto] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [mensaje, setMensaje] = useState("");
+
+  const limpiar = () => {
+    setCorreoElectronico("");
+    setAsunto("");
+    setDescripcion("");
+    setMensaje("");
+  };
+
+  const enviarTicket = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/cuenta/crear-ticket/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          correo_electronico: correoElectronico,
+          asunto: asunto,
+          descripcion: descripcion,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMensaje(data.success || "Ticket creado con éxito");
+        limpiar();
+      } else {
+        const errorData = await response.json();
+        setMensaje(errorData.error || "Error al crear el ticket");
+      }
+    } catch (error) {
+      setMensaje("Hubo un error al procesar tu solicitud");
+    }
+  };
+
   return (
     <div className="todoApp">
       <div className="card">
@@ -46,15 +81,33 @@ const Tickets = () => {
 
               <div className="labelGeneral">
                 <label className="textoTit" for="Asunto">
+                  Ingrse correo electronico con el cual comunicarse:
+                </label>
+
+                <div className="inputAsunto">
+                  <input
+                    id="Asunto"
+                    type="email"
+                    value={correoElectronico}
+                    onChange={(e) => setCorreoElectronico(e.target.value)}
+                    placeholder="Correo electrónico"
+                    required
+                  />
+                </div>
+
+
+                <label className="textoTit" for="Asunto">
                   Ingresa el asunto (Error de diseño, funciones erróneas, error
                   de carga, etc):
                 </label>
 
                 <div className="inputAsunto">
                   <input
-                    type="text"
                     id="Asunto"
-                    placeholder="Asunto en cuestión"
+                    type="text"
+                    value={asunto}
+                    onChange={(e) => setAsunto(e.target.value)}
+                    placeholder="Asunto del problema"
                     required
                   />
                 </div>
@@ -67,24 +120,21 @@ const Tickets = () => {
                   </div>
                   <div className="textArea">
                     <textarea
+                      value={descripcion}
+                      onChange={(e) => setDescripcion(e.target.value)}
+                      placeholder="Descripción detallada"
                       id="Descripcion"
-                      placeholder="Descripción"
                       required
                     ></textarea>
                   </div>
                 </div>
-                <button className="btn btn-primary" id="boton1 ">
-                  {" "}
-                  Enviar Ticket{" "}
+                <button className="btn btn-primary" onClick={enviarTicket}>
+                  Enviar Ticket
                 </button>
-                <button
-                  className="btn btn-secondary"
-                  id="boton2"
-                  onClick={limpiar}
-                >
-                  {" "}
-                  Limpiar campos{" "}
+                <button className="btn btn-secondary" onClick={limpiar}>
+                  Limpiar Campos
                 </button>
+                <div>{mensaje && <p>{mensaje}</p>}</div>
                 <button className="btn btn-secondary" id="boton2 ">
                   <Link to="/chatSoporte"> Chat de soporte </Link>
                 </button>

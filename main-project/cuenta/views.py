@@ -2,14 +2,43 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import Usuario
+from .models import Usuario, Ticket
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.conf import settings
 from django.urls import reverse
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def crear_ticket(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            correo_electronico = data.get("correo_electronico")
+            asunto = data.get("asunto")
+            descripcion = data.get("descripcion")
+            
+            # Verificar si el correo existe en la tabla de usuarios
+            usuario = Usuario.objects.filter(correo_electronico=correo_electronico).first()
+            if not usuario:
+                return JsonResponse({"error": "El correo no está registrado"}, status=400)
+
+            # Crear el ticket
+            Ticket.objects.create(
+                usuario=usuario,
+                asunto=asunto,
+                descripcion=descripcion
+            )
+
+            return JsonResponse({"success": "Ticket creado con éxito"}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
+
 
 class LoginView(APIView):
     def post(self, request):

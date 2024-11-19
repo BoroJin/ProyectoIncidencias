@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.timezone import now
 
 
 class CustomUserManager(BaseUserManager):
@@ -51,3 +52,22 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nombre
+
+
+class Ticket(models.Model):
+    ESTADOS = [
+        ('abierto', 'Abierto'),
+        ('en_proceso', 'En proceso'),
+        ('resuelto', 'Resuelto'),
+        ('cerrado', 'Cerrado'),
+    ]
+
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="tickets")
+    asunto = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='abierto')
+    fecha_creacion = models.DateTimeField(default=now)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Ticket #{self.id} - {self.asunto}"
