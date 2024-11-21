@@ -106,7 +106,7 @@ DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hola',
         'USER': 'postgres',
-        'PASSWORD': 'operacion7',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
     }
