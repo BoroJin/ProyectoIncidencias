@@ -6,22 +6,17 @@ import { getAllIncidencias, assignResolutor } from "../api/incidencias.api";
 const AsignarResolutor = () => {
   const [incidencias, setIncidencias] = useState([]);
   const [resolutores, setResolutores] = useState([]);
-  const [selectedIncidencia, setSelectedIncidencia] = useState(null);
-  const [selectedResolutor, setSelectedResolutor] = useState(null);
-  const [comentario, setComentario] = useState("");
+  const [selectedResolutores, setSelectedResolutores] = useState({});
+  const [comentarios, setComentarios] = useState({});
   const navigate = useNavigate();
-  console.log("Resolutores cargados:", resolutores);
 
   useEffect(() => {
-    // Cargar incidencias con estado "aprobada"
-
     async function fetchIncidencias() {
       const res = await getAllIncidencias();
       setIncidencias(res.data.filter((i) => i.estado === "aprobada"));
     }
     fetchIncidencias();
 
-    // Cargar lista de resolutores
     async function fetchResolutores() {
       try {
         const res = await fetch("http://127.0.0.1:8000/urls/resolutores/");
@@ -29,7 +24,6 @@ const AsignarResolutor = () => {
           throw new Error(`Error en la solicitud: ${res.statusText}`);
         }
         const data = await res.json();
-        console.log("Resolutores cargados:", data);
         setResolutores(data);
       } catch (error) {
         console.error("Error al cargar resolutores:", error);
@@ -38,71 +32,89 @@ const AsignarResolutor = () => {
     fetchResolutores();
   }, []);
 
-  const handleAssign = async () => {
-    if (selectedIncidencia && selectedResolutor) {
+  const handleAssign = async (incidenciaId) => {
+    const resolutorId = selectedResolutores[incidenciaId];
+    const comentario = comentarios[incidenciaId] || "";
+
+    if (resolutorId) {
       await assignResolutor({
-        incidenciaId: selectedIncidencia.id,
-        resolutorId: selectedResolutor.id,
+        incidenciaId,
+        resolutorId,
         comentario,
       });
       alert("Resolutor asignado correctamente.");
       navigate("/depto-obras");
     } else {
-      alert("Por favor selecciona una incidencia y un resolutor.");
+      alert("Por favor selecciona un resolutor.");
     }
+  };
+
+  const handleResolutorChange = (incidenciaId, resolutorId) => {
+    setSelectedResolutores({
+      ...selectedResolutores,
+      [incidenciaId]: resolutorId,
+    });
+  };
+
+  const handleComentarioChange = (incidenciaId, comentario) => {
+    setComentarios({
+      ...comentarios,
+      [incidenciaId]: comentario,
+    });
   };
 
   return (
     <div>
-      <h2>Asignar Resolutor a Incidencia</h2>
-      <div className="flex-container">
-        <div className="column">
-          <h3>Incidencias Aprobadas</h3>
-          <ul>
-            {incidencias.map((incidencia) => (
-              <li
-                key={incidencia.id}
-                onClick={() => setSelectedIncidencia(incidencia)}
-                style={{
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedIncidencia?.id === incidencia.id ? "#ddd" : "#fff",
-                }}
-              >
-                {incidencia.titulo_Incidencia}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="column">
-          <h3>Resolutores Disponibles</h3>
-          <ul>
-            {resolutores.map((resolutor) => (
-              <li
-                key={resolutor.id}
-                onClick={() => setSelectedResolutor(resolutor)}
-                style={{
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedResolutor?.id === resolutor.id ? "#ddd" : "#fff",
-                }}
-              >
-                {resolutor.nombre}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div>
-        <h3>Comentario</h3>
-        <textarea
-          value={comentario}
-          onChange={(e) => setComentario(e.target.value)}
-          rows="4"
-          cols="50"
-        />
-      </div>
-      <button onClick={handleAssign}>Confirmar Asignación</button>
+      <h2>Asignar Resolutor a Incidencias</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Título de Incidencia</th>
+            <th>Resolutores Disponibles</th>
+            <th>Comentario</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {incidencias.map((incidencia) => (
+            <tr key={incidencia.id}>
+              <td>{incidencia.titulo_Incidencia}</td>
+              <td>
+                <select
+                  value={selectedResolutores[incidencia.id] || ""}
+                  onChange={(e) =>
+                    handleResolutorChange(incidencia.id, e.target.value)
+                  }
+                >
+                  <option value="" disabled>
+                    Selecciona un resolutor
+                  </option>
+                  {resolutores.map((resolutor) => (
+                    <option key={resolutor.id} value={resolutor.id}>
+                      {resolutor.nombre}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td>
+                <textarea
+                  value={comentarios[incidencia.id] || ""}
+                  onChange={(e) =>
+                    handleComentarioChange(incidencia.id, e.target.value)
+                  }
+                  rows="2"
+                  cols="30"
+                />
+              </td>
+              <td>
+                <button onClick={() => handleAssign(incidencia.id)}>
+                  Asignar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <button onClick={() => navigate("/depto-obras")}>Cancelar</button>
     </div>
   );
