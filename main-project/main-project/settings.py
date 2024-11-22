@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'gestor_territorial',
     'director',
     'Dobras',
+    'django_extensions',
     'coreapi',
 ]
 
@@ -106,7 +107,7 @@ DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hola',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'operacion7',
         'HOST': 'localhost',
         'PORT': '5432',
     }

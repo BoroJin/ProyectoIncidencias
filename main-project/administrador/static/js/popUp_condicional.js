@@ -47,7 +47,8 @@ document.getElementById('btnSubir').addEventListener('click', function () {
 document.getElementById('btnContinuar').addEventListener('click', function () {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    fetch('/agregar_usuarios_desde_csv/', { 
+    fetch('/administrador/agregar_usuarios_desde_csv/', {
+
         method: 'POST',
         headers: {
             'X-CSRFToken': csrftoken,
