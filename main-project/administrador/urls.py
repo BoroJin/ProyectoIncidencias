@@ -19,6 +19,7 @@ urlpatterns = [
     path('importar_usr_vista/', views.importar_usr_vista, name='importar_usr_vista'),
     path('recibir_y_validar/', views.recibir_y_validar_csv, name='recibir_y_validar'),
     path('agregar_usuarios_desde_csv/', views.agregar_usuarios_desde_csv, name='agregar_usuarios_desde_csv'),
+    
 
     
 ]
