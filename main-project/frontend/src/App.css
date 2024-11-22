@@ -357,4 +357,61 @@ body {
   padding: 5px 0;
 }
 
+.separaciones-verticales th,
+.separaciones-verticales td {
+  border-right: 1px solid #ddd; /* Líneas verticales */
+}
+
+.separaciones-verticales th:last-child,
+.separaciones-verticales td:last-child {
+  border-right: none; /* Quita la línea derecha del último elemento */
+}
+
+.separaciones-verticales th {
+  background-color: #f1f1f1; /* Fondo para encabezados */
+  text-align: left;
+  padding: 10px;
+}
+
+.separaciones-verticales td {
+  padding: 10px;
+  text-align: left;
+}
+
+.separaciones-verticales tbody tr:nth-child(odd) {
+  background-color: #fafafa; /* Fondo alternativo para filas */
+}
+
+.bigcard-wide {
+  max-width: 90%; /* Aumenta el ancho máximo de la tarjeta */
+  min-width: 800px; /* Asegura que la tarjeta no sea demasiado estrecha */
+  margin: 0 auto; /* Centra la tarjeta horizontalmente */
+  padding: 20px; /* Añade espacio interno */
+}
+
+.bigcard-content {
+  overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+}
+
+.resolutor-table {
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+  border-collapse: collapse; /* Elimina el espacio entre las celdas */
+}
+
+.resolutor-table th,
+.resolutor-table td {
+  border: 1px solid #ddd; /* Agrega borde a las celdas */
+  padding: 10px; /* Espaciado interno */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.resolutor-table th {
+  background-color: #f1f1f1; /* Color de fondo para encabezados */
+}
+
+.button-container {
+  margin-top: 20px; /* Espaciado entre la tabla y el botón */
+  text-align: right; /* Alinea los botones a la derecha */
+}
+
 /* FIN HOME */

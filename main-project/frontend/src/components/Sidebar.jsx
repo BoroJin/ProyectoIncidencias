@@ -35,9 +35,6 @@ function Sidebar() {
                 Asignar Resolutor a Incidencias
               </Link>
             </li>
-            <li>
-              <Link to="/depto-obras/option2">Departamento Obras Option 2</Link>
-            </li>
           </>
         );
       case "/director":

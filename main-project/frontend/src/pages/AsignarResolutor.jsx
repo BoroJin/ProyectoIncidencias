@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import BigCard from "../components/BigCard";
 import { getAllIncidencias, assignResolutor } from "../api/incidencias.api";
 
 const AsignarResolutor = () => {
@@ -64,59 +65,74 @@ const AsignarResolutor = () => {
   };
 
   return (
-    <div>
-      <h2>Asignar Resolutor a Incidencias</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Título de Incidencia</th>
-            <th>Resolutores Disponibles</th>
-            <th>Comentario</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {incidencias.map((incidencia) => (
-            <tr key={incidencia.id}>
-              <td>{incidencia.titulo_Incidencia}</td>
-              <td>
-                <select
-                  value={selectedResolutores[incidencia.id] || ""}
-                  onChange={(e) =>
-                    handleResolutorChange(incidencia.id, e.target.value)
-                  }
-                >
-                  <option value="" disabled>
-                    Selecciona un resolutor
-                  </option>
-                  {resolutores.map((resolutor) => (
-                    <option key={resolutor.id} value={resolutor.id}>
-                      {resolutor.nombre}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <textarea
-                  value={comentarios[incidencia.id] || ""}
-                  onChange={(e) =>
-                    handleComentarioChange(incidencia.id, e.target.value)
-                  }
-                  rows="2"
-                  cols="30"
-                />
-              </td>
-              <td>
-                <button onClick={() => handleAssign(incidencia.id)}>
-                  Asignar
-                </button>
-              </td>
+    <BigCard title="Asignar Resolutor a Incidencias" customClass="bigcard-wide">
+      <div className="bigcard-content">
+        <table className="resolutor-table separaciones-verticales">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Resolutor</th>
+              <th>Comentario</th>
+              <th>Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button onClick={() => navigate("/depto-obras")}>Cancelar</button>
-    </div>
+          </thead>
+          <tbody>
+            {incidencias.map((incidencia) => (
+              <tr key={incidencia.id}>
+                <td>{incidencia.id}</td>
+                <td>{incidencia.titulo_Incidencia}</td>
+                <td>
+                  <select
+                    className="btn-detalle"
+                    value={selectedResolutores[incidencia.id] || ""}
+                    onChange={(e) =>
+                      handleResolutorChange(incidencia.id, e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      Asigna un Resolutor
+                    </option>
+                    {resolutores.map((resolutor) => (
+                      <option key={resolutor.id} value={resolutor.id}>
+                        {resolutor.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <textarea
+                    className="textarea-comentario"
+                    value={comentarios[incidencia.id] || ""}
+                    onChange={(e) =>
+                      handleComentarioChange(incidencia.id, e.target.value)
+                    }
+                    rows="2"
+                    cols="30"
+                  />
+                </td>
+                <td>
+                  <button
+                    className="btn-comentario"
+                    onClick={() => handleAssign(incidencia.id)}
+                  >
+                    Enviar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="button-container">
+          <button
+            className="btn-custom"
+            onClick={() => navigate("/depto-obras")}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </BigCard>
   );
 };
 

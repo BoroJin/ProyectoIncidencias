@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { initMap } from "../api/mapa";
+import { initMap, addMarkers, focusMarker } from "../api/mapa";
 import "leaflet/dist/leaflet.css";
 import Card from "../components/Card";
 import "../App.css";
@@ -8,32 +8,35 @@ import { getAllIncidencias } from "../api/incidencias.api";
 
 const DepartamentoObrasView = () => {
   const [incidencias, setIncidencias] = useState([]);
+
   useEffect(() => {
-    initMap("map");
+    initMap();
+
     async function loadIncidencias() {
       try {
         const res = await getAllIncidencias();
-        console.log(res);
         setIncidencias(res.data);
+
+        // Agregar marcadores al mapa
+        if (res.data && res.data.length > 0) {
+          addMarkers(res.data);
+        }
       } catch (error) {
         console.error("Error al cargar incidencias:", error);
       }
     }
+
     loadIncidencias();
   }, []);
+
+  const handleIncidenciaClick = (id) => {
+    focusMarker(id); // Llama a la función para centrar el mapa en el marcador
+  };
 
   return (
     <div className="card-container">
       <Card title="Mapa">
         <div id="map"></div>
-        <div id="buttons" style={{ display: "none" }}>
-          <button id="removeMarker" className="custom-button1">
-            Remover marcador
-          </button>
-          <button id="openPopup" className="custom-button2">
-            Rellenar formulario
-          </button>
-        </div>
       </Card>
       <Card title="Últimas Notificaciones">
         <p>Notificaciones relacionadas a progreso de las incidencias.</p>
@@ -50,7 +53,12 @@ const DepartamentoObrasView = () => {
           <span>Encargado</span>
         </div>
         {incidencias.map((incidencia) => (
-          <div key={incidencia.id} className="incidencia-row">
+          <div
+            key={incidencia.id}
+            className="incidencia-row"
+            onClick={() => handleIncidenciaClick(incidencia.id)} // Evento para manejar clic
+            style={{ cursor: "pointer" }} // Agregar estilo de puntero
+          >
             <span>{incidencia.id}</span>
             <span>{incidencia.titulo_Incidencia}</span>
             <span>{incidencia.descripcion}</span>
