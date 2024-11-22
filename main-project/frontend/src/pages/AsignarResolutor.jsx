@@ -65,74 +65,81 @@ const AsignarResolutor = () => {
   };
 
   return (
-    <BigCard title="Asignar Resolutor a Incidencias" customClass="bigcard-wide">
-      <div className="bigcard-content">
-        <table className="resolutor-table separaciones-verticales">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Título</th>
-              <th>Resolutor</th>
-              <th>Comentario</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {incidencias.map((incidencia) => (
-              <tr key={incidencia.id}>
-                <td>{incidencia.id}</td>
-                <td>{incidencia.titulo_Incidencia}</td>
-                <td>
-                  <select
-                    className="btn-detalle"
-                    value={selectedResolutores[incidencia.id] || ""}
-                    onChange={(e) =>
-                      handleResolutorChange(incidencia.id, e.target.value)
-                    }
-                  >
-                    <option value="" disabled>
-                      Asigna un Resolutor
-                    </option>
-                    {resolutores.map((resolutor) => (
-                      <option key={resolutor.id} value={resolutor.id}>
-                        {resolutor.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <textarea
-                    className="textarea-comentario"
-                    value={comentarios[incidencia.id] || ""}
-                    onChange={(e) =>
-                      handleComentarioChange(incidencia.id, e.target.value)
-                    }
-                    rows="2"
-                    cols="30"
-                  />
-                </td>
-                <td>
-                  <button
-                    className="btn-comentario"
-                    onClick={() => handleAssign(incidencia.id)}
-                  >
-                    Enviar
-                  </button>
-                </td>
+    <div className="center-container">
+      {" "}
+      {/* Añadido el contenedor que centra la BigCard */}
+      <BigCard
+        title="Asignar Resolutor a Incidencias"
+        customClass="bigcard-wide"
+      >
+        <div className="bigcard-content">
+          <table className="resolutor-table separaciones-verticales">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Incidencia</th>
+                <th>Resolutor</th>
+                <th>Comentario</th>
+                <th>Acción</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="button-container">
-          <button
-            className="btn-custom"
-            onClick={() => navigate("/depto-obras")}
-          >
-            Cancelar
-          </button>
+            </thead>
+            <tbody>
+              {incidencias.map((incidencia) => (
+                <tr key={incidencia.id}>
+                  <td>{incidencia.id}</td>
+                  <td>{incidencia.titulo_Incidencia}</td>
+                  <td>
+                    <select
+                      className="btn-detalle"
+                      value={selectedResolutores[incidencia.id] || ""}
+                      onChange={(e) =>
+                        handleResolutorChange(incidencia.id, e.target.value)
+                      }
+                    >
+                      <option value="" disabled>
+                        Asigne un Resolutor
+                      </option>
+                      {resolutores.map((resolutor) => (
+                        <option key={resolutor.id} value={resolutor.id}>
+                          {resolutor.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <textarea
+                      className="textarea-comentario"
+                      value={comentarios[incidencia.id] || ""}
+                      onChange={(e) =>
+                        handleComentarioChange(incidencia.id, e.target.value)
+                      }
+                      rows="2"
+                      cols="30"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className="btn-comentario"
+                      onClick={() => handleAssign(incidencia.id)}
+                    >
+                      Enviar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="button-container">
+            <button
+              className="btn-custom"
+              onClick={() => navigate("/depto-obras")}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
-      </div>
-    </BigCard>
+      </BigCard>
+    </div>
   );
 };
 
