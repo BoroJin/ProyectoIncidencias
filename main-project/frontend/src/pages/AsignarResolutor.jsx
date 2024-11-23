@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import Card from "../components/Card";
 import BigCard from "../components/BigCard";
 import { getAllIncidencias, assignResolutor } from "../api/incidencias.api";
+import { initMap } from "../api/mapa";
 
 const AsignarResolutor = () => {
   const [incidencias, setIncidencias] = useState([]);
@@ -12,6 +14,8 @@ const AsignarResolutor = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    initMap();
+
     async function fetchIncidencias() {
       const res = await getAllIncidencias();
       setIncidencias(res.data.filter((i) => i.estado === "aprobada"));
@@ -65,80 +69,84 @@ const AsignarResolutor = () => {
   };
 
   return (
-    <div className="center-container">
-      {" "}
-      {/* Añadido el contenedor que centra la BigCard */}
-      <BigCard
-        title="Asignar Resolutor a Incidencias"
-        customClass="bigcard-wide"
-      >
-        <div className="bigcard-content">
-          <table className="resolutor-table separaciones-verticales">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Incidencia</th>
-                <th>Resolutor</th>
-                <th>Comentario</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {incidencias.map((incidencia) => (
-                <tr key={incidencia.id}>
-                  <td>{incidencia.id}</td>
-                  <td>{incidencia.titulo_Incidencia}</td>
-                  <td>
-                    <select
-                      className="btn-detalle"
-                      value={selectedResolutores[incidencia.id] || ""}
-                      onChange={(e) =>
-                        handleResolutorChange(incidencia.id, e.target.value)
-                      }
-                    >
-                      <option value="" disabled>
-                        Asigne un Resolutor
-                      </option>
-                      {resolutores.map((resolutor) => (
-                        <option key={resolutor.id} value={resolutor.id}>
-                          {resolutor.nombre}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <textarea
-                      className="textarea-comentario"
-                      value={comentarios[incidencia.id] || ""}
-                      onChange={(e) =>
-                        handleComentarioChange(incidencia.id, e.target.value)
-                      }
-                      rows="2"
-                      cols="30"
-                    />
-                  </td>
-                  <td>
-                    <button
-                      className="btn-comentario"
-                      onClick={() => handleAssign(incidencia.id)}
-                    >
-                      Enviar
-                    </button>
-                  </td>
+    <div className="flex-container">
+      <div className="card-wrapper">
+        <Card title="Mapa">
+          <div id="map"></div>
+        </Card>
+        <br />
+        <BigCard
+          title="Asignar Resolutor a Incidencias"
+          customClass="bigcard-wide"
+        >
+          <div className="bigcard-content">
+            <table className="resolutor-table separaciones-verticales">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Incidencia</th>
+                  <th>Resolutor</th>
+                  <th>Comentario</th>
+                  <th>Acción</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="button-container">
-            <button
-              className="btn-custom"
-              onClick={() => navigate("/depto-obras")}
-            >
-              Cancelar
-            </button>
+              </thead>
+              <tbody>
+                {incidencias.map((incidencia) => (
+                  <tr key={incidencia.id}>
+                    <td>{incidencia.id}</td>
+                    <td>{incidencia.titulo_Incidencia}</td>
+                    <td>
+                      <select
+                        className="btn-detalle"
+                        value={selectedResolutores[incidencia.id] || ""}
+                        onChange={(e) =>
+                          handleResolutorChange(incidencia.id, e.target.value)
+                        }
+                      >
+                        <option value="" disabled>
+                          Asigne un Resolutor
+                        </option>
+                        {resolutores.map((resolutor) => (
+                          <option key={resolutor.id} value={resolutor.id}>
+                            {resolutor.nombre}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <textarea
+                        className="textarea-comentario"
+                        value={comentarios[incidencia.id] || ""}
+                        onChange={(e) =>
+                          handleComentarioChange(incidencia.id, e.target.value)
+                        }
+                        rows="2"
+                        cols="30"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className="btn-comentario"
+                        onClick={() => handleAssign(incidencia.id)}
+                      >
+                        Enviar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="button-container">
+              <button
+                className="btn-custom"
+                onClick={() => navigate("/depto-obras")}
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
-        </div>
-      </BigCard>
+        </BigCard>
+      </div>
     </div>
   );
 };

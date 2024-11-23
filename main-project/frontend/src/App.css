@@ -426,4 +426,17 @@ body {
   border-radius: 8px; /* Bordes redondeados para un estilo más suave */
 }
 
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+}
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra elementos en dirección vertical */
+}
+
 /* FIN HOME */
