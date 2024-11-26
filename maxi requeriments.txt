@@ -1,4 +1,4 @@
-python = 3.11.8
+#python = 3.11.8
 
 django-extensions
 asgiref
@@ -13,8 +13,9 @@ django-cors-headers
 python-dotenv
 djangorestframework-simplejwt
 #nmp
-bootstrap
-react-router-dom
+#bootstrap
+#react-router-dom
 axios
+coreapi
 
 

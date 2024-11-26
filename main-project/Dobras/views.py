@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Usuario, Incidencia, RegistroAsignacion, Notificaciones
-from .serializer import UsuarioSerializer, IncidenciaSerializer, RegistroAsignacionSerializer, NotificacionesSerializer
+from .models import Usuario, Incidencia, RegistroAsignacion
+from .serializer import UsuarioSerializer, IncidenciaSerializer, RegistroAsignacionSerializer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -21,10 +21,6 @@ class IncidenciaView(viewsets.ModelViewSet):
 class RegistroAsignacionView(viewsets.ModelViewSet):
     serializer_class = RegistroAsignacionSerializer
     queryset = RegistroAsignacion.objects.all()
-
-class NotificacionesView(viewsets.ModelViewSet):
-    serializer_class = NotificacionesSerializer
-    queryset = Notificaciones.objects.all()
 
 def obtener_resolutores(request):
     if request.method == "GET":

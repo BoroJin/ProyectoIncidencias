@@ -21,10 +21,3 @@ class RegistroAsignacion(models.Model):
     def __str__(self):
         return self.idIncidencia.titulo_Incidencia
     
-class Notificaciones(models.Model):
-    titulo = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    idincidencia = models.ForeignKey(Incidencia, on_delete=models.CASCADE)
-    idusuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.titulo
