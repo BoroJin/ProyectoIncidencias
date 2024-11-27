@@ -62,7 +62,7 @@ class LoginView(APIView):
                 elif user.rol == 'Gestor Territorial':    
                     redirect_url = 'http://127.0.0.1:8000/gestor_territorial/'
                 elif user.rol == 'Departamento de obras':      
-                    redirect_url = 'http://localhost:5174/depto-obras'
+                    redirect_url = 'http://localhost:5173/depto-obras'
 
                 return Response({
                     'refresh': str(refresh),

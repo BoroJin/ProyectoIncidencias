@@ -73,7 +73,7 @@ AUTH_USER_MODEL = 'cuenta.Usuario'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3001",# URL del Login
     "http://localhost:3002",# URL del ticket
-    "http://localhost:5174",# URL del Dep obras(carpetas Dobras,fontend,venv y incidencias)
+    "http://localhost:5173",# URL del Dep obras(carpetas Dobras,fontend,venv y incidencias)
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 

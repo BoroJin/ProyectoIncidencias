@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from.models import Usuario, Incidencia, RegistroAsignacion, Notificaciones
+from.models import Usuario, Incidencia, RegistroAsignacion
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,12 +16,6 @@ class IncidenciaSerializer(serializers.ModelSerializer):
 class RegistroAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistroAsignacion
-        fields = '__all__'
-        read_only_fields = ['id']
-
-class NotificacionesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Notificaciones
         fields = '__all__'
         read_only_fields = ['id']
 

@@ -1,10 +1,72 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
 from .models import Campo, Opcion, Formulario
 from gestor_territorial.models import Incidencia
+from cuenta.models import Usuario
+import folium
 
-def home(request):
-    incidencias = Incidencia.objects.all().order_by('-fecha_Reporte')
-    return render(request, 'director/home.html', {'incidencias': incidencias})
+def dashboard(request):
+    incidencia = Incidencia.objects.filter(estado='iniciada')
+    initialMap = folium.Map(location=[-33.427656074857076, -70.61159044504167], zoom_start=9)
+    for location in incidencia:
+        coordinates = (location.latitud, location.longitud)
+        folium.Marker(coordinates, popup='Nombre:'+ location.titulo_Incidencia).add_to(initialMap)
+
+    return render(request, 'director/dashboard.html',{'incidencia':incidencia,'map':initialMap._repr_html_()})
+
+def incidencias(request):
+    incidencia = Incidencia.objects.all()
+    usuarios = Usuario.objects.filter(rol='r')
+    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios})
+
+
+def asignarUsuario (request):
+    id_incidencia = request.POST.get('ID_asignar')
+
+    usuario_id = request.POST.get('usuario_id')
+
+    incidencia = Incidencia.objects.get(id=id_incidencia)
+    incidencia.resolutor_Asignado = usuario_id
+    incidencia.estado = 'Asignada'
+    incidencia.save()
+
+    return redirect('director:incidencias')
+
+def deshacerAsignacion(request,id):
+
+    incidencia = Incidencia.objects.get(id=id)
+    incidencia.resolutor_Asignado = 'Sin asignar'
+    incidencia.estado = 'iniciada'
+    incidencia.save()
+
+    return redirect('director:incidencias')
+
+
+def rechazarIncidencia(request):
+
+    id_incidencia = request.POST.get('ID_rechazo')
+    id_incidencia1 = int(id_incidencia)
+
+
+    justificacion = request.POST.get('justificacion')
+
+    nombre_usuario = request.POST.get('user_rechazo')
+    usuario = Usuario.objects.get(nombre = nombre_usuario)
+    id_usuario = usuario.id_usuario
+
+    fecha_asignacion = timezone.now()
+
+
+    estado = 'rechazada'
+    #registro = RegistroAuditoriaAsignacion.objects.create(id_incidencia_id = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
+
+    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia.estado = 'rechazada'
+    incidencia.resolutor_Asignado = 'none'
+    incidencia.save()
+    return redirect('director:incidencias')
+
 
 def aprobar_rechazar(request, incidencia_id, accion):
     incidencia = get_object_or_404(Incidencia, id=incidencia_id)

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import uuid
 from administrador.models import Usuario
-from Dobras.models import RegistroAsignacion, Notificaciones
+from Dobras.models import RegistroAsignacion
 from gestor_territorial.models import Incidencia
 from django.http import JsonResponse
 from django.core.files.storage import default_storage
@@ -84,100 +84,3 @@ def dashboard_resolutor(request):
     incidencias = getIncidenciasAsigandas()
     return render(request, 'resolutor/dashboard_resolutor.html', {'incidencias': incidencias})
 
-def get_notificaciones(request):
-    mi_id = getMiId()  # Obtiene el ID del usuario actual
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
-
-    # Filtrar todas las notificaciones
-    notificaciones = Notificaciones.objects.filter(
-        idUsuario=mi_id
-    ).union(
-        Notificaciones.objects.filter(
-            incidenciaId__in=incidencias_ids
-        )
-    )
-
-    # Serializar las notificaciones para enviarlas en JSON
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
-        }
-        for notificacion in notificaciones
-    ]
-
-    return JsonResponse({'notificaciones': data})
-
-def get_notificaciones_no_leidas(request):
-    mi_id = getMiId()
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
-
-    # Filtrar notificaciones no leídas
-    notificaciones_no_leidas = Notificaciones.objects.filter(
-        estado_lectura=False,
-        idUsuario=mi_id
-    ).union(
-        Notificaciones.objects.filter(
-            incidenciaId__in=incidencias_ids,
-            estado_lectura=False
-        )
-    )
-
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
-        }
-        for notificacion in notificaciones_no_leidas
-    ]
-
-    return JsonResponse({'notificaciones': data})
-
-def get_notificaciones_leidas(request):
-    mi_id = getMiId()
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
-
-    # Filtrar notificaciones leídas
-    notificaciones_leidas = Notificaciones.objects.filter(
-        estado_lectura=True,
-        idUsuario=mi_id
-    ).union(
-        Notificaciones.objects.filter(
-            incidenciaId__in=incidencias_ids,
-            estado_lectura=True
-        )
-    )
-
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
-        }
-        for notificacion in notificaciones_leidas
-    ]
-
-    return JsonResponse({'notificaciones': data})
-
-def mark_as_read(request):
-    data = json.loads(request.body)
-    notification_ids = data.get('notification_ids', [])
-
-    # Filtra las notificaciones por ID y usuario actual y marca como leídas
-    Notificaciones.objects.filter(idNotificacion__in=notification_ids, idUsuario=request.user).update(estado_lectura=True)
-    
-    return JsonResponse({'status': 'success'})

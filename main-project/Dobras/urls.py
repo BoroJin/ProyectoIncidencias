@@ -10,7 +10,6 @@ router = DefaultRouter()
 router.register(r'incidencias', views.IncidenciaView, 'incidencias')
 router.register(r'usuarios', views.UsuarioView, 'usuarios')
 router.register(r'registroasignaciones', views.RegistroAsignacionView, 'RegistroAsignaciones')
-router.register(r'notificaciones', views.NotificacionesView, 'notificaciones')
 
 urlpatterns = [
     path('api/v1/', include(router.urls) ),
