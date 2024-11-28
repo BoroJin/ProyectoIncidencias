@@ -217,11 +217,11 @@ def agregar_usuarios_desde_csv(request):
 
                 for index, linea in enumerate(contenido, start=1):
                     usuario_data = linea.strip().split(",")
-                    nombre, contrasena, correo, rol = usuario_data[0], usuario_data[1], usuario_data[2], usuario_data[3]
+                    nombre, password, correo, rol = usuario_data[0], usuario_data[1], usuario_data[2], usuario_data[3]
 
                     # Crea y guarda el nuevo usuario
                     try:
-                        nuevo_usuario = Usuario(nombre=nombre, contrasena=contrasena, correo_electronico=correo, rol=rol)
+                        nuevo_usuario = Usuario(nombre=nombre, password=password, correo_electronico=correo, rol=rol)
                         nuevo_usuario.save()
                         usuarios_agregados += 1
                     except IntegrityError:

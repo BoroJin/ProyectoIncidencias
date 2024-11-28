@@ -43,12 +43,11 @@ document.getElementById('btnSubir').addEventListener('click', function () {
         form.reportValidity();
     }
 });
-// Función para llamar a la vista que agrega usuarios desde el CSV
+// Función para llamar a la vista que agrega usuarios desde el CSV// Maneja la redirección después de agregar usuarios
 document.getElementById('btnContinuar').addEventListener('click', function () {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     fetch('/administrador/agregar_usuarios_desde_csv/', {
-
         method: 'POST',
         headers: {
             'X-CSRFToken': csrftoken,
@@ -58,12 +57,14 @@ document.getElementById('btnContinuar').addEventListener('click', function () {
     .then(response => response.json())
     .then(data => {
         const modalContent = document.getElementById('modal-body-content');
-        modalContent.innerHTML = `<p>${data.mensaje}</p>`;
-        document.getElementById('btnContinuar').style.display = 'none'; // Oculta el botón después de agregar
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url + `?mensaje=${encodeURIComponent(data.mensaje)}`;
+        } else {
+            modalContent.innerHTML = `<p>${data.mensaje}</p>`;
+        }
     })
     .catch(error => {
         console.error('Error al agregar usuarios:', error);
-        const modalContent = document.getElementById('modal-body-content');
-        modalContent.innerHTML = '<p>Error al agregar usuarios.</p>';
+        document.getElementById('modal-body-content').innerHTML = '<p>Error al agregar usuarios.</p>';
     });
 });
