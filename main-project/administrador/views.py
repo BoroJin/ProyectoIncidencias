@@ -1,5 +1,5 @@
 #maxi
-
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Logo  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
