@@ -14,15 +14,32 @@ from cuenta.models import Usuario, Ticket
 
 
 def adm_principal(request):
-    return render(request, 'administrador/Adm_principal.html')
+    global user_name #para que el valor no cambie
+    user_name = request.GET.get('user_name', 'Usuario')  # Valor predeterminado: "Usuario"
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+
+    return render(request, 'administrador/Adm_principal.html', {
+        'user_name': user_name
+    })
 
 def adm_ticket(request):
-    tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
-    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
+    # Recuperar los tickets relacionados
+    tickets = Ticket.objects.select_related('usuario').all()
+
+    # Recuperar el nombre del usuario desde la URL
+    #user_name = request.GET.get('user_name', 'Usuario')  # Valor predeterminado: "Usuario"
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+
+    return render(request, 'administrador/Adm_ticket.html', {
+        'tickets': tickets,
+        'user_name': user_name
+    })
 
 def registro_auditoria(request):
-    return render(request, 'administrador/Registros_de_auditoria.html')
-
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+    return render(request, 'administrador/Registros_de_auditoria.html', {
+        'user_name': user_name
+    })
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
         nombre = request.POST['nombre']
@@ -38,11 +55,16 @@ def adm_gestion_usuarios(request):
 
     # Obtener todos los usuarios de la base de datos
     usuarios = Usuario.objects.all()
-
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuarios': usuarios})
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+    return render(request, 'administrador/Adm_gestion_usuarios.html', 
+                  {'usuarios': usuarios, 
+                   'user_name': user_name})
 
 def adm_cargar_masiva(request):
-    return render(request, 'administrador/Adm_cargar_masiva.html')
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+    return render(request, 'administrador/Adm_cargar_masiva.html', {
+        'user_name': user_name
+    })
 
 def adm_actualizar_logo(request):
     logo = Logo.objects.first()
@@ -50,7 +72,6 @@ def adm_actualizar_logo(request):
     # Si no existe un logo en la base de datos, crea uno vacío
     if logo is None:
         logo = Logo.objects.create()  # Crea un logo con valores por defecto
-
     if request.method == 'POST':
         nombre_municipalidad = request.POST.get('nombre_municipalidad')
         
@@ -62,12 +83,14 @@ def adm_actualizar_logo(request):
         logo.save()
 
         messages.success(request, 'El nombre y el logo de la municipalidad se han actualizado.')
-        return redirect('adm_principal')
+        return redirect(f'/administrador/adm_principal/?user_name={user_name}')
 
-    context = {
-        'form': logo  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
-    }
-    return render(request, 'administrador/Adm_actualizar_logo.html', context)
+    print(f"Nombre de usuario recibido en la URL: {user_name}")
+
+    return render(request, 'administrador/Adm_actualizar_logo.html',{
+        'form': logo,  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
+        'user_name': user_name
+    })
 
 
 def eliminar_usuario(request, usuario_id):
@@ -91,7 +114,7 @@ def editar_usuario(request, usuario_id):
         messages.success(request, 'Usuario actualizado correctamente.')
         return redirect('adm_gestion_usuarios')
     
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario, 'user_name': user_name})
 
 class ConfiguracionMunicipalidadView(APIView):
     def get(self, request):
@@ -101,10 +124,14 @@ class ConfiguracionMunicipalidadView(APIView):
     
     
 def importar_usr_vista(request):
-    return render(request, 'administrador/importar_usr_vista.html')
+    return render(request, 'administrador/importar_usr_vista.html', {
+        'user_name': user_name
+    })
 
 def exportar_usr_vista(request):
-    return render(request, 'administrador/exportar_usr_vista.html')
+    return render(request, 'administrador/exportar_usr_vista.html', {
+        'user_name': user_name
+    })
 
 # De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
 def recibir_y_validar_csv(request):

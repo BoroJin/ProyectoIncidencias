@@ -38,7 +38,6 @@ def crear_ticket(request):
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
-
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
@@ -49,8 +48,7 @@ class LoginView(APIView):
             user = Usuario.objects.get(correo_electronico=email)
             if user.password == password:
                 refresh = RefreshToken.for_user(user)
-                refresh = RefreshToken.for_user(user)
-                    
+
                 # Define las URLs de redirección según el rol
                 redirect_url = ''
                 if user.rol == 'Administrador':
@@ -64,10 +62,12 @@ class LoginView(APIView):
                 elif user.rol == 'Departamento de obras':      
                     redirect_url = 'http://localhost:5173/depto-obras'
 
+                # Agregar el nombre del usuario en la respuesta
                 return Response({
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
-                    'redirect_url': redirect_url 
+                    'redirect_url': redirect_url,
+                    'user_name': user.nombre  # Modificacion aqui, para enviar el nombre de usuario para R.auditoria
                 })
             else:
                 return Response({'error': 'Credenciales incorrectas'}, status=status.HTTP_401_UNAUTHORIZED)

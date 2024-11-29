@@ -13,7 +13,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{% url 'adm_principal' %}">
+            <a class="navbar-brand" href="#">
                 <img src="{{ logo }}" alt="Logo Muni">
                 {{ nombre_municipalidad }}
             </a>
@@ -150,7 +150,7 @@
 
         <!-- Botón para abrir el modal de agregar usuarios -->
         <div class="d-flex justify-content-start mt-3">
-            <a href="{% url 'adm_principal' %}" class="btn btn-2 ">Volver</a>
+            <a href="{% url 'adm_principal' %}?user_name={{ user_name }}" class="btn btn-2 ">Volver</a>
 
             <div class="col d-flex justify-content-end">
                 <div class="dropdown">
@@ -164,10 +164,10 @@
                                 data-bs-target="#agregarUsuarioModal">Agregar Usuario</a>
                         </li>
                         <li>
-                            <a href="{% url 'importar_usr_vista' %}" class="dropdown-item">Importar usuarios</a>
+                            <a href="{% url 'importar_usr_vista' %}?user_name={{ user_name }}" class="dropdown-item">Importar usuarios</a>
                         </li>
                         <li>
-                            <a href="{% url 'exportar_usr_vista' %}" class="dropdown-item">Exportar usuarios</a>
+                            <a href="{% url 'exportar_usr_vista' %}?user_name={{ user_name }}" class="dropdown-item">Exportar usuarios</a>
                         </li>
 
                     </ul>
@@ -188,7 +188,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" action="{% url 'adm_gestion_usuarios' %}">
+                <form method="post" action="{% url 'adm_gestion_usuarios' %}?user_name={{ user_name }}">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
@@ -211,7 +211,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary boton-b" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary boton-a">Agregar Usuario</button>
                     </div>
                 </form>
@@ -222,10 +222,10 @@
     <!-- Enlace a jQuery y Bootstrap JS -->
     <script src="{% static 'js/busqueda.js' %}"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

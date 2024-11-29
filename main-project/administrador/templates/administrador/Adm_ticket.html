@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light sidebar">
             <!-- actualizar logo de manera dinamica -->
-            <a class="navbar-brand" href="{% url 'adm_principal' %}">
+            <a class="navbar-brand" href="#">
                 <img src="{{ logo }}" alt="Logo Muni">
                 {{ nombre_municipalidad }}
             </a>
@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Bienvenido Administrador
+                        <a class="nav-link" href="#"> {{ user_name }}
                             <img
                                 src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
                         </a>
@@ -81,7 +81,7 @@
         </table>
 
         <div class="col-md-4">
-            <a href="{% url 'adm_principal' %}" class="btn btn-2">Volver</a>
+            <a href="{% url 'adm_principal' %}?user_name={{ user_name }}" class="btn btn-2">Volver</a>
         </div>
 
     </div>

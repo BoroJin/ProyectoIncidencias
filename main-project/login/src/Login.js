@@ -29,29 +29,50 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
-
-        const response = await fetch('http://localhost:8000/cuenta/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('access_token', data.access);
-            localStorage.setItem('refresh_token', data.refresh);
-            if (data.redirect_url) {
-                window.location.href = data.redirect_url;
+    
+        try {
+            const response = await fetch('http://localhost:8000/cuenta/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+            
+                // Guardar tokens y nombre de usuario en localStorage
+                localStorage.setItem('access_token', data.access);
+                localStorage.setItem('refresh_token', data.refresh);
+                localStorage.setItem('user_name', data.user_name); // Guardar el nombre del usuario, para R.auditoria
+                
+                if (data.redirect_url) {
+                    redirectToDjango(data.redirect_url);
+                }
+            
+            } else {
+                const errorData = await response.json();
+                console.error('Error en login:', errorData);
+                setError('Login fallido. Verifique sus credenciales.');
             }
-
-        } else {
-            const errorData = await response.json();
-            console.error('Error en login:', errorData);
-            setError('Login fallido. Verifique sus credenciales.');
+        } catch (error) {
+            console.error('Error al procesar el login:', error);
+            setError('Error de conexión. Intente nuevamente más tarde.');
         }
-
+    };
+    
+    // Función para redirigir al servidor Django, para registro de auditoria
+    const redirectToDjango = (redirectUrl) => {
+        const userName = localStorage.getItem('user_name');
+        if (userName) {
+            // Redirige al servidor Django con el nombre del usuario como parámetro
+            const finalUrl = `${redirectUrl}?user_name=${encodeURIComponent(userName)}`;
+            console.log(`Redirigiendo a: ${finalUrl}`);
+            window.location.href = finalUrl;
+        } else {
+            console.error('No se encontró el nombre del usuario en localStorage.');
+        }
     };
 
     return (
