@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportar CSV</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_exportar_importar_usr.css' %}">
+</head>
+
+<body>
+    <main class="container">
+        <div class="contenedor">
+            <h2>Exportar Datos a CSV</h2>
+            <p>Haga clic en el botón para descargar los datos en formato CSV.</p>
+            <a href="{% url 'exportar_csv' %}" class="btn">Exportar CSV</a> 
+            <a href="{% url 'adm_gestion_usuarios' %}" class="btn btn-2">Volver</a>
+        </div>
+    </main>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+

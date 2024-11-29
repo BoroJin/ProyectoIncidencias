@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Incidencias</title>
+    <style>
+        /* Estilos generales */
+        body { display: flex; margin: 0; font-family: Arial, sans-serif; }
+        .sidebar { width: 200px; background-color: #333; color: white; height: 100vh; padding-top: 20px; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; }
+        .sidebar a { color: white; padding: 15px; text-decoration: none; display: block; }
+        .sidebar a:hover { background-color: #575757; }
+        .main-content { margin-left: 220px; padding: 20px; width: 100%; }
+        .incidencias-container { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
+        .incidencia-card { border: 1px solid #333; padding: 15px; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); }
+        .btn { display: inline-block; padding: 10px 20px; margin: 5px; text-decoration: none; color: white; border-radius: 4px; }
+        .btn-aprobar { background-color: #4CAF50; }
+        .btn-rechazar { background-color: #f44336; }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación lateral -->
+    <div class="sidebar">
+        <a href="{% url 'director:home' %}">Inicio</a>
+        <a href="{% url 'director:crear_formulario' %}">Crear Formulario</a>
+        <a href="{% url 'director:ver_formularios' %}">Ver Formularios</a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h1>Detalles de Incidencias</h1>
+        <div class="incidencias-container">
+            {% for incidencia in incidencias %}
+                <div class="incidencia-card">
+                    <h2>{{ incidencia.titulo_Incidencia }}</h2>
+                    <p><strong>ID:</strong> {{ incidencia.id }}</p>
+                    <p><strong>Descripción:</strong> {{ incidencia.descripcion }}</p>
+                    <p><strong>Estado:</strong> {{ incidencia.get_estado_display }}</p>
+                    <p><strong>Urgencia:</strong> {{ incidencia.get_urgencia_display }}</p>
+                    <p><strong>Fecha de reporte:</strong> {{ incidencia.fecha_Reporte }}</p>
+                    <p><strong>Coordenadas:</strong> Latitud: {{ incidencia.latitud }}, Longitud: {{ incidencia.longitud }}</p>
+                    <p><strong>ID Usuario Gestor Territorial:</strong> {{ incidencia.id_usuario_gestorTerritorial }}</p>
+                    <p><strong>ID Usuario Departamento:</strong> {{ incidencia.id_usuario_departamento }}</p>
+                    <p><strong>Resolutor Asignado:</strong> {{ incidencia.resolutor_Asignado }}</p>
+                    <p><strong>Comentarios:</strong> {{ incidencia.comentarios }}</p>
+
+                    <!-- Historial de Cambios de Estado -->
+                    <p><strong>Historial de Cambios de Estado:</strong></p>
+                    <ul>
+                        {% for key, value in incidencia.historial_Cambios_estados.items %}
+                            <li>{{ key }}: {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Archivo multimedia, si existe -->
+                    {% if incidencia.direccion_multimedia %}
+                        <p><strong>Archivo multimedia:</strong> <a href="{{ incidencia.direccion_multimedia.url }}" download>Descargar archivo</a></p>
+                    {% endif %}
+
+                    <!-- Respuestas relacionadas -->
+                    <p><strong>Respuestas:</strong></p>
+                    <ul>
+                        {% for respuesta in incidencia.respuestas.all %}
+                            <li><strong>{{ respuesta.campo.nombre }}:</strong> {{ respuesta.valor }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Botones para aprobar o rechazar -->
+                    <a href="{% url 'director:aprobar_rechazar' incidencia.id 'aprobar' %}" class="btn btn-aprobar">Aprobar</a>
+                    <a href="{% url 'director:aprobar_rechazar' incidencia.id 'rechazar' %}" class="btn btn-rechazar">Rechazar</a>
+                </div>
+            {% empty %}
+                <p>No hay incidencias creadas.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
