@@ -174,15 +174,6 @@ def guardar_incidencia(request):
             # Guarda los cambios en la incidencia
             incidencia.save()
 
-            # Crea un nuevo registro en RegistroAsignacion
-            RegistroAsignacion.objects.create(
-                idUsuario=request.user,  # Usuario actual como referencia de quién hizo el cambio
-                idIncidencia=incidencia,
-                fechaAsignacion=timezone.now(),
-                estado=estado,
-                comentario=comentario
-            )
-
             # Retorna la información del archivo y el estado en la respuesta JSON
             return JsonResponse({
                 'status': 'success',
