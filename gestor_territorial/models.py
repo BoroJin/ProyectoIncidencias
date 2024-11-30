@@ -3,7 +3,8 @@ from director.models import Campo
 
 class Incidencia(models.Model):
     id = models.AutoField(primary_key=True)  # ID autoincremental
-    direccion_multimedia = models.FileField(upload_to='incidencias/adjuntos/', blank=True, null=True)  # Archivos adjuntos
+    multimedia_resolutor = models.FileField(upload_to='incidencias/adjuntos/resolutor', blank=True, null=True)  # Archivos adjuntos
+    multimedia_gestor= models.FileField(upload_to='incidencias/adjuntos/gestor', blank=True, null=True)  # Archivos adjuntos
     id_usuario_gestorTerritorial = models.IntegerField(null=True, blank=True)
     titulo_Incidencia = models.CharField(max_length=200)
     
@@ -35,7 +36,6 @@ class Incidencia(models.Model):
     ]
     urgencia = models.CharField(max_length=10, choices=URGENCIA_CHOICES, default='media')  # Nivel de urgencia
     
-    historial_Cambios_estados = models.JSONField(default=dict)  # Historial de cambios de estado
     resolutor_Asignado = models.CharField(max_length=100, blank=True, null=True)  # Resolutor asignado
     id_usuario_departamento = models.IntegerField(null=True, blank=True)
 

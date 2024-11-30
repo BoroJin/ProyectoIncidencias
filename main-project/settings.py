@@ -66,7 +66,7 @@ ROOT_URLCONF = 'main-project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR],
+        'DIRS': [BASE_DIR ],
 
         'APP_DIRS': True,
         'OPTIONS': {
@@ -142,8 +142,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'resolutor', 'static', 'resolutor'),
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
     os.path.join(BASE_DIR, 'departamentoObras', 'dist', 'assets'),
+    
     ]
 
 

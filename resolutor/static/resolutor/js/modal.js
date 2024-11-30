@@ -1,140 +1,161 @@
-// Escucha el evento de carga completa del documento para inicializar los elementos y eventos del modal
-document.addEventListener('DOMContentLoaded', function () {
-    // Selecciona elementos del DOM para manejarlos dentro del script
-    const incidenciaModal = document.getElementById('incidenciaModal'); // Modal de incidencia
-    const btnInconcluso = document.getElementById('btnInconcluso'); // Botón para marcar como "Inconcluso"
-    const btnFinalizado = document.getElementById('btnFinalizado'); // Botón para marcar como "Finalizado"
-    const btnEnviar = document.getElementById('btnEnviar'); // Botón para enviar el formulario
-    const inconclusoSection = document.getElementById('inconclusoSection'); // Sección para ingresar razón de "Inconcluso"
-    const finalizadoSection = document.getElementById('finalizadoSection'); // Sección para subir archivo al marcar "Finalizado"
-    const incidenciaForm = document.getElementById('incidenciaForm'); // Formulario del modal
-    const finalizadoArchivo = document.getElementById('finalizadoArchivo'); // Campo de archivo en la sección "Finalizado"
-    const inconclusoRazon = document.getElementById('inconclusoRazon'); // Campo de texto en la sección "Inconcluso"
-    const errorMessage = document.getElementById('errorMessage'); // Mensaje de error
-    const successMessage = document.getElementById('successMessage'); // Mensaje de éxito
-    let actionType = ''; // Almacena la acción actual (inconcluso o finalizado)
+document.addEventListener('DOMContentLoaded', () => {
+    // Obtener token CSRF
+    const getCookie = (name) => {
+        return document.cookie.split('; ').reduce((acc, cookie) => {
+            const [key, value] = cookie.split('=');
+            return key === name ? decodeURIComponent(value) : acc;
+        }, null);
+    };
 
-    // Manejador de evento que se activa al abrir el modal de incidencia
-    incidenciaModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget; // Botón que abrió el modal
-        const incidenciaData = button.getAttribute('data-incidencia'); // Obtiene datos de la incidencia en formato JSON
-        const incidencia = JSON.parse(incidenciaData); // Convierte los datos a un objeto JavaScript
+    const csrftoken = getCookie('csrftoken');
+    let currentIncidenciaData = null;
+    let currentAction = null; // "Inconcluso" o "Finalizado"
 
-        // Rellena los datos de la incidencia en los elementos del modal
-        document.getElementById('modalIncidenciaId').textContent = incidencia.id;
-        document.getElementById('modalTitulo').textContent = incidencia.titulo;
-        document.getElementById('modalDescripcion').textContent = incidencia.descripcion;
-        document.getElementById('modalUrgencia').textContent = incidencia.urgencia;
-        document.getElementById('modalEstado').textContent = incidencia.estado;
-        document.getElementById('modalFecha').textContent = incidencia.fecha_reporte;
-        document.getElementById('modalResolutor').textContent = incidencia.resolutor;
+    // Inicializar modales
+    const modals = {
+        asignada: new bootstrap.Modal(document.getElementById('incidenciaModalAsignada')),
+        proceso: new bootstrap.Modal(document.getElementById('incidenciaModalProceso'))
+    };
 
-        // Restablece el modal a su estado inicial
-        inconclusoSection.classList.add('d-none');
-        finalizadoSection.classList.add('d-none');
+    // Elementos del DOM
+    const {
+        btnInconcluso,
+        btnFinalizado,
+        btnEnviar,
+        comentariosInconcluso,
+        archivoFinalizado
+    } = {
+        btnInconcluso: document.getElementById('btnInconcluso'),
+        btnFinalizado: document.getElementById('btnFinalizado'),
+        btnEnviar: document.getElementById('btnEnviar'),
+        comentariosInconcluso: document.getElementById('comentariosInconcluso'),
+        archivoFinalizado: document.getElementById('archivoFinalizado')
+    };
+    const iniciarButton = document.querySelector('#incidenciaModalAsignada .btn-proceso');
+    const incidenciaForm = document.getElementById('incidenciaForm');
+
+    // Función para llenar datos en el modal
+    const fillModalData = (modalElement, incidencia) => {
+        const fields = ['Id', 'Titulo', 'Descripcion', 'Urgencia', 'Estado', 'Fecha', 'Resolutor'];
+        fields.forEach(field => {
+            modalElement.querySelector(`#${modalElement.id}${field}`).textContent = incidencia[field.toLowerCase()];
+        });
+    };
+
+    // Función para mostrar el botón "Enviar" y manejar la caja de comentarios
+    const mostrarBotonEnviar = (action) => {
+        currentAction = action;
+        btnEnviar.classList.remove('d-none');
+        btnEnviar.disabled = false;
+        comentariosInconcluso.classList.toggle('d-none', action !== 'Inconcluso');
+        archivoFinalizado.classList.toggle('d-none', action !== 'Finalizado');
+    };
+
+    // Manejar acciones "Inconcluso" y "Finalizado"
+    [btnInconcluso, btnFinalizado].forEach(btn => {
+        btn.addEventListener('click', () => {
+            mostrarBotonEnviar(btn === btnInconcluso ? 'Inconcluso' : 'Finalizado');
+        });
+    });
+
+    // Evento para el botón "Enviar"
+    btnEnviar.addEventListener('click', async (event) => {
+        event.preventDefault();
+        try {
+            if (currentAction === 'Inconcluso') {
+                const comentarios = document.getElementById('comentarios').value.trim();
+                if (!comentarios) throw 'Por favor, justifique el estado a asignar.';
+
+                const response = await fetch('http://127.0.0.1:8000/resolutor/setIncidenciaInconclusa/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({ id: currentIncidenciaData.id, comentarios })
+                });
+
+                if (!response.ok) throw 'Error en la solicitud';
+                await response.json();
+                alert('Incidencia marcada como inconclusa y datos enviados correctamente.');
+                modals.proceso.hide();
+                window.location.reload(); // Recargar la página
+
+            } else if (currentAction === 'Finalizado') {
+                const archivos = document.getElementById('archivos').files;
+                if (archivos.length === 0) throw 'Por favor, adjunte al menos un archivo.';
+
+                const formData = new FormData();
+                formData.append('id', currentIncidenciaData.id);
+                [...archivos].forEach(file => formData.append('archivos', file));
+
+                const response = await fetch('http://127.0.0.1:8000/resolutor/setIncidenciaFinalizada/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    body: formData,
+                });
+
+                if (!response.ok) throw 'Error en la solicitud';
+                await response.json();
+                alert('Incidencia finalizada y archivos enviados correctamente.');
+                modals.proceso.hide();
+                window.location.reload(); // Recargar la página
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(typeof error === 'string' ? error : 'Hubo un error al enviar los datos. Por favor, intenta nuevamente.');
+        }
+    });
+
+    // Reiniciar el estado al cerrar el modal
+    document.getElementById('incidenciaModalProceso').addEventListener('hidden.bs.modal', () => {
+        btnEnviar.classList.add('d-none');
         btnEnviar.disabled = true;
-        errorMessage.textContent = '';
-        errorMessage.classList.add('d-none');
-        successMessage.classList.add('d-none');
-        actionType = '';
+        comentariosInconcluso.classList.add('d-none');
+        archivoFinalizado.classList.add('d-none');
+        currentAction = null;
         incidenciaForm.reset();
     });
 
-// Evento para mostrar la sección "Inconcluso" cuando el usuario selecciona esta opción
-    btnInconcluso.addEventListener('click', function () {
-        actionType = 'inconcluso';
-        inconclusoSection.classList.remove('d-none'); // Muestra la sección "Inconcluso"
-        finalizadoSection.classList.add('d-none'); // Oculta la sección "Finalizado"
-        btnEnviar.disabled = true; // Deshabilita el botón "Enviar"
-        errorMessage.textContent = '';
-        errorMessage.classList.add('d-none');
-        successMessage.classList.add('d-none');
-    });
+    // Manejar clics en las incidencias
+    document.addEventListener('click', (event) => {
+        const target = event.target.closest('.btn-incidencia-asignada, .btn-incidencia-proceso');
+        if (!target) return;
+        event.preventDefault();
 
-    // Evento para mostrar la sección "Finalizado" cuando el usuario selecciona esta opción
-    btnFinalizado.addEventListener('click', function () {
-        actionType = 'finalizado';
-        finalizadoSection.classList.remove('d-none'); // Muestra la sección "Finalizado"
-        inconclusoSection.classList.add('d-none'); // Oculta la sección "Inconcluso"
-        btnEnviar.disabled = true; // Deshabilita el botón "Enviar"
-        errorMessage.textContent = '';
-        errorMessage.classList.add('d-none');
-        successMessage.classList.add('d-none');
-    });
+        const incidenciaData = JSON.parse(target.dataset.incidencia);
+        currentIncidenciaData = incidenciaData;
 
-    // Evento que habilita el botón "Enviar" si el campo de razón de "Inconcluso" tiene texto
-    inconclusoRazon.addEventListener('input', function () {
-        btnEnviar.disabled = inconclusoRazon.value.trim().length === 0;
-    });
-
-    // Evento que habilita el botón "Enviar" si se ha seleccionado un archivo en la sección "Finalizado"
-    finalizadoArchivo.addEventListener('change', function () {
-        btnEnviar.disabled = finalizadoArchivo.files.length === 0;
-    });
-
-    // Evento para manejar el envío del formulario cuando el usuario hace clic en "Enviar"
-    incidenciaForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Previene el envío del formulario por defecto
-
-        // Validación: verifica que haya un archivo seleccionado en "Finalizado"
-        if (actionType === 'finalizado' && finalizadoArchivo.files.length === 0) {
-            errorMessage.textContent = 'Por favor, sube un archivo para finalizar la incidencia.';
-            errorMessage.classList.remove('d-none');
-            return;
+        if (target.classList.contains('btn-incidencia-asignada')) {
+            fillModalData(document.getElementById('incidenciaModalAsignada'), incidenciaData);
+            modals.asignada.show();
+        } else {
+            fillModalData(document.getElementById('incidenciaModalProceso'), incidenciaData);
+            modals.proceso.show();
         }
+    });
 
-        // Validación: verifica que se haya ingresado una razón en "Inconcluso"
-        if (actionType === 'inconcluso' && inconclusoRazon.value.trim().length === 0) {
-            errorMessage.textContent = 'Por favor, ingresa una razón para marcar como inconcluso.';
-            errorMessage.classList.remove('d-none');
-            return;
+    // Evento para el botón "Iniciar"
+    iniciarButton.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/resolutor/setIncidenciaEnProceso/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ id: currentIncidenciaData.id }),
+            });
+
+            if (!response.ok) throw 'Error en la solicitud';
+            await response.json();
+            alert('Incidencia iniciada correctamente.');
+            modals.asignada.hide();
+            window.location.reload(); // Recargar la página
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Hubo un error al iniciar la incidencia. Por favor, intenta nuevamente.');
         }
-
-        // Crear un objeto FormData con el archivo y otros datos necesarios
-        const formData = new FormData();
-        formData.append('id', document.getElementById('modalIncidenciaId').textContent);
-        formData.append('estado', actionType); // Agregar el estado de la incidencia como 'inconcluso' o 'finalizado'
-
-        if (actionType === 'finalizado') {
-            const file = finalizadoArchivo.files[0];
-            if (file) {
-                formData.append('archivo', file); // Agregar el archivo al FormData
-            }
-        } else if (actionType === 'inconcluso') {
-            formData.append('razon', inconclusoRazon.value.trim());
-        }
-
-        // Enviar los datos al servidor Django usando fetch
-        fetch('{% url "guardar_incidencia" %}', { // Cambia la URL a la vista de almacenamiento
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Si la respuesta es exitosa, muestra un mensaje de éxito y actualiza las notificaciones
-                successMessage.textContent = 'El estado de la incidencia y el archivo se han guardado correctamente.';
-                successMessage.classList.remove('d-none');
-                fetchNotifications(); // Llama a la función para actualizar las notificaciones
-                // Procesar la respuesta y actualizar la vista si es necesario
-
-                setTimeout(() => {
-                    successMessage.classList.add('d-none');
-                    const modal = bootstrap.Modal.getInstance(incidenciaModal);
-                    modal.hide();
-                }, 2000);
-            } else {
-                errorMessage.textContent = 'Ocurrió un error al guardar la incidencia.';
-                errorMessage.classList.remove('d-none');
-            }
-        })
-        .catch(error => {
-            console.error('Error al enviar los datos:', error);
-            errorMessage.textContent = 'Ocurrió un error al guardar la incidencia.';
-            errorMessage.classList.remove('d-none');
-        });
     });
 });

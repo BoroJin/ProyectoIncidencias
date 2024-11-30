@@ -11,6 +11,9 @@ import csv
 from django.http import JsonResponse
 from django.http import HttpResponse
 from cuenta.models import Usuario, Ticket
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import RegistroAuditoria, Usuario, Incidencia
 
 
 def adm_principal(request):
@@ -20,8 +23,7 @@ def adm_ticket(request):
     tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
     return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
 
-def registro_auditoria(request):
-    return render(request, 'administrador/Registros_de_auditoria.html')
+
 
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
@@ -245,46 +247,44 @@ def agregar_usuarios_desde_csv(request):
     return JsonResponse({'mensaje': 'Método no permitido'}, status=405)
 
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import RegistroAuditoria, Usuario, Incidencia
 
-def crear_registro_auditoria(request):
-    if request.method == 'POST':
-        try:
-            # Obtener datos del request
-            usuario_id = request.POST.get('usuario_id')
-            incidencia_id = request.POST.get('incidencia_id')
-            estado_anterior = request.POST.get('estado_anterior')
-            estado_actual = request.POST.get('estado_actual')
-            comentario = request.POST.get('comentario', '')
+def crear_registro_auditoria(datos):
+    usuario_id = datos.get('usuario_id')
+    incidencia_id = datos.get('incidencia_id')
+    estado_anterior = datos.get('estado_anterior')
+    estado_actual = datos.get('estado_actual')
+    comentario = datos.get('comentario', '')
 
-            # Validar que los IDs y estados existan
-            usuario = get_object_or_404(Usuario, id=usuario_id)
-            incidencia = get_object_or_404(Incidencia, id=incidencia_id)
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    incidencia = get_object_or_404(Incidencia, id=incidencia_id)
 
-            # Verificar que el estado actual sea válido
-            estados_validos = dict(Incidencia.ESTADO_CHOICES).keys()
-            if estado_actual not in estados_validos:
-                return JsonResponse({'error': 'Estado actual no válido'}, status=400)
-            if estado_anterior and estado_anterior not in estados_validos:
-                return JsonResponse({'error': 'Estado anterior no válido'}, status=400)
+    # Verificar que el estado actual sea válido
+    estados_validos = dict(Incidencia.ESTADO_CHOICES).keys()
+    if estado_actual not in estados_validos:
+        return JsonResponse({'error': 'Estado actual no válido'}, status=400)
+    if estado_anterior and estado_anterior not in estados_validos:
+        return JsonResponse({'error': 'Estado anterior no válido'}, status=400)
 
-            # Crear el registro en la tabla RegistroAuditoria
-            registro = RegistroAuditoria.objects.create(
-                usuario=usuario,
-                incidencia=incidencia,
-                estado_anterior=estado_anterior,
-                estado_actual=estado_actual,
-                comentario=comentario
+            
+    registro = RegistroAuditoria.objects.create(
+        idUsuario=usuario,
+        idIncidencia=incidencia,
+        estado_anterior=estado_anterior,
+        estado_actual=estado_actual,
+        comentario=comentario
             )
 
-            return JsonResponse({
-                'message': 'Registro de auditoría creado con éxito',
-                'registro_id': registro.idRegistro
-            }, status=201)
+    return JsonResponse({
+        'message': 'Registro de auditoría creado con éxito',
+        'registro_id': registro.idRegistro
+        }, status=201)
 
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+def detalle_incidencia(request, incidencia_id):
+    incidencia = get_object_or_404(Incidencia, id=incidencia_id)
+    return render(request, 'administrador/registroAuditoria.html', {'incidencia': incidencia})
+def lista_incidencias(request):
+    incidencias = Incidencia.objects.all()
+    return render(request, 'administrador/listaIncidencias.html', {'incidencias': incidencias})
 
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+def registro_auditoria(request):
+    return render(request, 'administrador/registroAuditoria.html')

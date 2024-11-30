@@ -17,7 +17,11 @@ class Logo(models.Model):
 class RegistroAuditoria(models.Model):
     idRegistro = models.AutoField(primary_key=True)
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # Usuario que realiza el cambio
-    idIncidencia = models.ForeignKey(Incidencia, on_delete=models.CASCADE)  # Incidencia afectada
+    idIncidencia = models.ForeignKey(
+        Incidencia,
+        on_delete=models.CASCADE,
+        related_name='registros_auditoria' 
+    )
 
     # Estados anteriores y actuales con los mismos choices del modelo Incidencia
     estado_anterior = models.CharField(
