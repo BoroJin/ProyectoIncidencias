@@ -1,5 +1,5 @@
 <!-- maxi -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,94 +7,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Administrador</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light sidebar">
-            <!-- actualizar logo de manera dinamica -->
-            <a class="navbar-brand" href="{% url 'adm_principal' %}">
-                <img src="{{ logo }}" alt="Logo Muni">
-                {{ nombre_municipalidad }}
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Bienvenido Administrador
-                            <img
-                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
-                        </a>
-                    </li>
-                </ul>
+        <!-- Barra de navegación superior -->
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                    <span class="ms-2">{{ nombre_municipalidad }}</span>
+                </a>
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="navbar-text">{{ user_name }}</span>
+                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
+                </div>
             </div>
         </nav>
     </header>
 
-    <div class="container text-center mt-4">
-        <h2>Seleccione una operacion a realizar</h2>
-    </div>
-
     <main role="main" class="col-md-9 ">
-        <div class="row">
-            <div class="col-md-4">
-
-                <a href="{% url 'adm_actualizar_logo' %}" class="card mb-4 text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/73131/edit-button.svg" class="card-img-top" alt="editar">
+    <div class="container">
+        <h2 class="header-text">Seleccione una operación a realizar</h2>
+    </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
+            <div class="col">
+                <a href="{% url 'adm_actualizar_logo' %}" class="card h-100 text-decoration-none shadow-sm">
+                    <img src="https://www.svgrepo.com/show/73131/edit-button.svg" class="card-img-top mx-auto mt-3"
+                        alt="editar">
                     <div class="card-body">
-                        <h5 class="card-title">Actualizar logo</h5>
+                        <h5 class="card-title fw-bold text-primary">Actualizar logo</h5>
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
-
-                <a href="{% url 'adm_gestion_usuarios' %}" class="card mb-4 text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/486504/user-management-filled.svg" class="card-img-top"
-                        alt="gestion">
+            <div class="col">
+                <a href="{% url 'adm_gestion_usuarios' %}" class="card h-100 text-decoration-none shadow-sm">
+                    <img src="https://www.svgrepo.com/show/486504/user-management-filled.svg"
+                        class="card-img-top mx-auto mt-3" alt="gestion">
                     <div class="card-body">
-                        <h5 class="card-title">Gestion de usuarios</h5>
+                        <h5 class="card-title fw-bold text-primary">Gestión de usuarios</h5>
                     </div>
                 </a>
             </div>
-            <div class="col-md-4">
-
-                <a href="{% url 'adm_ticket' %}" class="card mb-4 text-decoration-none">
+            <div class="col">
+                <a href="{% url 'adm_ticket' %}" class="card h-100 text-decoration-none shadow-sm">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeujOaRWnmiTkG15-RkZrieVZ_JKumVf1CPQ&s"
-                        class="card-img-top" alt="notificaciones">
+                        class="card-img-top mx-auto mt-3" alt="notificaciones">
                     <div class="card-body">
-                        <h5 class="card-title">Tickets</h5>
+                        <h5 class="card-title fw-bold text-primary">Tickets</h5>
                     </div>
                 </a>
             </div>
-
-            <div class="row justify-content-center">
-                <div class="col-md-4 mt-4">
-                    <a href="{% url 'registro-auditoria' %}" class="card mb-4 text-decoration-none">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQforQ_2ChYPq7yKFMF5s7qWGlZ0uQ8iIGU6Q&s"
-                            class="card-img-top" alt="auditoria">
-                        <div class="card-body">
-                            <h5 class="card-title">Registros de auditoría</h5>
-                        </div>
-                    </a>
-                </div>
-
+            <div class="col">
+                <a href="{% url 'registro-auditoria' %}" class="card h-100 text-decoration-none shadow-sm">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQforQ_2ChYPq7yKFMF5s7qWGlZ0uQ8iIGU6Q&s"
+                        class="card-img-top mx-auto mt-3" alt="auditoria">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-primary">Registros de auditoría</h5>
+                    </div>
+                </a>
             </div>
+        </div>
+
     </main>
 
     <footer class="footer text-center py-4">
-        <p>Si puede leer esto es que funcionó :D</p>
-        <p>si no, Error de capa 8 D:</p>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
 </body>
 
 <!-- Enlace a jQuery y Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Leaflet JS -->

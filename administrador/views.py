@@ -18,11 +18,14 @@ from django.core.paginator import Paginator
 
 
 def adm_principal(request):
-    return render(request, 'administrador/Adm_principal.html')
+    global user_id, user_name
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+    return render(request, 'administrador/Adm_principal.html', {'user_name': user_name})
 
 def adm_ticket(request):
     tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
-    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
+    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets,'user_name': user_name})
 
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
@@ -40,10 +43,10 @@ def adm_gestion_usuarios(request):
     # Obtener todos los usuarios de la base de datos
     usuarios = Usuario.objects.all()
 
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuarios': usuarios})
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuarios': usuarios,'user_name': user_name})
 
 def adm_cargar_masiva(request):
-    return render(request, 'administrador/Adm_cargar_masiva.html')
+    return render(request, 'administrador/Adm_cargar_masiva.html',{'user_name': user_name})
 
 def adm_actualizar_logo(request):
     logo = Logo.objects.first()
@@ -66,7 +69,8 @@ def adm_actualizar_logo(request):
         return redirect('adm_principal')
 
     context = {
-        'form': logo  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
+        'form': logo,  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
+        'user_name': user_name
     }
     return render(request, 'administrador/Adm_actualizar_logo.html', context)
 
@@ -91,7 +95,7 @@ def editar_usuario(request, usuario_id):
         messages.success(request, 'Usuario actualizado correctamente.')
         return redirect('adm_gestion_usuarios')
     
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario, 'user_name': user_name})
 
 class ConfiguracionMunicipalidadView(APIView):
     def get(self, request):
@@ -100,10 +104,10 @@ class ConfiguracionMunicipalidadView(APIView):
         return Response(serializer.data)
       
 def importar_usr_vista(request):
-    return render(request, 'administrador/importar_usr_vista.html')
+    return render(request, 'administrador/importar_usr_vista.html',{'user_name': user_name})
 
 def exportar_usr_vista(request):
-    return render(request, 'administrador/exportar_usr_vista.html')
+    return render(request, 'administrador/exportar_usr_vista.html',{'user_name': user_name})
 
 # De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
 def recibir_y_validar_csv(request):
