@@ -32,7 +32,7 @@ class Incidencia(models.Model):
         ('baja', 'Baja'),
         ('media', 'Media'),
         ('alta', 'Alta'),
-        ('critica', 'Crítica'),
+        ('critica', 'Crítica'),  
     ]
     urgencia = models.CharField(max_length=10, choices=URGENCIA_CHOICES, default='media')  # Nivel de urgencia
     
