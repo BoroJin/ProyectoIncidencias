@@ -15,6 +15,7 @@ django-cors-headers
 python-dotenv
 djangorestframework-simplejwt
 folium
+drf_spectacular
 
 -Librerias de Java
 
