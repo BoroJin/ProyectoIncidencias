@@ -4,6 +4,7 @@ Para que corra el programa, es necesario primero que nada tener Node.js instalad
 
 Para el chat en vivo, se necesitará también un servidor de chat, que se encuentra en el archivo servidorChat.js. Para correr el servidor, es necesario tener Node.js instalado y ejecutar el siguiente comando:
     
+    desde \web\src\servidorChat.js
     node servidorChat.js
     
     #La información del servidor se encuentra en el archivo servidorChat.js, y los mensajes 
@@ -13,3 +14,27 @@ Para el chat en vivo, se necesitará también un servidor de chat, que se encuen
 
     #Si bien el chat al que accede el usuario se encuentra en la sidebar, el chat que recibe sus mensajes y responde,
     (Chat de soporte) se encuentra en la sidebar -> Tickets -> botón chat de soporte en el inferior de la carta.
+
+Para el caso de la base de datos de los mensajes y de los tickets, las rutas ya se encuentran en los archivos urls.py,
+y yo utilicé django restframework para que fuera más ordenado y más fácil de manejar. De todas formas los mensajes y los tickets
+se guardan automaticamente cada vez que que se da el boton enviar de cada vista correspondiente.
+
+Es necesario instalar:
+
+    pip install djangorestframework
+    pip install django-cors-headers
+    pip install psycopg2 /si te da error puedes probar con psycopg2-binary en vez de psycopg2 
+    pip install django 
+
+En el settings.py, en el apartado de base de datos es necesario que cambies la contraseña definida puesto que es la mía,
+y recuerda tambien utilizar
+
+    python manage.py makemigrations
+    python manage.py migrate
+Para que se creen las tablas de la base de datos.
+
+Finalmente, ya se puede ejecutar (no importa el orden):
+
+    - python manage.py runserver para correr el servidor de django
+    - node servidorChat.js para correr el servidor de chat
+    - npm start para correr el frontend
