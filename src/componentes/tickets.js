@@ -1,12 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { CgDanger } from "react-icons/cg";
 
-const limpiar = () => {
-  document.getElementById("Asunto").value = "";
-  document.getElementById("Descripcion").value = "";
-};
 const Tickets = () => {
+  const [titulo, setTitulo] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [mensaje, setMensaje] = useState(""); // Estado para mostrar el mensaje de éxito o error
+
+  const limpiar = () => {
+    setTitulo("");
+    setCorreo("");
+    setFecha("");
+    setDescripcion("");
+  };
+
+  const enviarTicket = async () => {
+    const ticketData = {
+      titulo,
+      correo,
+      fecha,
+      descripcion,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/tickets/",
+        ticketData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Ticket enviado:", response.data);
+      setMensaje({ tipo: "success", texto: "¡Ticket enviado con éxito!" }); // Mostrar mensaje de éxito
+      limpiar(); // Limpiar los campos después de enviar
+      setTimeout(() => setMensaje(""), 5000); // Limpiar el mensaje después de 5 segundos
+    } catch (error) {
+      console.error("Error al enviar el ticket:", error);
+      setMensaje({
+        tipo: "error",
+        texto: "Error al enviar el ticket. Intenta de nuevo.",
+      }); // Mostrar mensaje de error
+      setTimeout(() => setMensaje(""), 5000); // Limpiar el mensaje después de 5 segundos
+    }
+  };
+
   return (
     <div className="todoApp">
       <div className="card">
@@ -45,7 +87,7 @@ const Tickets = () => {
               </ul>
 
               <div className="labelGeneral">
-                <label className="textoTit" for="Asunto">
+                <label className="textoTit" htmlFor="Asunto">
                   Ingresa el asunto (Error de diseño, funciones erróneas, error
                   de carga, etc):
                 </label>
@@ -56,8 +98,38 @@ const Tickets = () => {
                     id="Asunto"
                     placeholder="Asunto en cuestión"
                     required
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
                   />
                 </div>
+                <label className="textoTit" htmlFor="Correo">
+                  Ingresa tu correo electrónico:
+                </label>
+
+                <div className="inputAsunto">
+                  <input
+                    type="email"
+                    id="Correo"
+                    placeholder="ejemplo: ejemplo@gmail.com"
+                    required
+                    value={correo}
+                    onChange={(e) => setCorreo(e.target.value)}
+                  />
+                </div>
+                <label className="textoTit" htmlFor="Fecha">
+                  Fecha:
+                </label>
+
+                <div className="inputAsunto">
+                  <input
+                    type="date"
+                    id="Fecha"
+                    required
+                    value={fecha}
+                    onChange={(e) => setFecha(e.target.value)}
+                  />
+                </div>
+
                 <div className="areaDesc">
                   <div className="textoTit">
                     {" "}
@@ -70,10 +142,16 @@ const Tickets = () => {
                       id="Descripcion"
                       placeholder="Descripción"
                       required
+                      value={descripcion}
+                      onChange={(e) => setDescripcion(e.target.value)}
                     ></textarea>
                   </div>
                 </div>
-                <button className="btn btn-primary" id="boton1 ">
+                <button
+                  className="btn btn-primary"
+                  id="boton1"
+                  onClick={enviarTicket}
+                >
                   {" "}
                   Enviar Ticket{" "}
                 </button>
@@ -85,9 +163,20 @@ const Tickets = () => {
                   {" "}
                   Limpiar campos{" "}
                 </button>
-                <button className="btn btn-secondary" id="boton2 ">
+                <button className="btn btn-secondary" id="boton2">
                   <Link to="/chatSoporte"> Chat de soporte </Link>
                 </button>
+
+                {/* Mostrar el mensaje de éxito o error */}
+                {mensaje && (
+                  <div
+                    className={`mensaje ${
+                      mensaje.tipo === "success" ? "success" : "error"
+                    }`}
+                  >
+                    {mensaje.texto}
+                  </div>
+                )}
               </div>
             </div>
           </div>

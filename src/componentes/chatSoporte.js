@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { IoSend } from "react-icons/io5";
+import axios from "axios"; // Asegúrate de tener axios importado
 
 const socket = io("http://localhost:4000");
 
-const ChatWindow = () => {
+const ChatSoporte = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
   const chatBodyRef = useRef(null);
 
   useEffect(() => {
@@ -54,15 +54,24 @@ const ChatWindow = () => {
     });
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim()) {
       const timestamp = new Date().toISOString();
       const messageData = {
-        author: "Soporte",
-        message: input,
-        timestamp,
-        time: formatDateTime(timestamp),
+        mensaje_soporte: input, // Enviar el mensaje de soporte
+        timestamp: timestamp, // Fecha y hora en formato ISO
+        time: formatDateTime(timestamp), // Hora formateada
       };
+
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/mensajes/",
+          messageData
+        );
+        console.log("Mensaje guardado:", response.data);
+      } catch (error) {
+        console.error("Error al enviar mensaje:", error);
+      }
 
       socket.emit("send_message", messageData);
       updateMessages(messageData);
@@ -73,7 +82,7 @@ const ChatWindow = () => {
   return (
     <div className="todoApp" id="appUsuario">
       <div className="card" id="chatUsuario">
-        <div className="card-header">
+        <div className="card-header" id="tituloChat">
           <h2>Chat Soporte</h2>
         </div>
 
@@ -81,11 +90,12 @@ const ChatWindow = () => {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={
-                msg.author === "Soporte" ? "msj-enviado" : "msj-recibido"
-              }
+              className={msg.mensaje_soporte ? "msj-enviado" : "msj-recibido"}
             >
-              <strong id="msjUsuario">{msg.author}:</strong> {msg.message}
+              <strong id="msjUsuario">
+                {msg.mensaje_soporte ? "Soporte" : "Usuario"}:
+              </strong>{" "}
+              {msg.mensaje_soporte || msg.mensaje_usuario}
               <small className="msg-time">{msg.time}</small>
             </div>
           ))}
@@ -111,4 +121,4 @@ const ChatWindow = () => {
   );
 };
 
-export default ChatWindow;
+export default ChatSoporte;

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { IoSend } from "react-icons/io5";
+import axios from "axios"; // Asegúrate de tener axios importado
 
 const socket = io("http://localhost:4000");
 
-const ChatUser = () => {
+const ChatUsuario = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
   const chatBodyRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +23,6 @@ const ChatUser = () => {
 
     socket.on("receive_message", handleMessage);
 
-    // Limpia el evento al desmontar
     return () => {
       socket.off("receive_message", handleMessage);
     };
@@ -45,7 +44,6 @@ const ChatUser = () => {
 
   const updateMessages = (newMessage) => {
     setMessages((prevMessages) => {
-      // Evitar duplicados
       if (prevMessages.some((msg) => msg.timestamp === newMessage.timestamp)) {
         return prevMessages;
       }
@@ -56,15 +54,24 @@ const ChatUser = () => {
     });
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim()) {
       const timestamp = new Date().toISOString();
       const messageData = {
-        author: "Usuario",
-        message: input,
-        timestamp,
-        time: formatDateTime(timestamp),
+        mensaje_usuario: input, // Enviar el mensaje del usuario
+        timestamp: timestamp, // Fecha y hora en formato ISO
+        time: formatDateTime(timestamp), // Hora formateada
       };
+
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/mensajes/",
+          messageData
+        );
+        console.log("Mensaje guardado:", response.data);
+      } catch (error) {
+        console.error("Error al enviar mensaje:", error);
+      }
 
       socket.emit("send_message", messageData);
       updateMessages(messageData);
@@ -75,18 +82,19 @@ const ChatUser = () => {
   return (
     <div className="todoApp" id="appUsuario">
       <div className="card" id="chatUsuario">
-        <div className="card-header">
+        <div className="card-header" id="tituloChat">
           <h2>Chat Usuario</h2>
         </div>
         <div className="card-body" id="bodyChat" ref={chatBodyRef}>
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={
-                msg.author === "Usuario" ? "msj-enviado" : "msj-recibido"
-              }
+              className={msg.mensaje_usuario ? "msj-enviado" : "msj-recibido"}
             >
-              <strong id="msjUsuario">{msg.author}:</strong> {msg.message}
+              <strong id="msjUsuario">
+                {msg.mensaje_usuario ? "Usuario" : "Soporte"}:
+              </strong>{" "}
+              {msg.mensaje_usuario || msg.mensaje_soporte}
               <small className="msg-time">{msg.time}</small>
             </div>
           ))}
@@ -112,4 +120,4 @@ const ChatUser = () => {
   );
 };
 
-export default ChatUser;
+export default ChatUsuario;

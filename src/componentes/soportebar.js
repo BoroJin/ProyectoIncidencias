@@ -3,7 +3,6 @@ import { IoHomeSharp } from "react-icons/io5";
 import { BsQuestionSquareFill } from "react-icons/bs";
 import { RiNewspaperFill } from "react-icons/ri";
 import { IoIosChatboxes } from "react-icons/io";
-import { IoDocuments } from "react-icons/io5";
 import { FaTicketSimple } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
@@ -44,11 +43,6 @@ const Sidebar = () => {
         <li className="sidebar-item">
           <Link className="textItem" to="/chatUsuario">
             <IoIosChatboxes /> <p className="textoS">Chat de soporte</p>
-          </Link>
-        </li>
-        <li className="sidebar-item">
-          <Link className="textItem" to="/documentacion">
-            <IoDocuments /> <p className="textoS">Documentacion</p>
           </Link>
         </li>
         <li className="sidebar-item">

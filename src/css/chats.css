@@ -36,7 +36,7 @@
   flex-direction: column;
   align-items: flex-start;
   overflow-y: auto;
-  max-height: 700px !important;
+  max-height: 600px !important;
 }
 
 .msg-time {
@@ -49,10 +49,12 @@
 .inBoton {
   width: 100%;
   display: flex;
+  height: max-content;
 }
 .inputChat {
   width: 100%;
   border-radius: 30px;
+  height: max-content;
 }
 .botonEnvio {
   border-radius: 50%;
@@ -65,4 +67,9 @@
   font-size: 18px;
   font-weight: 600;
   font-style: oblique;
+  height: max-content !important;
+}
+
+#tituloChat {
+  height: max-content !important;
 }

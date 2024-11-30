@@ -1,6 +1,8 @@
 .card {
   width: 85%;
   display: flex;
+  overflow-y: auto;
+  max-height: 600px !important;
 }
 
 .card-body {
