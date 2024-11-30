@@ -8,12 +8,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.http import HttpResponse
 from cuenta.models import Usuario, Ticket
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import RegistroAuditoria, Usuario, Incidencia
+from django.core.paginator import Paginator
 
 
 def adm_principal(request):
@@ -22,8 +23,6 @@ def adm_principal(request):
 def adm_ticket(request):
     tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
     return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
-
-
 
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
@@ -71,7 +70,6 @@ def adm_actualizar_logo(request):
     }
     return render(request, 'administrador/Adm_actualizar_logo.html', context)
 
-
 def eliminar_usuario(request, usuario_id):
     if request.method == 'POST':
         usuario = get_object_or_404(Usuario, id=usuario_id)
@@ -100,8 +98,7 @@ class ConfiguracionMunicipalidadView(APIView):
         configuracion = Logo.objects.first()
         serializer = ConfiguracionMunicipalidadSerializer(configuracion)
         return Response(serializer.data)
-    
-    
+      
 def importar_usr_vista(request):
     return render(request, 'administrador/importar_usr_vista.html')
 
@@ -246,8 +243,6 @@ def agregar_usuarios_desde_csv(request):
     
     return JsonResponse({'mensaje': 'Método no permitido'}, status=405)
 
-
-
 def crear_registro_auditoria(datos):
     usuario_id = datos.get('usuario_id')
     incidencia_id = datos.get('incidencia_id')
@@ -279,12 +274,62 @@ def crear_registro_auditoria(datos):
         'registro_id': registro.idRegistro
         }, status=201)
 
-def detalle_incidencia(request, incidencia_id):
-    incidencia = get_object_or_404(Incidencia, id=incidencia_id)
-    return render(request, 'administrador/registroAuditoria.html', {'incidencia': incidencia})
-def lista_incidencias(request):
-    incidencias = Incidencia.objects.all()
-    return render(request, 'administrador/listaIncidencias.html', {'incidencias': incidencias})
+from django.http import JsonResponse
+from .models import Incidencia, RegistroAuditoria
+def registros_de_incidencia(request, incidencia_id):
+    try:
+        incidencia = Incidencia.objects.get(pk=incidencia_id)
+    except Incidencia.DoesNotExist:
+        raise Http404("Incidencia no encontrada")
+
+    registros_auditoria = incidencia.registros_auditoria.select_related('idUsuario').all().order_by('fecha_cambio')
+    registros = [
+        {
+            'idRegistro': registro.idRegistro,
+            'idUsuario': registro.idUsuario.nombre,
+            'estado_anterior': registro.get_estado_anterior_display(),
+            'estado_actual': registro.get_estado_actual_display(),
+            'comentario': registro.comentario,
+            'fecha_cambio': registro.fecha_cambio.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        for registro in registros_auditoria
+    ]
+    data = {
+        'idIncidencia': incidencia.id,
+        'titulo': incidencia.titulo_Incidencia,
+        'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
+        'estado_actual': incidencia.estado,
+        'registros': registros
+    }
+    return JsonResponse(data)
+
+
 
 def registro_auditoria(request):
-    return render(request, 'administrador/registroAuditoria.html')
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+    
+    # Obtener todas las incidencias con sus registros de auditoría
+    incidencias = Incidencia.objects.prefetch_related('registros_auditoria').all()
+    
+    # Paginación: Mostrar 10 incidencias por página
+    paginator = Paginator(incidencias, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Convertimos las incidencias en un formato que incluya la fecha de reporte
+    incidencias_data = [
+        {
+            'id': incidencia.id,
+            'titulo': incidencia.titulo_Incidencia,
+            'estado': incidencia.get_estado_display(),
+            'urgencia': incidencia.get_urgencia_display(),
+            'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        for incidencia in page_obj
+    ]
+    
+    return render(request, 'administrador/registroAuditoria.html', {
+        'page_obj': incidencias_data,
+        'user_name': user_name,
+    })
