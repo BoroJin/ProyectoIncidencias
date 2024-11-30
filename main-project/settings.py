@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'cuenta',
     'rest_framework',
     'corsheaders',
-    'Dobras'
+    'Dobras',
     
 ]
 CORS_ALLOW_ALL_ORIGINS = True
@@ -141,10 +141,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'resolutor', 'static', 'resolutor'),
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
-    os.path.join(BASE_DIR, 'departamentoObras', 'dist', 'assets'),
+    os.path.join(BASE_DIR, 'DepartamentoObras', 'dist'),
     
     ]
 
