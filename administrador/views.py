@@ -1,25 +1,24 @@
 #maxi
-
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Usuario, Logo  # Suponiendo que tienes un modelo llamado Usuario
+from .models import Logo  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
 from django.http import JsonResponse
 from django.http import HttpResponse
+from cuenta.models import Usuario, Ticket
 
-
-def adm_recuperacion(request):
-    return render(request, 'administrador/recupera_contraseña.html')
-
-def adm_inicio_sesion(request):
-    return render(request, 'administrador/Adm_inicio_sesion.html')
 
 def adm_principal(request):
     return render(request, 'administrador/Adm_principal.html')
 
 def adm_ticket(request):
-    return render(request, 'administrador/Adm_ticket.html')
+    tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
+    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
 
 def registro_auditoria(request):
     return render(request, 'administrador/Registros_de_auditoria.html')
@@ -47,21 +46,29 @@ def adm_cargar_masiva(request):
 
 def adm_actualizar_logo(request):
     logo = Logo.objects.first()
-    
+
+    # Si no existe un logo en la base de datos, crea uno vacío
+    if logo is None:
+        logo = Logo.objects.create()  # Crea un logo con valores por defecto
+
     if request.method == 'POST':
         nombre_municipalidad = request.POST.get('nombre_municipalidad')
+        
+        # Si se sube un nuevo archivo de imagen
         if request.FILES.get('imagen'):
             logo.imagen = request.FILES['imagen']
+        
         logo.nombre_municipalidad = nombre_municipalidad
         logo.save()
 
         messages.success(request, 'El nombre y el logo de la municipalidad se han actualizado.')
         return redirect('adm_principal')
-    
+
     context = {
         'form': logo  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
     }
     return render(request, 'administrador/Adm_actualizar_logo.html', context)
+
 
 def eliminar_usuario(request, usuario_id):
     if request.method == 'POST':
@@ -77,7 +84,8 @@ def editar_usuario(request, usuario_id):
         usuario.nombre = request.POST['nombre']
         usuario.correo_electronico = request.POST['correo']
         usuario.rol = request.POST['rol']
-        usuario.contrasena = request.POST['contrasena']
+        usuario.password = request.POST.get('password')
+
         usuario.save()
         
         messages.success(request, 'Usuario actualizado correctamente.')
@@ -85,6 +93,13 @@ def editar_usuario(request, usuario_id):
     
     return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})
 
+class ConfiguracionMunicipalidadView(APIView):
+    def get(self, request):
+        configuracion = Logo.objects.first()
+        serializer = ConfiguracionMunicipalidadSerializer(configuracion)
+        return Response(serializer.data)
+    
+    
 def importar_usr_vista(request):
     return render(request, 'administrador/importar_usr_vista.html')
 
@@ -137,7 +152,7 @@ def exportar_csv(request):
     usuarios = Usuario.objects.all()
     for usuario in usuarios:
         # Escribe cada usuario en el archivo CSV
-        writer.writerow([usuario.nombre,usuario.contrasena,usuario.correo_electronico,usuario.rol])
+        writer.writerow([usuario.nombre,usuario.password,usuario.correo_electronico,usuario.rol])
     return response #Retorna el csv para descargar
 
 # #Esta funcion busca validar nombres de usuarios, en aspectos como:
@@ -150,7 +165,7 @@ def exportar_csv(request):
     #    -Si tiene un punto luego del arroba
     # - Rol
     #    -Que el rol, sea valido (Administrador)(Gestor Territorial)(Director)(Departamento de obras)(Resolutor)
-def validar_csv_entrada(ruta,longitud_max=10,longitud_min=3):
+def validar_csv_entrada(ruta,longitud_max=1000,longitud_min=3):
     #Obtener una lista de los usuarios en uso
     usuarios_en_uso = Usuario.objects.values_list('nombre', flat=True)
     errores = []
@@ -202,11 +217,11 @@ def agregar_usuarios_desde_csv(request):
 
                 for index, linea in enumerate(contenido, start=1):
                     usuario_data = linea.strip().split(",")
-                    nombre, contrasena, correo, rol = usuario_data[0], usuario_data[1], usuario_data[2], usuario_data[3]
+                    nombre, password, correo, rol = usuario_data[0], usuario_data[1], usuario_data[2], usuario_data[3]
 
                     # Crea y guarda el nuevo usuario
                     try:
-                        nuevo_usuario = Usuario(nombre=nombre, contrasena=contrasena, correo_electronico=correo, rol=rol)
+                        nuevo_usuario = Usuario(nombre=nombre, password=password, correo_electronico=correo, rol=rol)
                         nuevo_usuario.save()
                         usuarios_agregados += 1
                     except IntegrityError:
@@ -228,3 +243,48 @@ def agregar_usuarios_desde_csv(request):
             return JsonResponse({'mensaje': f'Error inesperado: {str(e)}'}, status=500)
     
     return JsonResponse({'mensaje': 'Método no permitido'}, status=405)
+
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import RegistroAuditoria, Usuario, Incidencia
+
+def crear_registro_auditoria(request):
+    if request.method == 'POST':
+        try:
+            # Obtener datos del request
+            usuario_id = request.POST.get('usuario_id')
+            incidencia_id = request.POST.get('incidencia_id')
+            estado_anterior = request.POST.get('estado_anterior')
+            estado_actual = request.POST.get('estado_actual')
+            comentario = request.POST.get('comentario', '')
+
+            # Validar que los IDs y estados existan
+            usuario = get_object_or_404(Usuario, id=usuario_id)
+            incidencia = get_object_or_404(Incidencia, id=incidencia_id)
+
+            # Verificar que el estado actual sea válido
+            estados_validos = dict(Incidencia.ESTADO_CHOICES).keys()
+            if estado_actual not in estados_validos:
+                return JsonResponse({'error': 'Estado actual no válido'}, status=400)
+            if estado_anterior and estado_anterior not in estados_validos:
+                return JsonResponse({'error': 'Estado anterior no válido'}, status=400)
+
+            # Crear el registro en la tabla RegistroAuditoria
+            registro = RegistroAuditoria.objects.create(
+                usuario=usuario,
+                incidencia=incidencia,
+                estado_anterior=estado_anterior,
+                estado_actual=estado_actual,
+                comentario=comentario
+            )
+
+            return JsonResponse({
+                'message': 'Registro de auditoría creado con éxito',
+                'registro_id': registro.idRegistro
+            }, status=201)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

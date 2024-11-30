@@ -1,0 +1,155 @@
+{%extends './base.html'%}
+{%block title%} Incidencias {%endblock%}
+
+{%block body%}
+<div class="row">
+  <div class="container-box">
+    <div class="table-responsive">
+
+      <h2>Incidencias</h2>
+      <table class="table table-bordered table-hover table-striped text-center">
+        <thead class="thead-dark">
+          <tr>
+            <th>#</th>
+            <th>Direccion de multimedia</th>
+            <th>Gestor Territorial</th>
+            <th>Título</th>
+            <th>Estado de Incidencia</th>
+            <th>Descripcion</th>
+            <th>Fecha de Creacion</th>
+            <th>Nivel de Urgencia</th>
+            <th>Resolutor Asignado</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Usuario de Departamento</th>
+            <th>Opciones</th>
+          </tr>   
+        </thead>
+      </thead>
+      <tbody>
+          {% for i in incidencia %}
+          <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.direccion_multimedia }}</td>
+            <td>{{ i.id_usuario_gestorTerritorial }}</td>
+            <td>{{ i.titulo_Incidencia }}</td>
+            <td>{{ i.estado }}</td>
+            <td>{{ i.descripcion }}</td>
+            <td>{{ i.fecha_Reporte }}</td>
+            <td>{{ i.urgencia }}</td>
+            <td>{{ i.resolutor_Asignado }}</td>
+            <td>{{ i.latitud }}</td>
+            <td>{{ i.longitud }}</td>
+            <td>{{ i.id_usuario_departamennto}}</td>
+            <td class="btn-group">
+              <button class="btn btn-info mr-2" data-toggle="modal" data-target="#asignarUsuarioModal" data-id="{{ i.id }}">Asignar usuario</button>
+              <a href="{% url 'director:deshacerAsignacion' i.id %}" class="btn btn-danger mr-2">deshacer asignacion</a>
+              <button class="btn btn-danger mr-2" data-toggle="modal" data-target="#rechazoModal" data-id="{{ i.id }}" data-user="{{ i.id_usuario_gestorTerritorial }}">Rechazar incidencia</button>
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Asignar Usuario -->
+<div class="modal fade" id="asignarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="asignarUsuarioModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="asignarUsuarioModalLabel">Asignar Usuario</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form action="{% url 'director:asignarUsuario' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="ID">ID de Incidencia</label>
+          <input type="text" id="ID_asignar" name="ID_asignar" class="form-control" readonly required />
+        </div>
+        <div class="form-group">
+          <label for="usuario_id">Seleccione un Usuario</label>
+          <select name="usuario_id" id="usuario_id" class="form-control" required>
+            <option value="" disabled selected>Seleccione un usuario</option>
+            {% for usuario in usuarios %}
+            <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group text-right">
+          <button type="submit" class="btn btn-success">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Modal rechazo -->
+<div class="modal fade" id="rechazoModal" tabindex="-1" role="dialog" aria-labelledby="rechazoModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="rechazoModalLabel">Rechazar Incidencia</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form action="{% url 'director:rechazarIncidencia' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="ID">ID de Incidencia</label>
+          <input type="text" id="ID_rechazo" name="ID_rechazo" class="form-control" readonly required />
+        </div>
+        <div class="form-group">
+          <label for="user">Usuario Asignado</label>
+          <input type="text" id="user_rechazo" name="user_rechazo" class="form-control" value="{{incidencia.usuario_asignado}}" readonly required>
+        </div>
+        <div class="form-group">
+          <label for="justificacion">Justificación</label>
+          <textarea id="justificacion" name="justificacion" placeholder="Ingrese su justificacion..." class="form-control" required></textarea>
+        </div>
+        <div class="form-group text-right">
+          <button type="submit" class="btn btn-success">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const modal = document.getElementById("asignarUsuarioModal");
+  const inputID = modal.querySelector("#ID_asignar");
+
+  $('#asignarUsuarioModal').on('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const idIncidencia = button.getAttribute("data-id");
+    inputID.value = idIncidencia;
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const rechazoModal = document.getElementById("rechazoModal");
+
+  $('#rechazoModal').on('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+
+    const idIncidencia = button.getAttribute("data-id");
+    const usuarioAsignado = button.getAttribute("data-user");
+
+    rechazoModal.querySelector("#ID_rechazo").value = idIncidencia;
+    rechazoModal.querySelector("#user_rechazo").value = usuarioAsignado;
+  });
+});
+</script>
+</div>
+{%endblock%}

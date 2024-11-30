@@ -1,6 +1,10 @@
-from django.shortcuts import render
+# views.py --> resolutor
+from django.shortcuts import render, redirect
 import uuid
-from administrador.models import Usuario, RegistroAsignacion, Notificacion
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from administrador.models import Usuario #, RegistroAsignacion, Notificacion
 from gestor_territorial.models import Incidencia
 from django.http import JsonResponse
 from django.core.files.storage import default_storage
@@ -10,16 +14,6 @@ from django.utils import timezone
 from django.utils.dateformat import format
 import json
 
-def getMiId():
-    # Esta información la obtendremos del módulo login (No está listo aún)
-    # Por el momento usaremos una constante
-    gestor_id = 5
-
-        # Obtener los IDs de las primeras dos incidencias sin asignar un gestor
-    #ids_a_modificar = Incidencia.objects.filter(resolutor_Asignado__isnull=True).values_list('id', flat=True)[:2]
-    #Incidencia.objects.filter(id__in=ids_a_modificar).update(resolutor_Asignado=gestor_id)
-
-    return gestor_id
 
 def getIncidenciasAsigandas():
     miId = getMiId() #Obtiene mi id
@@ -80,103 +74,47 @@ def guardar_incidencia(request):
         return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
     
 def dashboard_resolutor(request):
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+
+    print(user_id)
     incidencias = getIncidenciasAsigandas()
-    return render(request, 'resolutor/dashboard_resolutor.html', {'incidencias': incidencias})
+    return render(request, 'resolutor/dashboard_resolutor.html', {'incidencias': incidencias, 'user_name': user_name})
 
-def get_notificaciones(request):
-    mi_id = getMiId()  # Obtiene el ID del usuario actual
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
 
-    # Filtrar todas las notificaciones
-    notificaciones = Notificacion.objects.filter(
-        idUsuario=mi_id
-    ).union(
-        Notificacion.objects.filter(
-            incidenciaId__in=incidencias_ids
-        )
-    )
-
-    # Serializar las notificaciones para enviarlas en JSON
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
+def crear_registro_y_responder(request):
+    if request.method == 'POST':
+        # Datos que deben enviarse a la vista `crear_registro_auditoria`
+        data_para_auditoria = {
+            'usuario_id': request.COOKIES.get('user_id'),
+            
+            'incidencia_id': request.POST.get('incidencia_id'),
+            'estado_anterior': request.POST.get('estado_anterior'),
+            'estado_actual': request.POST.get('estado_actual'),
+            'comentario': request.POST.get('comentario', ''),
         }
-        for notificacion in notificaciones
-    ]
+        
+        # Construir un objeto simulado `request` para pasar a la vista original
+        class MockRequest:
+            def __init__(self, data):
+                self.method = 'POST'
+                self.POST = data
+        
+        mock_request = MockRequest(data_para_auditoria)
 
-    return JsonResponse({'notificaciones': data})
+        # Llamar a `crear_registro_auditoria` y capturar su respuesta
+        response = crear_registro_auditoria(mock_request)
 
-def get_notificaciones_no_leidas(request):
-    mi_id = getMiId()
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
+        # Devolver la respuesta original o personalizarla
+        if response.status_code == 201:
+            return JsonResponse({
+                'message': 'Registro y respuesta procesados correctamente',
+                'registro': response.json()
+            })
+        else:
+            return JsonResponse({
+                'error': 'Ocurrió un problema al crear el registro',
+                'detalle': response.json()
+            }, status=response.status_code)
 
-    # Filtrar notificaciones no leídas
-    notificaciones_no_leidas = Notificacion.objects.filter(
-        estado_lectura=False,
-        idUsuario=mi_id
-    ).union(
-        Notificacion.objects.filter(
-            incidenciaId__in=incidencias_ids,
-            estado_lectura=False
-        )
-    )
-
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
-        }
-        for notificacion in notificaciones_no_leidas
-    ]
-
-    return JsonResponse({'notificaciones': data})
-
-def get_notificaciones_leidas(request):
-    mi_id = getMiId()
-    incidencias_asignadas = getIncidenciasAsigandas()
-    incidencias_ids = [incidencia.id for incidencia in incidencias_asignadas]
-
-    # Filtrar notificaciones leídas
-    notificaciones_leidas = Notificacion.objects.filter(
-        estado_lectura=True,
-        idUsuario=mi_id
-    ).union(
-        Notificacion.objects.filter(
-            incidenciaId__in=incidencias_ids,
-            estado_lectura=True
-        )
-    )
-
-    data = [
-        {
-            'id': notificacion.idNotificacion,
-            'titulo': notificacion.titulo,
-            'descripcion': notificacion.descripcion,
-            'incidenciaId': notificacion.incidenciaId.id if notificacion.incidenciaId else None,
-            'fecha_creacion': format(notificacion.fecha_creacion, 'Y-m-d H:i:s'),
-            'is_read': notificacion.estado_lectura
-        }
-        for notificacion in notificaciones_leidas
-    ]
-
-    return JsonResponse({'notificaciones': data})
-
-def mark_as_read(request):
-    data = json.loads(request.body)
-    notification_ids = data.get('notification_ids', [])
-
-    # Filtra las notificaciones por ID y usuario actual y marca como leídas
-    Notificacion.objects.filter(idNotificacion__in=notification_ids, idUsuario=request.user).update(estado_lectura=True)
-    
-    return JsonResponse({'status': 'success'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

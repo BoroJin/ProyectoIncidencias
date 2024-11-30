@@ -1,0 +1,31 @@
+<form action="{% url 'crear_incidencia' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="lat" value="{{ latitud }}">
+    <input type="hidden" name="lng" value="{{ longitud }}">
+
+    {% for campo in campos %}
+        <div class="form-group">
+            <label for="{{ campo.id }}">{{ campo.nombre }}</label>
+
+            {% if campo.tipo == 'text' %}
+                <input class="form-control" type="text" name="{{ campo.id }}" id="{{ campo.id }}" placeholder="Escriba aquí">
+
+            {% elif campo.tipo == 'checkbox' %}
+                {% for opcion in campo.opciones.all %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="{{ campo.id }}_{{ opcion.valor }}" id="{{ campo.id }}_{{ opcion.valor }}" value="{{ opcion.valor }}">
+                        <label class="form-check-label" for="{{ campo.id }}_{{ opcion.valor }}">{{ opcion.valor }}</label>
+                    </div>
+                {% endfor %}
+
+            {% elif campo.tipo == 'select' %}
+                <select class="form-control" name="{{ campo.id }}" id="{{ campo.id }}">
+                    {% for opcion in campo.opciones.all %}
+                        <option value="{{ opcion.valor }}">{{ opcion.valor }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit">Enviar Respuestas</button>
+</form>

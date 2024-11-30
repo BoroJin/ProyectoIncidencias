@@ -2,37 +2,41 @@ import json
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from .models import Incidencia, Respuesta
 from director.models import Formulario
+from django.views.decorators.csrf import csrf_exempt
 
-def home(request):
+def ver_gestor(request):
+    return render(request, 'gestor_territorial/gestor_territorial.html')
+
+def ver_listaIncidencias(request):
     estados_filtrados = ['iniciada', 'rechazada', 'aprobada', 'asignada', 'inconclusa', 'finalizada']
     incidencias = Incidencia.objects.filter(estado__in=estados_filtrados).order_by('-fecha_Reporte')
-    incidencias_json = serialize('json', incidencias)
-    return render(request, 'home.html', {'incidencias_json': incidencias_json})
 
-# Vista para mostrar el formulario con las coordenadas
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verificar si es una solicitud AJAX
+        data = serialize('json', incidencias)  # Serializar los datos
+        return JsonResponse({'status': 'success', 'incidencias': data})
+
+    return render(request, 'gestor_territorial/lista_incidencias.html', {'incidencias': incidencias})
+
 def mostrar_formulario(request):
-    # Cargar formulario activo
     try:
         formulario = Formulario.objects.get(activo=True)
         campos = formulario.campos.all()
     except Formulario.DoesNotExist:
-        formulario = None
-        campos = []
+        return JsonResponse({'status': 'error', 'message': 'Formulario no encontrado'}, status=404)
 
-    # Obtener coordenadas desde parámetros GET
-    latitud = request.GET.get('lat')
-    longitud = request.GET.get('lng')
-
-    return render(request, 'mostrar_formulario.html', {
+    # Renderizar los campos del formulario como HTML
+    formulario_html = render_to_string('gestor_territorial/partials/formulario.html', {
         'formulario': formulario,
         'campos': campos,
-        'latitud': latitud,
-        'longitud': longitud
+        'latitud': request.GET.get('lat'),
+        'longitud': request.GET.get('lng')
     })
 
-# Vista para procesar el formulario y crear la incidencia
+    return JsonResponse({'status': 'success', 'formulario_html': formulario_html})
+@csrf_exempt
 def crear_incidencia(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
@@ -51,7 +55,6 @@ def crear_incidencia(request):
     except ValueError:
         return JsonResponse({'status': 'error', 'message': 'Coordenadas inválidas'}, status=400)
 
-    # Crea la incidencia con el estado "iniciada"
     incidencia = Incidencia.objects.create(
         latitud=lat, 
         longitud=lng, 
@@ -66,6 +69,4 @@ def crear_incidencia(request):
             valor_campo = ', '.join(opciones_seleccionadas)
         Respuesta.objects.create(incidencia=incidencia, campo=campo, valor=valor_campo)
 
-    # Redirigir al inicio
-    return redirect('home')
-
+    return redirect('ver_gestor')

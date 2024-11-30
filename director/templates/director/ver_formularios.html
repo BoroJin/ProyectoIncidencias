@@ -1,21 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Ver Formularios</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; }
-        h1 { text-align: center; color: #333; }
-        .formulario { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
-        a, button { margin-top: 10px; display: block; padding: 10px 20px; text-decoration: none; color: white; background-color: #007bff; border: none; cursor: pointer; transition: background-color 0.3s; }
-        a:hover, button:hover { background-color: #004494; }
-        button:disabled { background-color: #ccc; }
-        form { display: inline; }
-    </style>
-</head>
-<body>
-<h1>Listado de Formularios</h1>
-{% for formulario in formularios %}
+{% extends './base.html' %}
+{% block title %} Formulario {% endblock %}
+{% block style %}
+<style>
+    body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; color: #333; }
+    h1 { text-align: center; color: #333; }
+    .formulario { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
+    a, button { margin-top: 10px; display: block; padding: 10px 20px; text-decoration: none; color: white; background-color: #007bff; border: none; cursor: pointer; transition: background-color 0.3s; }
+    a:hover, button:hover { background-color: #004494; }
+    button:disabled { background-color: #ccc; }
+    form { display: inline; }
+</style>
+{%endblock%}
+
+{% block body %}
+<div class="row">
+    <h1>Listado de Formularios</h1>
+    {% for formulario in formularios %}
     <div class="formulario">
         <h2>{{ formulario.nombre }}</h2>
         <p>{{ formulario.descripcion }}</p>
@@ -30,11 +30,11 @@
             <button type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
         </form>
     </div>
-{% empty %}
-    <p>No hay formularios disponibles.</p>
-{% endfor %}
-</body>
-</html>
+    {% empty %}
+        <p>No hay formularios disponibles.</p>
+    {% endfor %}
+</div>
+{%endblock%}
 
 
 

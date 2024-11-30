@@ -1,0 +1,39 @@
+{%extends './base.html'%}
+{% load static %}
+{%block title%} Dashboard {%endblock%}
+
+{%block body%}
+<div class="row">
+    <div class="table-responsive col-md-6">
+        <h2 class="">Incidencias</h2>
+        <table class="table table-bordered table-hover table-striped text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Titulo</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in incidencia %}
+                <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.titulo_Incidencia }}</td>
+                <td>{{ i.latitud }}</td>
+                <td>{{ i.longitud }}</td>
+                <td>{{ i.estado }}</td>
+                <td>{{ i.fecha_Reporte }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        {{map|safe}}
+    </div>
+</div>
+{%endblock%}
