@@ -1,5 +1,4 @@
 # Ignorar archivos de configuración
-settings.py
 local_settings.py
 
 # Ignorar archivos temporales
