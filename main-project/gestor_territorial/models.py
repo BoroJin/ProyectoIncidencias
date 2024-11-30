@@ -14,12 +14,13 @@ class Incidencia(models.Model):
             ('inconclusa', 'Inconclusa'),
             ('finalizada', 'Finalizada'),
             ('validada', 'Validada'),
+            ('no verificada', 'No Verificada'),
         ]
     estado = models.CharField(max_length=15, choices=ESTADO_CHOICES, default='iniciada')  # Estado de la incidencia
     tipo = models.CharField(max_length=200, null=True, blank=True)
     descripcion = models.TextField()  # Descripción detallada
     fecha_Reporte = models.DateTimeField(auto_now_add=True)  # Fecha y hora del reporte
-    latitud = models.FloatField(null=False, blank=False)  # Permite valores nulos y campos en blanco
+    latitud = models.FloatField(null=False, blank=False)
     longitud = models.FloatField(null=False, blank=False)
     URGENCIA_CHOICES = [
         ('baja', 'Baja'),

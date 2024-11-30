@@ -1,9 +1,11 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="es"></html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Lista de Incidencias</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'gestor_territorial/css/style_lista_incidencias_gt.css' %}">
@@ -86,6 +88,30 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <!-- Modal para agregar comentarios -->
+                                <div class="modal" id="modalComentario" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Agregar Comentario</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="formComentario" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" id="incidenciaId">
+                                                    <div class="mb-3">
+                                                        <textarea id="comentarioTexto" class="form-control" rows="4" placeholder="Escribe tu comentario aquí"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="guardarComentario">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
     
                                 <!-- Contenedor de tarjetas -->
                                 <div id="cardView" style="display: none;">
@@ -110,7 +136,9 @@
         const incidenciasData = {{ incidencias|safe }};
         console.log(incidenciasData);  // Verifica si los datos son correctos
     </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'gestor_territorial/js/comentarios.js' %}"></script>
     <script src="{% static 'gestor_territorial/js/incidencias.js' %}"></script>
 </body>
 </html>

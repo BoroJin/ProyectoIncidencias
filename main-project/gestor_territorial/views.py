@@ -1,14 +1,26 @@
 import json
 from django.core.serializers import serialize
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from .models import Incidencia, Respuesta
 from director.models import Formulario
 from django.views.decorators.csrf import csrf_exempt
+from administrador.models import Usuario
 
 def ver_gestor(request):
-    return render(request, 'gestor_territorial/gestor_territorial.html')
+    estados_filtrados = ['finalizada']
+    incidencias = Incidencia.objects.filter(estado__in=estados_filtrados).order_by('-fecha_Reporte')
+    global user_id, user_name
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verificar si es una solicitud AJAX
+        data = serialize('json', incidencias)  # Serializar los datos
+        return JsonResponse({'status': 'success', 'incidencias': data})
+
+    return render(request, 'gestor_territorial/gestor_territorial.html', {'incidencias': incidencias, 'user_name': user_name,})
 
 def ver_listaIncidencias(request):
     estados_filtrados = ['iniciada', 'rechazada', 'aprobada', 'asignada', 'inconclusa', 'finalizada']
@@ -36,6 +48,7 @@ def mostrar_formulario(request):
     })
 
     return JsonResponse({'status': 'success', 'formulario_html': formulario_html})
+
 @csrf_exempt
 def crear_incidencia(request):
     if request.method != 'POST':
@@ -70,3 +83,49 @@ def crear_incidencia(request):
         Respuesta.objects.create(incidencia=incidencia, campo=campo, valor=valor_campo)
 
     return redirect('ver_gestor')
+    
+
+def agregar_comentario(request):
+    if request.method == 'POST':
+        incidencia_id = request.POST.get('incidencia_id')
+        comentario = request.POST.get('comentario')
+
+        if not incidencia_id or not comentario:
+            return JsonResponse({'success': False, 'error': 'Datos incompletos'})
+
+        try:
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+            if incidencia.comentarios:
+                incidencia.comentarios += f"\n{comentario}"
+            else:
+                incidencia.comentarios = comentario
+            incidencia.save()
+
+            return JsonResponse({'success': True})
+        except Incidencia.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método no permitido'})   
+    
+def cambiar_estado(request):
+    if request.method == 'POST':
+        incidencia_id = request.POST.get('incidencia_id')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        comentario = request.POST.get('comentario', '')
+
+        try:
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+            incidencia.estado = nuevo_estado
+
+            if nuevo_estado == 'no verificada':
+                if incidencia.comentarios:
+                    incidencia.comentarios += f"\nRazón del rechazo: {comentario}"
+                else:
+                    incidencia.comentarios = f"Razón del rechazo: {comentario}"
+
+            incidencia.save()
+            return JsonResponse({'success': True})
+        except Incidencia.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})

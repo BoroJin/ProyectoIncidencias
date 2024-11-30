@@ -11,7 +11,6 @@ urlpatterns = [
     path('adm_cargar_masiva/', views.adm_cargar_masiva, name='adm_cargar_masiva'),
     path('adm_gestion_usuarios/', views.adm_gestion_usuarios, name='adm_gestion_usuarios'),
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),  # Nueva URL para eliminar
-    path('adm_auditoria/', views.registro_auditoria, name='adm_auditoria'), 
     path('editar_usuario/<int:usuario_id>/', views.editar_usuario, name='editar_usuario'),
     path('api/configuracion/', views.ConfiguracionMunicipalidadView.as_view(), name='configuracion'),
     path('exportar_csv/', views.exportar_csv, name='exportar_csv'),
@@ -19,4 +18,10 @@ urlpatterns = [
     path('importar_usr_vista/', views.importar_usr_vista, name='importar_usr_vista'),
     path('recibir_y_validar/', views.recibir_y_validar_csv, name='recibir_y_validar'),
     path('agregar_usuarios_desde_csv/', views.agregar_usuarios_desde_csv, name='agregar_usuarios_desde_csv'),
+
+
+    path('incidencias/<int:incidencia_id>/registros/', views.registros_de_incidencia, name='registros_de_incidencia'),
+    path('registro-auditoria/', views.registro_auditoria, name='registro-auditoria'), 
+
+    
 ]
