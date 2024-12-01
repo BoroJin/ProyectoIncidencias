@@ -7,3 +7,6 @@ def login(request):
 
 def departamentoObra(request):
     return render(request, 'DepartamentoObras/dist/index.html')
+
+def ticket(request):
+    return render(request, 'ticket/build/index.html')

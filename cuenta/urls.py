@@ -15,6 +15,6 @@ urlpatterns = [
     path('recuperacion/', views.adm_recuperacion, name='adm_recuperacion'), 
     path('recuperar/', views.restablecer_contra, name='recuperar'),
     path('restablecer/<int:user_id>/', views.restablecer, name='restablecer'),
-    path('api/', include(router.urls)),  # La raíz ahora está mapeada a la API, sin necesidad de '/api/'
+    path('api/', include(router.urls)),  
 
 ]

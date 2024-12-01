@@ -150,7 +150,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resolutor', 'static', 'resolutor'),
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
     os.path.join(BASE_DIR, 'DepartamentoObras', 'dist'),
-    
+    os.path.join(BASE_DIR, 'ticket', 'build', 'static'),
+
     ]
 
 
