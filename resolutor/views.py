@@ -20,7 +20,7 @@ def dashboard_resolutor(request):
     user_id = request.COOKIES.get('user_id')
     user_name = request.COOKIES.get('user_name')
 
-    print(user_id)
+    #print(user_id)
     incidencias = getIncidenciasAsigandas(request)
     incidencias_proceso=getIncidenciasProceso(request)
     return render(request, 'resolutor/dashboard_resolutor.html',
@@ -33,7 +33,7 @@ def simular_creacion_incidencias(request):
     incidencias_simuladas = [
         {
             "titulo_Incidencia": "Simulacion de creacion 1",
-            "estado": "asignada",
+            "estado": "iniciada",
             "urgencia": "alta",
             "descripcion": "Descripcion simulada 1",
             "latitud": -33.4489,
@@ -41,7 +41,7 @@ def simular_creacion_incidencias(request):
         },
         {
             "titulo_Incidencia": "Simulacion de creacion 2",
-            "estado": "asignada",
+            "estado": "iniciada",
             "urgencia": "media",
             "descripcion": "descripcion simulada 2",
             "latitud": -33.4578,
@@ -49,7 +49,7 @@ def simular_creacion_incidencias(request):
         },
         {
             "titulo_Incidencia": "Simulacion de creacion 3",
-            "estado": "asignada",
+            "estado": "iniciada",
             "urgencia": "alta",
             "descripcion": "descripcion simulada 3",
             "latitud": -33.4600,
@@ -139,10 +139,10 @@ def setIncidenciaInconclusa(request):
         comentario = data.get("comentarios")
         incidencia_id = data.get('id')
         incidencia = Incidencia.objects.get(id=incidencia_id)
-        #crear_registro(incidencia_id,incidencia.estado,"inconclusa",comentario)
-        #incidencia.estado = 'inconclusa'
-        #incidencia.save()
-        print (comentario,incidencia_id)
+        crear_registro(incidencia_id,incidencia.estado,"inconclusa",comentario,user_id )
+        incidencia.estado = 'inconclusa'
+        incidencia.save()
+        #print (comentario,incidencia_id)
         return JsonResponse({'message': 'Incidencia marcada como inconclusa exitosamente'})
    
 def guardar_incidencia(request):
@@ -189,9 +189,9 @@ def guardar_incidencia(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
     
-def crear_registro(idIncidencia,estado,new_estado,comentario):
+def crear_registro(idIncidencia,estado,new_estado,comentario,id_usr_aplicacion):
         data_para_auditoria = {
-            'usuario_id': user_id,
+            'usuario_id': id_usr_aplicacion,
             'incidencia_id': idIncidencia,
             'estado_anterior': estado,
             'estado_actual': new_estado,

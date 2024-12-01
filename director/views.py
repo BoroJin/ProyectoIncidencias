@@ -5,20 +5,28 @@ from .models import Campo, Opcion, Formulario
 from gestor_territorial.models import Incidencia
 from cuenta.models import Usuario
 import folium
+from resolutor.views import crear_registro
+
+
+
 
 def dashboard(request):
+    global user_id, user_name
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+    print (user_name)
     incidencia = Incidencia.objects.filter(estado='iniciada')
     initialMap = folium.Map(location=[-33.427656074857076, -70.61159044504167], zoom_start=9)
     for location in incidencia:
         coordinates = (location.latitud, location.longitud)
         folium.Marker(coordinates, popup='Nombre:'+ location.titulo_Incidencia).add_to(initialMap)
 
-    return render(request, 'director/dashboard.html',{'incidencia':incidencia,'map':initialMap._repr_html_()})
+    return render(request, 'director/dashboard.html',{'incidencia':incidencia,'map':initialMap._repr_html_(),'user_name': user_name})
 
 def incidencias(request):
     incidencia = Incidencia.objects.all()
     usuarios = Usuario.objects.filter(rol='r')
-    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios})
+    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios,'user_name': user_name})
 
 
 def asignarUsuario (request):
@@ -27,8 +35,9 @@ def asignarUsuario (request):
     usuario_id = request.POST.get('usuario_id')
 
     incidencia = Incidencia.objects.get(id=id_incidencia)
+    crear_registro(id_incidencia,incidencia.estado,'asignada',"La incidencia se ah asginado",user_id)
     incidencia.resolutor_Asignado = usuario_id
-    incidencia.estado = 'Asignada'
+    incidencia.estado = 'asignada'
     incidencia.save()
 
     return redirect('director:incidencias')
@@ -36,6 +45,7 @@ def asignarUsuario (request):
 def deshacerAsignacion(request,id):
 
     incidencia = Incidencia.objects.get(id=id)
+    crear_registro(id,incidencia.estado,'iniciada',"Se de hizo la asignacion",user_id)
     incidencia.resolutor_Asignado = 'Sin asignar'
     incidencia.estado = 'iniciada'
     incidencia.save()
@@ -51,17 +61,21 @@ def rechazarIncidencia(request):
 
     justificacion = request.POST.get('justificacion')
 
-    nombre_usuario = request.POST.get('user_rechazo')
-    usuario = Usuario.objects.get(nombre = nombre_usuario)
-    id_usuario = usuario.id_usuario
+    #nombre_usuario = request.POST.get('user_rechazo')
+    #usuario = Usuario.objects.get(nombre = nombre_usuario)
+    #id_usuario = usuario.id_usuario
 
-    fecha_asignacion = timezone.now()
+    #fecha_asignacion = timezone.now()
 
-
-    estado = 'rechazada'
+    #estado = 'rechazada'
     #registro = RegistroAuditoriaAsignacion.objects.create(id_incidencia_id = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
 
-    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia = Incidencia.objects.get(id=id_incidencia)
+    print ("Primer",justificacion)
+    print ("############")
+
+    crear_registro(id_incidencia,incidencia.estado,'rechazada',justificacion,user_id)
+
     incidencia.estado = 'rechazada'
     incidencia.resolutor_Asignado = 'none'
     incidencia.save()
