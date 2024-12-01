@@ -1,7 +1,7 @@
 import json
 from django.core.serializers import serialize
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from .models import Incidencia, Respuesta
 from director.models import Formulario
@@ -137,3 +137,21 @@ def cambiar_estado(request):
             return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
 
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def obtener_incidencia(request, incidencia_id):
+    try:
+        incidencia = Incidencia.objects.get(id=incidencia_id)
+        data = {
+            'id': incidencia.id,
+            'titulo_Incidencia': incidencia.titulo_Incidencia,
+            'estado': incidencia.estado,
+            'tipo': incidencia.tipo,
+            'urgencia': incidencia.urgencia,
+            'fecha_Reporte': incidencia.fecha_Reporte.isoformat(),
+            'descripcion': incidencia.descripcion,
+            'comentarios': incidencia.comentarios,
+        }
+        return JsonResponse(data)
+    except Incidencia.DoesNotExist:
+        return JsonResponse({'error': 'Incidencia no encontrada'}, status=404)

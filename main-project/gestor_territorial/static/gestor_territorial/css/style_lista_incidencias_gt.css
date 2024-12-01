@@ -158,6 +158,21 @@ body {
     background-color: #315579;
 }
 
+.custom-button1 {
+    background-color: #315579dc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.custom-button1:hover {
+    background-color: #3a5368;
+    color: white;
+}
+
 .btn-detalle {
     background-color: #b0ceec;
     border: none;
