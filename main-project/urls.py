@@ -32,7 +32,7 @@ urlpatterns = [
     path('gestor_territorial/', include('gestor_territorial.urls')),
     path('director/', include('director.urls')),
     path('urls/', include('Dobras.urls')),
-    path('depto-obras/', views.departamentoObra, name='departamentoObras'),
+    path('depto-obras/', views.departamentoObra, name='depto-obras'),
     path('', views.login, name='login'),
 ]
 if settings.DEBUG:

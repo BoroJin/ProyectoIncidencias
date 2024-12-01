@@ -21,15 +21,15 @@
                 <a class="navbar-brand" href="#">Municipalidad X</a>
             </div>
                 <div class="ms-auto d-flex align-items-center">
-                    <a class="navbar-text" href="#">User name</a>
+                    <a class="navbar-text" href="#">{{ user_name }}</a>
                     <div class="user-container">
                         <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon"></div>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
 
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 sidebar p-3">
@@ -37,7 +37,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'director:dashboard' %}">Dashboard</a>
                         <a class="nav-link" href="{% url 'director:incidencias' %}">Incidencias</a>
-                        <a class="nav-link" href="{% url 'director:crear_formulario' %}">Formulario</a>
+                        <a class="nav-link" href="{% url 'director:crear_formulario' %}">Crear Formularios</a>
+                        <a class="nav-link" href="{% url 'director:ver_formularios' %}">Ver Formularios</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +49,7 @@
                 {%endblock%}
             </div>
 
-    <a href="#" class="btn btn-float">
+    <a href="/resolutor/simularCreacion" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
 

@@ -1,0 +1,22 @@
+body {
+  font-family: Serif;
+  margin: 0;
+  padding: 0;
+  background-color: #dbe9f7e5;
+}
+
+.btn-float {
+  background-color: #315579dc;
+  position: fixed;
+  color: #fffafa;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.icono-btn {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
