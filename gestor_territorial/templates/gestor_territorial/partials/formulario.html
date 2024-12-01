@@ -1,31 +1,71 @@
-<form action="{% url 'crear_incidencia' %}" method="post">
+<form action="{% url 'crear_incidencia' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="lat" value="{{ latitud }}">
     <input type="hidden" name="lng" value="{{ longitud }}">
 
-    {% for campo in campos %}
+    <!-- Campos siempre visibles -->
+    <fieldset>
+        <legend>Información de la Incidencia</legend>
+
         <div class="form-group">
-            <label for="{{ campo.id }}">{{ campo.nombre }}</label>
-
-            {% if campo.tipo == 'text' %}
-                <input class="form-control" type="text" name="{{ campo.id }}" id="{{ campo.id }}" placeholder="Escriba aquí">
-
-            {% elif campo.tipo == 'checkbox' %}
-                {% for opcion in campo.opciones.all %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="{{ campo.id }}_{{ opcion.valor }}" id="{{ campo.id }}_{{ opcion.valor }}" value="{{ opcion.valor }}">
-                        <label class="form-check-label" for="{{ campo.id }}_{{ opcion.valor }}">{{ opcion.valor }}</label>
-                    </div>
-                {% endfor %}
-
-            {% elif campo.tipo == 'select' %}
-                <select class="form-control" name="{{ campo.id }}" id="{{ campo.id }}">
-                    {% for opcion in campo.opciones.all %}
-                        <option value="{{ opcion.valor }}">{{ opcion.valor }}</option>
-                    {% endfor %}
-                </select>
-            {% endif %}
+            <label for="titulo">Título</label>
+            <input class="form-control" type="text" name="titulo" id="titulo" placeholder="Escriba el título" required>
         </div>
-    {% endfor %}
-    <button type="submit">Enviar Respuestas</button>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción</label>
+            <textarea class="form-control" name="descripcion" id="descripcion" rows="4" placeholder="Describa la incidencia" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="urgencia">Urgencia</label>
+            <select class="form-control" name="urgencia" id="urgencia" required>
+                <option value="baja">Baja</option>
+                <option value="media" selected>Media</option>
+                <option value="alta">Alta</option>
+                <option value="critica">Crítica</option>
+            </select>
+        </div>
+    </fieldset>
+
+    <!-- Campos dinámicos -->
+    <fieldset>
+        <legend>Detalles adicionales</legend>
+        {% for campo in campos %}
+            <div class="form-group">
+                <label for="{{ campo.id }}">{{ campo.nombre }}</label>
+
+                {% if campo.tipo == 'texto' %}
+                    <input class="form-control" type="text" name="{{ campo.id }}" id="{{ campo.id }}" placeholder="Escriba aquí" {% if campo.es_obligatorio %} required {% endif %}>
+                {% elif campo.tipo == 'checkbox' %}
+                    {% for opcion in campo.opciones.all %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="{{ campo.id }}_{{ opcion.valor }}" id="{{ campo.id }}_{{ opcion.valor }}" value="{{ opcion.valor }}">
+                            <label class="form-check-label" for="{{ campo.id }}_{{ opcion.valor }}">{{ opcion.valor }}</label>
+                        </div>
+                    {% endfor %}
+                {% elif campo.tipo == 'select' %}
+                    <select class="form-control" name="{{ campo.id }}" id="{{ campo.id }}">
+                        <option value="">Seleccione una opción</option>
+                        {% for opcion in campo.opciones.all %}
+                            <option value="{{ opcion.valor }}">{{ opcion.valor }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </fieldset>
+
+    <!-- Campo para subir archivos multimedia -->
+    <fieldset>
+        <legend>Archivos Multimedia</legend>
+        <div class="form-group">
+            <label for="media_files">Subir archivos</label>
+            <input class="form-control-file" type="file" name="media_files" id="media_files" accept="image/*,video/*" multiple>
+        </div>
+    </fieldset>
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Enviar Respuestas</button>
+    </div>
 </form>

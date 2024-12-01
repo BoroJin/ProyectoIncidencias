@@ -22,8 +22,8 @@
         <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
-                    <span class="ms-2">{{ nombre_municipalidad }}</span>
+                    <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
+                    <span class="ms-2">Municipalidad</span>
                 </a>
                 <div class="d-flex align-items-center ms-auto">
                     <span class="navbar-text">{{ user_name }}</span>
@@ -36,7 +36,6 @@
     <!-- Barra lateral -->
     <aside class="col-md-3 col-lg-2 sidebar p-3 fixed-top" id="barraLateral">
         <a class="nav-sel" href="{% url 'adm_principal' %}">Inicio</a>
-        
     </aside>
 
     <!-- Contenido principal -->
@@ -63,18 +62,58 @@
                                     {% for incidencia in page_obj %}
                                     <tr data-incidencia-id="{{ incidencia.id }}" class="incidencia-row" style="cursor: pointer;">
                                         <td>{{ incidencia.id }}</td>
-                                        <td>{{ incidencia.titulo }}</td>
-                                        <td>{{ incidencia.estado }}</td>
-                                        <td>{{ incidencia.urgencia }}</td>
-                                        <td>{{ incidencia.fecha_reporte }}</td>
+                                        <td>{{ incidencia.titulo_Incidencia }}</td>
+                                        <td>{{ incidencia.get_estado_display }}</td>
+                                        <td>{{ incidencia.get_urgencia_display }}</td>
+                                        <td>{{ incidencia.fecha_Reporte|date:"Y-m-d H:i:s" }}</td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="5">No hay incidencias disponibles.</td>
+                                        <td colspan="5" class="text-center">No hay incidencias disponibles.</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            
+                            <div class="pagination-container mt-4">
+                                <nav aria-label="Paginación">
+                                    <ul class="pagination justify-content-center">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1" aria-label="Primera página">
+                                                    &lt;&lt; Primera
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Página anterior">
+                                                    Anterior
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                            
+                                        <li class="page-item disabled">
+                                            <span class="page-link">
+                                                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                                            </span>
+                                        </li>
+                            
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Página siguiente">
+                                                    Siguiente
+                                                </a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última página">
+                                                    Última &gt;&gt;
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,8 @@ class Incidencia(models.Model):
     
     # Actualización de ESTADO_CHOICES con las nuevas opciones
     ESTADO_CHOICES = [
+        ('eliminada', 'eliminada'),
+        ('inexistente', 'inexistente'),
         ('iniciada', 'Iniciada'),
         ('verificada', 'Verificada'),
         ('no verificada', 'No Verificada'),

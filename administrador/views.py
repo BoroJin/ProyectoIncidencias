@@ -1,7 +1,7 @@
 #maxi
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Logo  # Suponiendo que tienes un modelo llamado Usuario
+from .models import Logo,Incidencia, RegistroAuditoria  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from rest_framework.views import APIView
@@ -15,7 +15,6 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import RegistroAuditoria, Usuario, Incidencia
 from django.core.paginator import Paginator
-
 
 def adm_principal(request):
     global user_id, user_name
@@ -278,8 +277,6 @@ def crear_registro_auditoria(datos):
         'registro_id': registro.idRegistro
         }, status=201)
 
-from django.http import JsonResponse
-from .models import Incidencia, RegistroAuditoria
 def registros_de_incidencia(request, incidencia_id):
     try:
         incidencia = Incidencia.objects.get(pk=incidencia_id)
