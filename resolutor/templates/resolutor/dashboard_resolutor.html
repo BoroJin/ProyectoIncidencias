@@ -17,202 +17,115 @@
 </head>
 <body>
     <!-- Barra de navegación superior -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <!-- Logo y título -->
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center logo-container" href="#">
                 <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
                 <span class="ms-2">Municipalidad</span>
             </a>
 
-            <!-- Información de usuario y notificaciones -->
-            <div class="d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <span class="navbar-text">{{ user_name }}</span>
-                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
-                </div>
+            <!-- Relleno flexible para empujar a la derecha -->
+            <div class="user-container ms-auto d-flex align-items-center">
+                <span class="navbar-text me-2">{{ user_name }}</span>
+                <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
             </div>
         </div>
     </nav>
 
     <!-- Barra lateral -->
-    <div class="col-md-3 col-lg-2 sidebar p-3 fixed-top" id="barraLateral">
-        <!-- Enlace de navegación: Inicio -->
+    <div class="sidebar p-3" id="barraLateral">
         <a class="nav-sel" href="#">Inicio</a>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                
+            </li>
+        </ul>
     </div>
 
     <!-- Botón flotante para soporte técnico -->
-    <a href="{% url 'simularAsignacion' %}" class="btn btn-float">
+    <a href="#" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
 
     <!-- Contenido principal -->
-    <div class="container-fluid" id="contenidoPrincipal">
-        <div class="row">
-    
-            <!-- Área de contenido -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- Mapa e incidencias dentro de tarjetas -->
-                <div class="row my-1">
-                    <!-- Card para el Mapa -->
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">Mapa</div>
-                            <div class="card-body">
-                                <div id="mapa" style="height: 500px;"></div>
-                            </div>
-                        </div>
+    <div id="contenidoPrincipal">
+        <main class="row">
+            <!-- Card para el Mapa -->
+            <section class="col-md-8">
+                <div class="card">
+                    <header class="card-header">Mapa</header>
+                    <div class="card-body">
+                        <div id="mapa" style="height: 500px;"></div>
                     </div>
-    
-                    <!-- Card para Incidencias Asignadas -->
-                    <div class="col-md-4">
-                        <!-- Contenedor principal para las dos tarjetas -->
-                        <div class="d-flex flex-column gap-3">
-                            <!-- Card para Incidencias Asignadas -->
-                            <div class="card">
-                                <div class="card-header">Incidencias Asignadas</div>
-                                <div class="card-body">
-                                    <div class="list-group">
-                                        {% if incidencias %}
-                                            {% for incidencia in incidencias %}
-                                                <a href="#" class="list-group-item list-group-item-action btn-incidencia-asignada"
-                                                   data-incidencia='{
-                                                       "id": "{{ incidencia.id }}",
-                                                       "titulo": "{{ incidencia.titulo_Incidencia|escapejs }}",
-                                                       "descripcion": "{{ incidencia.descripcion|escapejs }}",
-                                                       "urgencia": "{{ incidencia.get_urgencia_display }}",
-                                                       "estado": "{{ incidencia.get_estado_display }}",
-                                                       "fecha_reporte": "{{ incidencia.fecha_Reporte|date:'Y-m-d H:i:s' }}",
-                                                       "latitud": "{{ incidencia.latitud }}",
-                                                       "longitud": "{{ incidencia.longitud }}",
-                                                       "resolutor": "{{ incidencia.resolutor_Asignado|default:"N/A" }}"
-                                                   }'>
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
-                                                        <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
-                                                    </div>
-                                                    <p class="mb-1">{{ incidencia.descripcion|truncatewords:10 }}</p>
-                                                </a>
-                                            {% endfor %}
-                                        {% else %}
-                                            <p>No hay incidencias asignadas</p>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                    
-                            <!-- Card para Incidencias en Proceso -->
-                            <div class="card">
-                                <div class="card-header">Incidencias en Proceso</div>
-                                <div class="card-body">
-                                    <div class="list-group">
-                                        {% if incidencias_en_proceso %}
-                                            {% for incidencia in incidencias_en_proceso %}
-                                                <a href="#" class="list-group-item list-group-item-action btn-incidencia-proceso"
-                                                   data-incidencia='{
-                                                       "id": "{{ incidencia.id }}",
-                                                       "titulo": "{{ incidencia.titulo_Incidencia|escapejs }}",
-                                                       "descripcion": "{{ incidencia.descripcion|escapejs }}",
-                                                       "urgencia": "{{ incidencia.get_urgencia_display }}",
-                                                       "estado": "{{ incidencia.get_estado_display }}",
-                                                       "fecha_reporte": "{{ incidencia.fecha_Reporte|date:'Y-m-d H:i:s' }}",
-                                                       "latitud": "{{ incidencia.latitud }}",
-                                                       "longitud": "{{ incidencia.longitud }}",
-                                                       "resolutor": "{{ incidencia.resolutor_Asignado|default:"N/A" }}"
-                                                   }'>
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
-                                                        <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
-                                                    </div>
-                                                    <p class="mb-1">{{ incidencia.descripcion|truncatewords:10 }}</p>
-                                                </a>
-                                            {% endfor %}
-                                        {% else %}
-                                            <p>No hay incidencias en proceso</p>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+            </section>
+
+            <!-- Cards para Incidencias -->
+            <section class="col-md-4">
+                <!-- Incidencias Asignadas -->
+                <div class="card mb-3">
+                    <header class="card-header">Incidencias Asignadas</header>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% if incidencias %}
+                                {% for incidencia in incidencias %}
+                                    <a href="#" class="list-group-item list-group-item-action btn-incidencia-asignada" data-incidencia='{
+                                        "id": "{{ incidencia.id }}",
+                                        "titulo": "{{ incidencia.titulo_Incidencia|escapejs }}",
+                                        "descripcion": "{{ incidencia.descripcion|escapejs }}",
+                                        "urgencia": "{{ incidencia.get_urgencia_display }}",
+                                        "estado": "{{ incidencia.get_estado_display }}",
+                                        "fecha_reporte": "{{ incidencia.fecha_Reporte|date:'Y-m-d H:i:s' }}",
+                                        "latitud": "{{ incidencia.latitud }}",
+                                        "longitud": "{{ incidencia.longitud }}",
+                                        "resolutor": "{{ incidencia.resolutor_Asignado|default:"N/A" }}"
+                                    }'>
+                                        <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
+                                        <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
+                                        <p class="mb-1">{{ incidencia.descripcion|truncatewords:10 }}</p>
+                                    </a>
+                                {% endfor %}
+                            {% else %}
+                                <p>No hay incidencias asignadas</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                    
-                    
-                    
-
-
-
-
-
-
-
-
-    
-
-    <!-- Modal de Incidencia en proceso -->
-    <div class="modal fade" id="incidenciaModalProceso" tabindex="-1" aria-labelledby="incidenciaModalProceso" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="incidenciaForm" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="incidenciaModalProceso">Detalles de la Incidencia</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><strong>ID de Incidencia:</strong> <span id="incidenciaModalProcesoId"></span></p>
-                        <p><strong>Título:</strong> <span id="incidenciaModalProcesoTitulo"></span></p>
-                        <p><strong>Descripción:</strong> <span id="incidenciaModalProcesoDescripcion"></span></p>
-                        <p><strong>Urgencia:</strong> <span id="incidenciaModalProcesoUrgencia"></span></p>
-                        <p><strong>Estado:</strong> <span id="incidenciaModalProcesoEstado"></span></p>
-                        <p><strong>Fecha de Reporte:</strong> <span id="incidenciaModalProcesoFecha"></span></p>
-                        <p><strong>Resolutor Asignado:</strong> <span id="incidenciaModalProcesoResolutor"></span></p>
-                        <div id="comentariosInconcluso" class="d-none mt-3">
-                            <label for="comentarios" class="form-label">Justifique el estado a asignar:</label>
-                            <textarea id="comentarios" class="form-control" rows="3" placeholder="Escriba sus razones aquí"></textarea>
-                        </div>
-                        <div id="archivoFinalizado" class="d-none mt-3">
-                            <label for="archivos" class="form-label">Adjuntar archivos:</label>
-                            <input type="file" id="archivos" class="form-control" multiple accept="image/*,video/*">
-                            <div class="form-text">Puedes subir imágenes y videos relacionados con la incidencia.</div>
+                
+                <!-- Incidencias en Proceso -->
+                <div class="card">
+                    <header class="card-header">Incidencias en Proceso</header>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% if incidencias_en_proceso %}
+                                {% for incidencia in incidencias_en_proceso %}
+                                    <a href="#" class="list-group-item list-group-item-action btn-incidencia-proceso" data-incidencia='{
+                                        "id": "{{ incidencia.id }}",
+                                        "titulo": "{{ incidencia.titulo_Incidencia|escapejs }}",
+                                        "descripcion": "{{ incidencia.descripcion|escapejs }}",
+                                        "urgencia": "{{ incidencia.get_urgencia_display }}",
+                                        "estado": "{{ incidencia.get_estado_display }}",
+                                        "fecha_reporte": "{{ incidencia.fecha_Reporte|date:'Y-m-d H:i:s' }}",
+                                        "latitud": "{{ incidencia.latitud }}",
+                                        "longitud": "{{ incidencia.longitud }}",
+                                        "resolutor": "{{ incidencia.resolutor_Asignado|default:"N/A" }}"
+                                    }'>
+                                        <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
+                                        <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
+                                        <p class="mb-1">{{ incidencia.descripcion|truncatewords:10 }}</p>
+                                    </a>
+                                {% endfor %}
+                            {% else %}
+                                <p>No hay incidencias en proceso</p>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-warning me-2" id="btnInconcluso">Inconcluso</button>
-                        <button type="button" class="btn btn-success me-2" id="btnFinalizado">Finalizado</button>
-                        <button type="submit" class="btn btn-primary d-none" id="btnEnviar" >Enviar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </div>
+            </section>
+        </main>
     </div>
-<!-- Modal de Incidencia en asignada -->
-<div class="modal fade" id="incidenciaModalAsignada" tabindex="-1" aria-labelledby="incidenciaModalAsignadaLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="incidenciaForm" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="incidenciaModalAsignada">Detalles de la Incidencia</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>ID de Incidencia:</strong> <span id="incidenciaModalAsignadaId"></span></p>
-                    <p><strong>Título:</strong> <span id="incidenciaModalAsignadaTitulo"></span></p>
-                    <p><strong>Descripción:</strong> <span id="incidenciaModalAsignadaDescripcion"></span></p>
-                    <p><strong>Urgencia:</strong> <span id="incidenciaModalAsignadaUrgencia"></span></p>
-                    <p><strong>Estado:</strong> <span id="incidenciaModalAsignadaEstado"></span></p>
-                    <p><strong>Fecha de Reporte:</strong> <span id="incidenciaModalAsignadaFecha"></span></p>
-                    <p><strong>Resolutor Asignado:</strong> <span id="incidenciaModalAsignadaResolutor"></span></p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn me-2 btn-proceso" >Iniciar</button>
 
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
     <!-- Bootstrap JS y dependencias -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

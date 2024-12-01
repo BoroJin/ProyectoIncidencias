@@ -28,50 +28,6 @@ def dashboard_resolutor(request):
                     'user_name': user_name,
                     "incidencias_en_proceso":incidencias_proceso})
 
-def simular_creacion_incidencias(request):
-    # Lista de ejemplos de datos simulados
-    incidencias_simuladas = [
-        {
-            "titulo_Incidencia": "Simulacion de creacion 1",
-            "estado": "iniciada",
-            "urgencia": "alta",
-            "descripcion": "Descripcion simulada 1",
-            "latitud": -33.4489,
-            "longitud": -70.6693,
-        },
-        {
-            "titulo_Incidencia": "Simulacion de creacion 2",
-            "estado": "iniciada",
-            "urgencia": "media",
-            "descripcion": "descripcion simulada 2",
-            "latitud": -33.4578,
-            "longitud": -70.6645,
-        },
-        {
-            "titulo_Incidencia": "Simulacion de creacion 3",
-            "estado": "iniciada",
-            "urgencia": "alta",
-            "descripcion": "descripcion simulada 3",
-            "latitud": -33.4600,
-            "longitud": -70.6620,
-        },
-    ]
-
-    # Crear las incidencias simuladas
-    for incidencia_data in incidencias_simuladas:
-        incidencia = Incidencia(
-            titulo_Incidencia=incidencia_data["titulo_Incidencia"],
-            estado=incidencia_data["estado"],
-            urgencia=incidencia_data["urgencia"],
-            descripcion=incidencia_data["descripcion"],
-            fecha_Reporte=now(),
-            latitud=incidencia_data["latitud"],
-            longitud=incidencia_data["longitud"],
-            resolutor_Asignado=None,  # Ningún resolutor asignado inicialmente
-        )
-        incidencia.save()
-
-    return JsonResponse({"resultado": "Incidencias simuladas creadas exitosamente."})
 
 def simular_asignacion(request):
     incidencias = Incidencia.objects.all().order_by('id')  # Ordena por el campo `id`
@@ -88,11 +44,9 @@ def simular_asignacion(request):
         print(f"Resolutor Asignado: {incidencia.resolutor_Asignado}")
         print("-" * 50)  # Línea separadora para claridad
         incidencia = Incidencia.objects.get(id=incidencia.id)
+        user_id = request.COOKIES.get('user_id')
         incidencia.resolutor_Asignado = user_id
-        incidencia.titulo_Incidencia = "Titulo simulado"
-        incidencia.estado = "asignada"
-        incidencia.descripcion = "Descripcion simulada"
-        incidencia.fecha_Reporte = now()
+        incidencia.estado = 'asignada'
         incidencia.save()
     return JsonResponse({"resultados": "Asignadas"})
 ###
@@ -111,8 +65,9 @@ def setIncidenciaEnProceso(request):
 
 def getIncidenciasAsigandas(request):
     user_id = request.COOKIES.get('user_id')
-    incidencias = Incidencia.objects.filter(resolutor_Asignado=user_id)
-    return incidencias # false si no hay asignaciones
+    incidencias = Incidencia.objects.filter(resolutor_Asignado=user_id, estado='asignada')
+    return incidencias if incidencias.exists() else False
+
 
 def setIncidenciaFinalizada(request):
     if request.method == 'POST':
