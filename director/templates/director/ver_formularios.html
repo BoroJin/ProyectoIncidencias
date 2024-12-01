@@ -1,38 +1,32 @@
 {% extends './base.html' %}
-{% block title %} Ver Formulario {% endblock %}
-{% block style %}
-<style>
-    .formulario { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
-   button { margin-top: 10px; display: block; padding: 10px 20px; text-decoration: none; color: white; background-color: #007bff; border: none; cursor: pointer; transition: background-color 0.3s; }
-    button:hover { background-color: #004494; }
-    button:disabled { background-color: #ccc; }
-    form { display: inline; }
-</style>
-{%endblock%}
+{% block title %} Ver Formularios {% endblock %}
 
 {% block body %}
-<div class="row">
+<div class="container">
     <h1>Listado de Formularios</h1>
-    {% for formulario in formularios %}
-    <div class="formulario">
-        <h2>{{ formulario.nombre }}</h2>
-        <p>{{ formulario.descripcion }}</p>
-        <p>Formulario activo: {{ formulario.activo }}</p>
-        <a href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
-        <form action="{% url 'director:eliminar_formulario' formulario.id %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
-        </form>
-        <form action="{% url 'director:activar_formulario' formulario.id %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
-        </form>
+    <div class="row">
+        {% for formulario in formularios %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ formulario.nombre }}</h2>
+                    <p class="card-text">{{ formulario.descripcion }}</p>
+                    <p>Formulario activo: {{ formulario.activo }}</p>
+                    <a class="btn btn-custom" href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
+                    <form action="{% url 'director:eliminar_formulario' formulario.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button class="btn btn-custom" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
+                    </form>
+                    <form action="{% url 'director:activar_formulario' formulario.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button class="btn btn-custom" type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p>No hay formularios disponibles.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-        <p>No hay formularios disponibles.</p>
-    {% endfor %}
 </div>
-{%endblock%}
-
-
-
+{% endblock %}

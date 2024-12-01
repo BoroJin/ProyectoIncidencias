@@ -1,52 +1,44 @@
-{%extends './base.html'%}
+{% extends './base.html' %}
 
-{%block title%} Gestionar Campos {%endblock%}
+{% load static %}
 
-{%block style%}
-<style>
+{% block title %} Gestionar Campos {% endblock %}
 
-    form { background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px auto; width: fit-content; }
-    label { display: block; margin: 15px 0 5px; }
-    input, select, textarea { width: 300px; padding: 8px; border-radius: 4px; border: 1px solid #ddd; }
-    button { background-color: #0056b3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
-    button:hover { background-color: #004494; }
-
-</style>
-{%endblock%}
-
-{%block body%}
+{% block body %}
 <div class="row">
-    <div class="col-auto">
-        <a class="btn btn-info btn-sm" href="{% url 'director:ver_formularios' %}">Volver a Listado de Formularios</a>
+    <div class="col-auto mt-3">
+        <a class="btn btn-custom btn-sm" href="{% url 'director:ver_formularios' %}">Volver a Listado de Formularios</a>
     </div>
     <div class="col-md-4 mt-3">
         <h2 class="py-3">Gestionar Campos del Formulario: {{ formulario.nombre }}</h2>
-        <div class="card-body">
-            <form method="POST" id="formAgregarCampo">
-                {% csrf_token %}
-                <div class="form-group mt-3">
-                    <label for="nombre_campo">Nombre del Campo:</label>
-                    <input type="text" name="nombre_campo" id="nombre_campo" required>
-                </div>
-                <div class="form-group mt-3">
-                    <label for="tipo_campo">Tipo de Campo:</label>
-                    <select name="tipo_campo" id="tipo_campo" onchange="mostrarOpciones()">
-                        <option value="texto">Texto</option>
-                        <option value="checkbox">Checkbox</option>
-                        <option value="select">Desplegable</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <div id="opciones" style="display:none;">
-                        <label>Opciones:</label>
-                        <button type="button" onclick="agregarOpcion()">Agregar Opción</button>
-                        <div id="opciones-container"></div>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" id="formAgregarCampo">
+                    {% csrf_token %}
+                    <div class="form-group mt-3">
+                        <label for="nombre_campo">Nombre del Campo:</label>
+                        <input type="text" name="nombre_campo" id="nombre_campo" class="form-control" required>
                     </div>
-                </div>
-                <div class="form-group text-center">
-                    <button type="submit" name="agregar">Agregar Campo</button>
-                </div>
-            </form>
+                    <div class="form-group mt-3">
+                        <label for="tipo_campo">Tipo de Campo:</label>
+                        <select name="tipo_campo" id="tipo_campo" class="form-control" onchange="mostrarOpciones()">
+                            <option value="texto">Texto</option>
+                            <option value="checkbox">Checkbox</option>
+                            <option value="select">Desplegable</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div id="opciones" style="display:none;">
+                            <label>Opciones:</label>
+                            <button class="btn btn-custom" type="button" onclick="agregarOpcion()">Agregar Opción</button>
+                            <div id="opciones-container"></div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-custom btn-block" type="submit" name="agregar">Agregar Campo</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div class="col-md-6 py-5">
@@ -65,7 +57,7 @@
                                     {% csrf_token %}
                                     <div class="form-group">
                                         <input type="hidden" name="campo_id" value="{{ campo.id }}">
-                                        <button type="submit" name="eliminar" >Eliminar</button>
+                                        <button class="btn btn-custom" type="submit" name="eliminar">Eliminar</button>
                                     </div>
                                 </form>
                             </div>
@@ -75,8 +67,7 @@
             </div>
         </div>
     </div>
-    
-    
+
     <script>
     function mostrarOpciones() {
         var tipoCampo = document.getElementById('tipo_campo').value;
@@ -88,15 +79,14 @@
             document.getElementById('opciones-container').innerHTML = ''; // Limpiar opciones anteriores
         }
     }
-    
+
     function agregarOpcion() {
         var opcionesContainer = document.getElementById('opciones-container');
         var nuevaOpcion = document.createElement('div');
-        nuevaOpcion.innerHTML = '<input type="text" name="opcion_nombre[]" placeholder="Nombre de la opción">' +
-                                '<input type="text" name="opcion_valor[]" placeholder="Valor de la opción">';
+        nuevaOpcion.innerHTML = '<input type="text" name="opcion_nombre[]" placeholder="Nombre de la opción" class="form-control my-2">' +
+                                '<input type="text" name="opcion_valor[]" placeholder="Valor de la opción" class="form-control mb-2">';
         opcionesContainer.appendChild(nuevaOpcion);
     }
     </script>
 </div>
-{%endblock%}
-
+{% endblock %}
