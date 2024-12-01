@@ -19,9 +19,9 @@ drf_spectacular
 
 -Librerias de Java
 
-bootstrap
-react-router-dom
 axios
+folium
+socket.io-client react-icons react-router-dom bootstrap
 
 Este TXT no es para usar con el requirements para instalar librerias es de vista para llevar el cuento de librerias
 utilizadas hasta el momento

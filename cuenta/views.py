@@ -1,7 +1,8 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework.exceptions import ValidationError
+from rest_framework import status,viewsets
 from .models import Usuario, Ticket
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
@@ -11,32 +12,32 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .serializer import TicketsSerializer,MensajeSerializer
+from .models import Mensaje
 
-@csrf_exempt
-def crear_ticket(request):
-    if request.method == "POST":
+class TicketsViewSet(viewsets.ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketsSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        if 'usuario' not in data:
+            raise ValidationError({"usuario": "El campo 'usuario' (correo electrónico) es obligatorio."})
         try:
-            data = json.loads(request.body)
-            correo_electronico = data.get("correo_electronico")
-            asunto = data.get("asunto")
-            descripcion = data.get("descripcion")
-            
-            # Verificar si el correo existe en la tabla de usuarios
-            usuario = Usuario.objects.filter(correo_electronico=correo_electronico).first()
-            if not usuario:
-                return JsonResponse({"error": "El correo no está registrado"}, status=400)
+            usuario = Usuario.objects.get(correo_electronico=data['usuario'])
+            data['usuario'] = usuario.id 
+        except Usuario.DoesNotExist:
+            raise ValidationError({"usuario": "No se encontró un usuario con este correo electrónico."})
 
-            # Crear el ticket
-            Ticket.objects.create(
-                usuario=usuario,
-                asunto=asunto,
-                descripcion=descripcion
-            )
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
 
-            return JsonResponse({"success": "Ticket creado con éxito"}, status=201)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-    return JsonResponse({"error": "Método no permitido"}, status=405)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class MensajeViewSet(viewsets.ModelViewSet):
+    queryset = Mensaje.objects.all()
+    serializer_class = MensajeSerializer
 
 class LoginView(APIView):
     def post(self, request):
