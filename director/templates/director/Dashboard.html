@@ -1,39 +1,126 @@
-{%extends './base.html'%}
+{% extends './base.html' %}
 {% load static %}
-{%block title%} Dashboard {%endblock%}
 
-{%block body%}
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
 <div class="row">
-    <div class="table-responsive col-md-6">
-        <h2 class="">Incidencias</h2>
-        <table class="table table-bordered table-hover table-striped text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Titulo</th>
-                    <th>Latitud</th>
-                    <th>Longitud</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in incidencia %}
-                <tr>
-                <td>{{ i.id }}</td>
-                <td>{{ i.titulo_Incidencia }}</td>
-                <td>{{ i.latitud }}</td>
-                <td>{{ i.longitud }}</td>
-                <td>{{ i.estado }}</td>
-                <td>{{ i.fecha_Reporte }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div class="col-md-6">
-        {{map|safe}}
+    <!-- Contenedor principal -->
+    <div class="w-100">
+        <div class="card-header d-flex justify-content-between">
+            <!-- Puedes agregar contenido aquí si lo deseas -->
+        </div>
+        <div class="card-body">
+            <div class="d-flex">
+                <!-- Contenedor de la Tabla -->
+                <div class="card flex-fill me-3">
+                    <div class="card-header">
+                        <span>Incidencias Iniciadas</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% if incidencias %}
+                                {% for incidencia in incidencias %}
+                                <a href="#" class="list-group-item list-group-item-action btn-incidencia-iniciada"
+                                   data-incidencia='{
+                                       "id": "{{ incidencia.id|escapejs }}",
+                                       "titulo": "{{ incidencia.titulo_Incidencia|escapejs }}",
+                                       "urgencia": "{{ incidencia.get_urgencia_display|escapejs }}",
+                                       "estado": "{{ incidencia.get_estado_display|escapejs }}",
+                                       "fecha_reporte": "{{ incidencia.fecha_Reporte|date:"Y-m-d H:i:s"|escapejs }}",
+                                       "latitud": "{{ incidencia.latitud|default_if_none:''|floatformat:6 }}",
+                                       "longitud": "{{ incidencia.longitud|default_if_none:''|floatformat:6 }}",
+                                       "resolutor": "{{ incidencia.resolutor_Asignado|default:'N/A'|escapejs }}"
+                                   }'>
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
+                                        <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
+                                    </div>
+                                    <p class="mb-1">Título: {{ incidencia.titulo_Incidencia }}</p>
+                                    <small class="text-muted">Estado: {{ incidencia.get_estado_display }}</small>
+                                </a>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-center">No hay incidencias asignadas</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenedor del Mapa -->
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <span>Mapa</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="mapContainer">
+                            {{ map|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-{%endblock%}
+
+<!-- Modal Incidencia -->
+<div class="modal fade" id="incidenciaModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Detalles de la Incidencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="modal-id"></span></p>
+                <p><strong>Título:</strong> <span id="modal-titulo"></span></p>
+                <p><strong>Urgencia:</strong> <span id="modal-urgencia"></span></p>
+                <p><strong>Estado:</strong> <span id="modal-estado"></span></p>
+                <p><strong>Fecha de Reporte:</strong> <span id="modal-fecha"></span></p>
+                <p><strong>Resolutor:</strong> <span id="modal-resolutor"></span></p>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="asignar-btn" data-bs-toggle="modal" data-bs-target="#asignarUsuarioModal">Asignar</button>
+                <button type="button" class="btn btn-danger" id="rechazar-btn">Rechazar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Asignar Usuario -->
+<div class="modal fade" id="asignarUsuarioModal" tabindex="-1" aria-labelledby="asignarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="asignarUsuarioLabel">Asignar Resolutor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="asignar-form">
+                    <div class="mb-3">
+                        <label for="usuario-select" class="form-label">Seleccione un usuario</label>
+                        <select class="form-select" id="usuario-select">
+                            <option value="">Seleccione...</option>
+                            {% for usuario in usuarios_departamento %}
+                                <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirmar-asignacion-btn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
