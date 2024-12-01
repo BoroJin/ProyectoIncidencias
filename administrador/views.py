@@ -1,20 +1,18 @@
 #maxi
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Logo  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
-from django.http import JsonResponse, Http404
-from django.http import HttpResponse
+from django.http import JsonResponse, Http404,HttpResponse
 from cuenta.models import Usuario, Ticket
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import RegistroAuditoria, Usuario, Incidencia
+from .models import RegistroAuditoria, Incidencia, Logo
 from django.core.paginator import Paginator
+
+
 
 
 def adm_principal(request):
@@ -274,8 +272,6 @@ def crear_registro_auditoria(datos):
         'registro_id': registro.idRegistro
         }, status=201)
 
-from django.http import JsonResponse
-from .models import Incidencia, RegistroAuditoria
 def registros_de_incidencia(request, incidencia_id):
     try:
         incidencia = Incidencia.objects.get(pk=incidencia_id)
@@ -303,8 +299,6 @@ def registros_de_incidencia(request, incidencia_id):
     }
     return JsonResponse(data)
 
-
-
 def registro_auditoria(request):
     user_id = request.COOKIES.get('user_id')
     user_name = request.COOKIES.get('user_name')
@@ -318,18 +312,18 @@ def registro_auditoria(request):
     page_obj = paginator.get_page(page_number)
     
     # Convertimos las incidencias en un formato que incluya la fecha de reporte
-    incidencias_data = [
-        {
-            'id': incidencia.id,
-            'titulo': incidencia.titulo_Incidencia,
-            'estado': incidencia.get_estado_display(),
-            'urgencia': incidencia.get_urgencia_display(),
-            'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
-        }
-        for incidencia in page_obj
-    ]
+    #incidencias_data = [
+    #    {
+    #        'id': incidencia.id,
+    #        'titulo': incidencia.titulo_Incidencia,
+    #        'estado': incidencia.get_estado_display(),
+    #        'urgencia': incidencia.get_urgencia_display(),
+    #        'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
+    #    }
+    #    for incidencia in page_obj
+    #]
     
     return render(request, 'administrador/registroAuditoria.html', {
-        'page_obj': incidencias_data,
+        'page_obj': page_obj,
         'user_name': user_name,
     })

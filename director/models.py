@@ -16,7 +16,7 @@ class Campo(models.Model):
         ('texto', 'Texto'),
         ('checkbox', 'Casilla de verificación'),
         ('select', 'Desplegable'),
-        # Agrega más tipos de campo según sea necesario
+        
     ]
     formulario = models.ForeignKey(Formulario, related_name="campos", on_delete=models.CASCADE)
     nombre = models.CharField(max_length=255)
