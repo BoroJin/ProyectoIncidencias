@@ -41,18 +41,24 @@ function Login() {
     
             if (response.ok) {
                 const data = await response.json();
-            
+                
                 // Guardar tokens y nombre de usuario en localStorage
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
                 localStorage.setItem('user_name', data.user_name); // Guardar el nombre del usuario, para R.auditoria
                 localStorage.setItem('user_id', data.user_id);
+                
                 if (data.redirect_url) {
-                    document.cookie = `user_id=${data.user_id}; path=/;`;
-                    document.cookie = `user_name=${data.user_name}; path=/;`;
+                    // Establecer cookies con tiempo de expiración de 30 días
+                    const expires = new Date();
+                    expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 días en milisegundos
+                    
+                    document.cookie = `user_id=${data.user_id}; path=/; expires=${expires.toUTCString()};`;
+                    document.cookie = `user_name=${data.user_name}; path=/; expires=${expires.toUTCString()};`;
+                    
+                    // Redirigir al usuario
                     redirectToDjango(data.redirect_url);
                 }
-            
             } else {
                 const errorData = await response.json();
                 console.error('Error en login:', errorData);
