@@ -4,6 +4,6 @@ notas.md
 # Ignorar archivos temporales
 *.pyc
 __pycache__/
-
+**/adjuntos/
 # Ignorar archivos de caché
 .cache/

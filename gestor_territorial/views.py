@@ -1,4 +1,5 @@
-import json
+from django.conf import settings
+import os
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,6 +9,8 @@ from director.models import Formulario
 from django.views.decorators.csrf import csrf_exempt
 from administrador.models import RegistroAuditoria
 from resolutor.views import crear_registro
+import uuid
+
 
 def ver_gestor(request):
     estados_filtrados = ['finalizada']
@@ -52,6 +55,7 @@ def mostrar_formulario(request):
     return JsonResponse({'status': 'success', 'formulario_html': formulario_html})
 
 @csrf_exempt
+
 def crear_incidencia(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
@@ -61,8 +65,8 @@ def crear_incidencia(request):
     longitud = request.POST.get('lng')
 
     # Capturar los campos fijos del formulario
-    titulo = request.POST.get('titulo')
-    descripcion = request.POST.get('descripcion')
+    titulo = request.POST.get('titulo') or 'Sin título'
+    descripcion = request.POST.get('descripcion') or 'Sin descripción'
     urgencia = request.POST.get('urgencia', 'media')  # Default a 'media' si no se proporciona
 
     # Validar coordenadas
@@ -71,30 +75,61 @@ def crear_incidencia(request):
         lng = float(longitud)
     except (ValueError, TypeError):
         return JsonResponse({'status': 'error', 'message': 'Coordenadas inválidas'}, status=400)
-    
+
+    # Procesar archivo multimedia
+    multimedia_archivo = request.FILES.get('media_files')
+    multimedia_ruta = None
+    if multimedia_archivo:
+        try:
+            unique_filename = f"{uuid.uuid4()}_{multimedia_archivo.name}"
+            # Definir la ruta de almacenamiento
+            relative_path = os.path.join('incidencias/adjuntos/gestor', unique_filename)
+            absolute_path = os.path.join(settings.MEDIA_ROOT, relative_path)
+
+            # Crear el directorio si no existe
+            os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
+
+            # Guardar archivo
+            with open(absolute_path, 'wb') as file:
+                for chunk in multimedia_archivo.chunks():
+                    file.write(chunk)
+            multimedia_ruta = relative_path
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error al guardar el archivo: {str(e)}'}, status=500)
+
     # Crear la incidencia
     incidencia = Incidencia.objects.create(
-        titulo_Incidencia=titulo or 'Sin título',
-        descripcion=descripcion or 'Sin descripción',
+        titulo_Incidencia=titulo,
+        descripcion=descripcion,
         urgencia=urgencia,
         latitud=lat,
         longitud=lng,
-        estado='iniciada'
+        estado='iniciada',
+        multimedia_gestor=multimedia_ruta
     )
+
+    # Crear registro en el historial
     user_id = request.COOKIES.get('user_id')
-    crear_registro(incidencia.id,"inexistente","iniciada","Incidencia iniciada y creada",user_id)
+    if user_id:
+        crear_registro(incidencia.id, "inexistente", "iniciada", "Incidencia iniciada y creada", user_id)
+
     # Procesar las respuestas dinámicas del formulario
     formulario = Formulario.objects.filter(activo=True).first()
     if formulario:
         for campo in formulario.campos.all():
             valor_campo = request.POST.get(str(campo.id), '')
             if campo.tipo in ['checkbox', 'select']:
-                opciones_seleccionadas = [opcion.valor for opcion in campo.opciones.all() if request.POST.get(f"{campo.id}_{opcion.valor}")]
+                opciones_seleccionadas = [
+                    opcion.valor for opcion in campo.opciones.all()
+                    if request.POST.get(f"{campo.id}_{opcion.valor}")
+                ]
                 valor_campo = ', '.join(opciones_seleccionadas)
             Respuesta.objects.create(incidencia=incidencia, campo=campo, valor=valor_campo)
 
+    # Redirigir al gestor
     return redirect('ver_gestor')
-    
+
+
 
 def agregar_comentario(request):
     if request.method == 'POST':
@@ -151,7 +186,6 @@ def reenviarIncidencia(request):
             return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
 
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
-
 
 def obtener_incidencia(request, incidencia_id):
     ultimo_registro = RegistroAuditoria.objects.filter(
