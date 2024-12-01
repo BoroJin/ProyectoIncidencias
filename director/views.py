@@ -3,43 +3,13 @@ from django.contrib import messages
 from django.utils import timezone
 from .models import Campo, Opcion, Formulario
 from gestor_territorial.models import Incidencia
+from gestor_territorial.views import crear_registro
 from cuenta.models import Usuario
 #from administrador.models import registroAuditoria
 import folium
+from django.http import JsonResponse, Http404
+from administrador.models import RegistroAuditoria
 
-
-
-def dashboard(request):
-    # Filtrar incidencias con estado 'iniciada'
-    incidencias = Incidencia.objects.filter(estado='iniciada')
-    usuarios_departamento = Usuario.objects.filter(rol='Departamento de obras')
-    print(incidencias)
-    # Crear el mapa inicial centrado en una ubicación predeterminada
-    initial_map = folium.Map(location=[-33.427656074857076, -70.61159044504167], zoom_start=9)
-
-    # Añadir marcadores para cada incidencia
-    for incidencia in incidencias:
-        print(incidencia.multimedia_gestor.url if incidencia.multimedia_gestor else "Sin multimedia")
-        if incidencia.latitud and incidencia.longitud:  # Verificar que las coordenadas existan
-            coordinates = (incidencia.latitud, incidencia.longitud)
-            popup_content = f'''
-                <b>Nombre:</b> {incidencia.titulo_Incidencia}<br>
-                <b>Urgencia:</b> {incidencia.get_urgencia_display()}<br>
-                <b>Estado:</b> {incidencia.get_estado_display()}
-            '''
-            folium.Marker(
-                location=coordinates,
-                popup=folium.Popup(popup_content, max_width=300),
-                tooltip="Haz clic para más información"
-            ).add_to(initial_map)
-
-    # Renderizar la plantilla con el QuerySet de incidencias y el HTML del mapa
-    context = {
-        'usuarios_departamento': usuarios_departamento,
-        'incidencias': incidencias,  # Pasa las incidencias al template
-        'map': initial_map._repr_html_()  # Mapa convertido a HTML para insertar en el template
-    }
-    return render(request, 'director/dashboard.html', context)
 
 def incidencias(request):
     incidencia = Incidencia.objects.all()
@@ -48,20 +18,28 @@ def incidencias(request):
 
 
 def asignarUsuario (request):
+    user_id = request.COOKIES.get('user_id')
     id_incidencia = request.POST.get('ID_asignar')
 
     usuario_id = request.POST.get('usuario_id')
 
     incidencia = Incidencia.objects.get(id=id_incidencia)
+    crear_registro(id_incidencia,incidencia.estado,'asignada',"La incidencia se ah asginado",user_id)
+
     incidencia.id_usuario_departamento = usuario_id
-    incidencia.estado = 'Asignada'
+    incidencia.estado = 'asignada'
+    
     incidencia.save()
 
     return redirect('director:incidencias')
 
 def deshacerAsignacion(request,id):
+    user_id = request.COOKIES.get('user_id')
 
     incidencia = Incidencia.objects.get(id=id)
+
+    crear_registro(id,incidencia.estado,'iniciada',"Se deshizo la asignacion",user_id)
+
     incidencia.id_usuario_departamento = None
     incidencia.estado = 'iniciada'
     incidencia.save()
@@ -72,26 +50,15 @@ def deshacerAsignacion(request,id):
 def rechazarIncidencia(request):
 
     id_incidencia = request.POST.get('ID_rechazo')
-    id_incidencia1 = int(id_incidencia)
-
-
     justificacion = request.POST.get('justificacion')
-
-    nombre_usuario = request.POST.get('user_rechazo')
-    usuario = Usuario.objects.get(nombre = nombre_usuario)
-    id_usuario = usuario.id_usuario
-
-    fecha_asignacion = timezone.now()
-
-
-    estado = 'rechazada'
     #registro = RegistroAuditoria.objects.create(idIncidencia = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
 
-    incidencia = Incidencia.objects.get(id_incidencia=id_incidencia)
+    incidencia = Incidencia.objects.get(id=id_incidencia)
+    crear_registro(id_incidencia,incidencia.estado,'rechazada',justificacion,user_id)
     incidencia.estado = 'rechazada'
     incidencia.resolutor_Asignado = 'none'
     incidencia.save()
-    return redirect('director:incidencias')
+    return redirect('director:dashboard')
 
 
 def eliminar_formulario(request, formulario_id):
@@ -141,3 +108,74 @@ def activar_formulario(request, formulario_id):
         formulario.activo = True
         formulario.save()
         return redirect('director:ver_formularios')
+
+from django.shortcuts import render
+import folium
+
+def dashboard(request):
+    global user_id, user_name
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+    
+    # Filtrar incidencias con estado 'iniciada' y optimizar consultas
+    incidencias = Incidencia.objects.filter(estado='iniciada')\
+                                    .select_related()\
+                                    .prefetch_related('registros_auditoria__idUsuario')
+    
+    usuarios_departamento = Usuario.objects.filter(rol='Departamento de obras')
+    
+    # Crear el mapa inicial centrado en una ubicación predeterminada
+    initial_map = folium.Map(location=[-33.427656074857076, -70.61159044504167], zoom_start=9)
+
+    # Añadir marcadores para cada incidencia y asignar el último comentario
+    for incidencia in incidencias:
+        if incidencia.latitud and incidencia.longitud:
+            coordinates = (incidencia.latitud, incidencia.longitud)
+            
+            # Obtener el último registro de auditoría
+            ultimo_registro = incidencia.registros_auditoria.order_by('-fecha_cambio').first()
+            incidencia.ultimo_comentario = ultimo_registro.comentario if ultimo_registro else "Sin comentarios"
+            
+            # Agregar comentario al popup del mapa
+            popup_content = f'''
+                <b>Nombre:</b> {incidencia.titulo_Incidencia}<br>
+                <b>Urgencia:</b> {incidencia.get_urgencia_display()}<br>
+                <b>Estado:</b> {incidencia.get_estado_display()}<br>
+                <b>Último comentario:</b> {incidencia.ultimo_comentario}
+            '''
+            folium.Marker(
+                location=coordinates,
+                popup=folium.Popup(popup_content, max_width=300),
+                tooltip="Haz clic para más información"
+            ).add_to(initial_map)
+
+    # Renderizar la plantilla con el QuerySet de incidencias y el HTML del mapa
+    context = {
+        'user_name': user_name,
+        'usuarios_departamento': usuarios_departamento,
+        'incidencias': incidencias,  # Pasa las incidencias al template
+        'map': initial_map._repr_html_(),  # Mapa convertido a HTML para insertar en el template
+    }
+    return render(request, 'director/dashboard.html', context)
+
+
+def comentario_ultimo_registro(request, incidencia_id):
+    incidencia = get_object_or_404(Incidencia, pk=incidencia_id)
+    
+    # Obtener el último registro de auditoría
+    ultimo_registro = incidencia.registros_auditoria.select_related('idUsuario')\
+                                                   .order_by('-fecha_cambio')\
+                                                   .first()
+    
+    if ultimo_registro:
+        # Solo enviar el comentario del último registro
+        data = {
+            'comentario': ultimo_registro.comentario,
+        }
+    else:
+        # Si no hay registros
+        data = {
+            'comentario': None,
+        }
+    
+    return JsonResponse(data)

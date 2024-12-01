@@ -1,14 +1,16 @@
-// Esperar a que el DOM esté completamente cargado
+// dashboard.js
+
 document.addEventListener('DOMContentLoaded', function () {
     // Función para obtener el token CSRF
     function getCSRFToken() {
-        return document.querySelector('meta[name="csrf-token"]').content;
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.content : '';
     }
-    
+
     // Función para crear una incidencia
     function crearIncidencia(incidenciaData) {
         const csrfToken = getCSRFToken();
-    
+
         fetch('crear_incidencia/', {
             method: 'POST',
             headers: {
@@ -50,9 +52,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('detallesEstado').textContent = data.estado || 'N/A';
                     document.getElementById('detallesTipo').textContent = data.tipo || 'N/A';
                     document.getElementById('detallesUrgencia').textContent = data.urgencia || 'N/A';
-                    document.getElementById('detallesFechaReporte').textContent = new Date(data.fecha_Reporte).toLocaleString() || 'N/A';
+                    document.getElementById('detallesFechaReporte').textContent = data.fecha_Reporte ? new Date(data.fecha_Reporte).toLocaleString() : 'N/A';
                     document.getElementById('detallesDescripcion').textContent = data.descripcion || 'No disponible';
                     document.getElementById('detallesComentarios').textContent = data.comentarios || 'Sin comentarios';
+
+                    // Manejar la imagen asociada
+                    const detallesImagen = document.getElementById('detallesImagen');
+                    const detallesSinImagen = document.getElementById('detallesSinImagen');
+
+                    if (data.multimedia_gestor) {
+                        detallesImagen.src = data.multimedia_gestor;
+                        detallesImagen.style.display = 'block';
+                        detallesSinImagen.style.display = 'none';
+                    } else {
+                        detallesImagen.style.display = 'none';
+                        detallesSinImagen.style.display = 'block';
+                    }
 
                     // Mostrar el modal
                     const modal = new bootstrap.Modal(document.getElementById('modalDetalles'));
@@ -63,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('No se pudieron cargar los detalles de la incidencia.');
                 });
         });
-        });
+    });
 
     // Manejar el clic en "Crear incidencia"
     const btnCrearIncidencia = document.getElementById('btnCrearIncidencia');
@@ -75,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const incidenciaData = {
                 lat: latitud,
                 lng: longitud,
-            
             };
 
             console.log('Datos para crear incidencia:', incidenciaData);
@@ -84,4 +98,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-

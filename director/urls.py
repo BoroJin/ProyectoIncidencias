@@ -17,4 +17,5 @@ urlpatterns = [
     path('ver_formularios/', views.ver_formularios, name='ver_formularios'),
     path('activar_formulario/<int:formulario_id>/', views.activar_formulario, name='activar_formulario'),
     path('eliminar_formulario/<int:formulario_id>/', views.eliminar_formulario, name='eliminar_formulario'),
+    path('rechazarIncidencia/', views.rechazarIncidencia, name='rechazarIncidencia'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -237,3 +237,26 @@ body {
 .incidenciaCard.finalizada {
     border-left: 5px solid #17a2b8;
 }
+#detallesImagen {
+    max-width: 100%; /* Imagen no más ancha que el contenedor */
+    max-height: 400px; /* Altura máxima para evitar sobrepasar el espacio del modal */
+    height: auto; /* Mantiene proporciones */
+    display: block; /* Asegura que sea un bloque */
+    border-radius: 5px; /* Esquinas redondeadas */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+}
+
+.d-flex-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px; /* Altura fija */
+    overflow: hidden; /* Evita que el contenido desborde */
+}
+
+.modal-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px; /* Espaciado entre los elementos */
+}

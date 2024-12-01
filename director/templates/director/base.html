@@ -1,3 +1,4 @@
+{% load static %}
 <!-- base.html -->
 <!DOCTYPE html>
 <html lang="es">
@@ -29,14 +30,10 @@
                 <a class="navbar-brand" href="#">Municipalidad X</a>
             </div>
             <div class="ms-auto d-flex align-items-center">
-                {% if user.is_authenticated %}
-                    <span class="navbar-text me-2">{{ user.username }}</span>
+                    <span class="navbar-text me-2">{{ user_name }}</span>
                     <div class="user-container">
                         <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
                     </div>
-                {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
-                {% endif %}
             </div>
         </div>
     </nav>

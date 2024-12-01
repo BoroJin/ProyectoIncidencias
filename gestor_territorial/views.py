@@ -204,6 +204,7 @@ def obtener_incidencia(request, incidencia_id):
             'fecha_Reporte': incidencia.fecha_Reporte.isoformat(),
             'descripcion': incidencia.descripcion,
             'comentarios': ultimo_registro.comentario,
+            'multimedia_gestor': incidencia.multimedia_gestor.url if incidencia.multimedia_gestor else '',
         }
         return JsonResponse(data)
     except Incidencia.DoesNotExist:
