@@ -1,4 +1,4 @@
-<form action="{% url 'crear_incidencia' %}" method="post">
+<form action="{% url 'crear_incidencia' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="lat" value="{{ latitud }}">
     <input type="hidden" name="lng" value="{{ longitud }}">
@@ -54,6 +54,15 @@
                 {% endif %}
             </div>
         {% endfor %}
+    </fieldset>
+
+    <!-- Campo para subir archivos multimedia -->
+    <fieldset>
+        <legend>Archivos Multimedia</legend>
+        <div class="form-group">
+            <label for="media_files">Subir archivos</label>
+            <input class="form-control-file" type="file" name="media_files" id="media_files" accept="image/*,video/*" multiple>
+        </div>
     </fieldset>
 
     <div class="form-group">

@@ -103,7 +103,8 @@ def importar_usr_vista(request):
 def exportar_usr_vista(request):
     return render(request, 'administrador/exportar_usr_vista.html')
 
-# De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
+    # De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
+
 def recibir_y_validar_csv(request):
     if request.method == 'POST' and request.FILES.get('file'):
         try:
@@ -137,7 +138,8 @@ def recibir_y_validar_csv(request):
     #Luego de confirmar esto, quiero que se redirija a "Adm_cargar_masiva.html", con un mensaje que diga(no popup) "x usuarios creados con exito"
     #Si no tuvo exito, que notifique el error en este mensaje
     
-# Esta funcion busca leer la tabla de usuarios y escribirlos en un csv, y retortnar el csv para descargar
+    # Esta funcion busca leer la tabla de usuarios y escribirlos en un csv, y retortnar el csv para descargar
+
 def exportar_csv(request):
     # Crea la respuesta como archivo CSV
     response = HttpResponse(content_type='text/csv')
@@ -152,7 +154,7 @@ def exportar_csv(request):
         writer.writerow([usuario.nombre,usuario.password,usuario.correo_electronico,usuario.rol])
     return response #Retorna el csv para descargar
 
-# #Esta funcion busca validar nombres de usuarios, en aspectos como:
+    # #Esta funcion busca validar nombres de usuarios, en aspectos como:
     #- nombre de usuario:
     #   - Longitud, entre maxima y minima
     #   - Solo permite caracteres y numeros
@@ -162,6 +164,7 @@ def exportar_csv(request):
     #    -Si tiene un punto luego del arroba
     # - Rol
     #    -Que el rol, sea valido (Administrador)(Gestor Territorial)(Director)(Departamento de obras)(Resolutor)
+
 def validar_csv_entrada(ruta,longitud_max=1000,longitud_min=3):
     #Obtener una lista de los usuarios en uso
     usuarios_en_uso = Usuario.objects.values_list('nombre', flat=True)

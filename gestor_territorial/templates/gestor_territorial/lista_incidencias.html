@@ -81,7 +81,7 @@
                                                     <script type="text/javascript">
                                                         console.log("ID de incidencia: {{ incidencia.id }}"); //  verificar que se está imprimiendo el valor correcto
                                                     </script>
-                                                    <button class="btn btn-sm btn-comentario">Agregar comentario</button>
+                                                    <button class="btn btn-sm btn-comentario"data-id="{{ incidencia.id }}">Agregar comentario</button>
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -101,18 +101,43 @@
                                                     {% csrf_token %}
                                                     <input type="hidden" id="incidenciaId">
                                                     <div class="mb-3">
-                                                        <textarea id="comentarioTexto" class="form-control" rows="4" placeholder="Escribe tu comentario aquí"></textarea>
+                                                        <textarea id="comentarioTexto" class="form-control" rows="4" placeholder="Escribe tu comentario aquí" required></textarea>
                                                     </div>
                                                 </form>
                                             </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary" id="guardarComentario">Guardar</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary" id="eliminarIncidencia" data-url="{% url 'eliminarIncidencia' %}" disabled>Eliminar incidencia</button>
+                                                <button type="button" class="btn btn-primary" id="guardarComentario" data-url="{% url 'reenviarIncidencia' %}" disabled>Reenviar incidencia</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-    
+
+                                <!-- Modal de Detalles -->
+                                <div class="modal fade" id="modalDetalles" tabindex="-1" aria-labelledby="modalDetallesLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="modalDetallesLabel">Detalles de la Incidencia</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        <p><strong>ID:</strong> <span id="detallesId"></span></p>
+                                        <p><strong>Título:</strong> <span id="detallesTitulo"></span></p>
+                                        <p><strong>Estado:</strong> <span id="detallesEstado"></span></p>
+                                        <p><strong>Tipo:</strong> <span id="detallesTipo"></span></p>
+                                        <p><strong>Urgencia:</strong> <span id="detallesUrgencia"></span></p>
+                                        <p><strong>Fecha de Reporte:</strong> <span id="detallesFechaReporte"></span></p>
+                                        <p><strong>Descripción:</strong> <span id="detallesDescripcion"></span></p>
+                                        <p><strong>Comentarios:</strong> <span id="detallesComentarios"></span></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn custom-button1" data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
                                 <!-- Contenedor de tarjetas -->
                                 <div id="cardView" style="display: none;">
                                     <div id="incidenciasContainer" class="row">

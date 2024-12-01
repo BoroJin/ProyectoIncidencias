@@ -62,10 +62,10 @@
                                     {% for incidencia in page_obj %}
                                     <tr data-incidencia-id="{{ incidencia.id }}" class="incidencia-row" style="cursor: pointer;">
                                         <td>{{ incidencia.id }}</td>
-                                        <td>{{ incidencia.titulo }}</td>
-                                        <td>{{ incidencia.estado }}</td>
-                                        <td>{{ incidencia.urgencia }}</td>
-                                        <td>{{ incidencia.fecha_reporte }}</td>
+                                        <td>{{ incidencia.titulo_Incidencia }}</td>
+                                        <td>{{ incidencia.get_estado_display }}</td>
+                                        <td>{{ incidencia.get_urgencia_display }}</td>
+                                        <td>{{ incidencia.fecha_Reporte|date:"Y-m-d H:i:s" }}</td>
                                     </tr>
                                     {% empty %}
                                     <tr>
