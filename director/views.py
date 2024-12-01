@@ -13,12 +13,13 @@ def dashboard(request):
     # Filtrar incidencias con estado 'iniciada'
     incidencias = Incidencia.objects.filter(estado='iniciada')
     usuarios_departamento = Usuario.objects.filter(rol='Departamento de obras')
-    print(usuarios_departamento)
+    print(incidencias)
     # Crear el mapa inicial centrado en una ubicación predeterminada
     initial_map = folium.Map(location=[-33.427656074857076, -70.61159044504167], zoom_start=9)
 
     # Añadir marcadores para cada incidencia
     for incidencia in incidencias:
+        print(incidencia.multimedia_gestor.url if incidencia.multimedia_gestor else "Sin multimedia")
         if incidencia.latitud and incidencia.longitud:  # Verificar que las coordenadas existan
             coordinates = (incidencia.latitud, incidencia.longitud)
             popup_content = f'''

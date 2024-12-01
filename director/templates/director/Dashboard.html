@@ -30,12 +30,18 @@
                                        "fecha_reporte": "{{ incidencia.fecha_Reporte|date:"Y-m-d H:i:s"|escapejs }}",
                                        "latitud": "{{ incidencia.latitud|default_if_none:''|floatformat:6 }}",
                                        "longitud": "{{ incidencia.longitud|default_if_none:''|floatformat:6 }}",
-                                       "resolutor": "{{ incidencia.resolutor_Asignado|default:'N/A'|escapejs }}"
+                                       "resolutor": "{{ incidencia.resolutor_Asignado|default:'N/A'|escapejs }}",
+                                       {% if incidencia.multimedia_gestor %}
+                                       "ruta": "{{ incidencia.multimedia_gestor.url|escapejs }}"
+                                       {% else %}
+                                       "ruta": ""
+                                       {% endif %}
                                    }'>
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">Incidencia {{ incidencia.id }}</h6>
                                         <small>Urgencia: {{ incidencia.get_urgencia_display }}</small>
                                     </div>
+                
                                     <p class="mb-1">Título: {{ incidencia.titulo_Incidencia }}</p>
                                     <small class="text-muted">Estado: {{ incidencia.get_estado_display }}</small>
                                 </a>
@@ -78,6 +84,11 @@
                 <p><strong>Estado:</strong> <span id="modal-estado"></span></p>
                 <p><strong>Fecha de Reporte:</strong> <span id="modal-fecha"></span></p>
                 <p><strong>Resolutor:</strong> <span id="modal-resolutor"></span></p>
+                <div>
+                    <strong>Imagen Asociada:</strong>
+                    <img id="modal-imagen" src="" alt="Imagen de la incidencia" style="max-width: 100%; height: auto;">
+                    <p id="sin-imagen-texto" style="display: none;">No hay imagen asociada a esta incidencia.</p>
+                </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
