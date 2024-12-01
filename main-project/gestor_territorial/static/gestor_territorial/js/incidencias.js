@@ -6,38 +6,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para obtener el token CSRF
     function getCSRFToken() {
-        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        return document.querySelector('meta[name="csrf-token"]').content;
     }
-
+    
     // Función para crear una incidencia
     function crearIncidencia(incidenciaData) {
         const csrfToken = getCSRFToken();
-
+    
         fetch('crear_incidencia/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCSRFToken(),
             },
-            body: JSON.stringify(incidenciaData),
+            body: new URLSearchParams({
+                lat: incidenciaData.lat,
+                lng: incidenciaData.lng,
+            }),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error en la solicitud: ${response.statusText}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
+                console.log('Respuesta del servidor:', data);
                 if (data.status === 'success') {
                     alert('Incidencia creada con éxito: ID ' + data.id);
-                    location.reload(); // Recargar la página para reflejar los cambios
+                    location.reload();
                 } else {
                     alert('Error al crear la incidencia: ' + data.message);
                 }
             })
             .catch(error => {
                 console.error('Error al crear la incidencia:', error);
-                alert('Error inesperado al crear la incidencia.');
             });
     }
 

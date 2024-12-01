@@ -41,15 +41,14 @@
             </div>
                 <!-- Formulario -->
                 <div id="formulario" class="popup" style="display: none;">
-                    {% csrf_token %}
                     <div class="popup-contenido">
                         <h2>Formulario de Incidencias</h2>
                         <div id="formulario-contenido">
                             {% csrf_token %}
-                            <span class="cerrar" onclick="closeFormPopup()">&times;</span>
-                            <!-- Aquí se insertará dinámicamente el formulario -->
-                             
+                            <!-- Aquí se renderizará el formulario completo -->
+                            {% include './partials/formulario.html' %}
                         </div>
+                        <span class="cerrar" onclick="closeFormPopup()">&times;</span>
                     </div>
                 </div>
 

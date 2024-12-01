@@ -140,6 +140,23 @@ body {
     background-color: #b0ceec7e;
 }
 
+.custom-enviar {
+    background-color: #315579dc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 10px; 
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.custom-enviar:hover {
+    background-color: #3a5368;
+    color: white;
+}
+
 .card-header {
     background-color: #c4def86e;
     font-weight: bold;

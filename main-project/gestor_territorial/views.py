@@ -54,33 +54,41 @@ def crear_incidencia(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
 
+    # Capturar coordenadas
     latitud = request.POST.get('lat')
     longitud = request.POST.get('lng')
 
-    try:
-        formulario = Formulario.objects.get(activo=True)
-    except Formulario.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Formulario no encontrado'}, status=404)
+    # Capturar los campos fijos del formulario
+    titulo = request.POST.get('titulo')
+    descripcion = request.POST.get('descripcion')
+    urgencia = request.POST.get('urgencia', 'media')  # Default a 'media' si no se proporciona
 
+    # Validar coordenadas
     try:
         lat = float(latitud)
         lng = float(longitud)
-    except ValueError:
+    except (ValueError, TypeError):
         return JsonResponse({'status': 'error', 'message': 'Coordenadas inválidas'}, status=400)
 
+    # Crear la incidencia
     incidencia = Incidencia.objects.create(
-        latitud=lat, 
-        longitud=lng, 
+        titulo_Incidencia=titulo or 'Sin título',
+        descripcion=descripcion or 'Sin descripción',
+        urgencia=urgencia,
+        latitud=lat,
+        longitud=lng,
         estado='iniciada'
     )
-    
-    # Procesar las respuestas del formulario
-    for campo in formulario.campos.all():
-        valor_campo = request.POST.get(str(campo.id), '')
-        if campo.tipo in ['checkbox', 'select']:
-            opciones_seleccionadas = [opcion.valor for opcion in campo.opciones.all() if request.POST.get(f"{campo.id}_{opcion.valor}")]
-            valor_campo = ', '.join(opciones_seleccionadas)
-        Respuesta.objects.create(incidencia=incidencia, campo=campo, valor=valor_campo)
+
+    # Procesar las respuestas dinámicas del formulario
+    formulario = Formulario.objects.filter(activo=True).first()
+    if formulario:
+        for campo in formulario.campos.all():
+            valor_campo = request.POST.get(str(campo.id), '')
+            if campo.tipo in ['checkbox', 'select']:
+                opciones_seleccionadas = [opcion.valor for opcion in campo.opciones.all() if request.POST.get(f"{campo.id}_{opcion.valor}")]
+                valor_campo = ', '.join(opciones_seleccionadas)
+            Respuesta.objects.create(incidencia=incidencia, campo=campo, valor=valor_campo)
 
     return redirect('ver_gestor')
     
