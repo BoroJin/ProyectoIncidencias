@@ -22,25 +22,24 @@
 <body>
 
     <!-- Barra de navegación superior -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <div class="logo-container">
-                <!-- Logo de la municipalidad -->
-                <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
-                <!-- Nombre de la municipalidad, en la barra de navegación -->
-                <a class="navbar-brand" href="#">Municipalidad X</a>
-            </div>
-                <!-- Información del usuario, alineada a la derecha -->
-                <div class="ms-auto d-flex align-items-center">
-                    <!-- Muestra el nombre del usuario actual -->
+    <header>
+        <!-- Barra de navegación superior -->
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                    <span class="ms-2">{{ nombre_municipalidad }}</span>
+                </a>
+                <div class="d-flex align-items-center ms-auto">
                     <span class="navbar-text">{{ user_name }}</span>
-                    <div class="user-container">
-                        <!-- Icono de usuario -->
-                        <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
-                    </div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
                 </div>
-        </div>
-    </nav>
+            </div>
+        </nav>
+    </header>
+
+    
+    <main>
 
     <div class="container-fluid">
         <div class="row">
@@ -151,7 +150,7 @@
     <a href="#" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
-
+</main>
     <!-- Carga de scripts necesarios -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Script de Bootstrap para funcionalidad -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script> <!-- Script de Leaflet para crear el mapa -->

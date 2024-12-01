@@ -1,46 +1,63 @@
-/* base.css */
+/* ===== Variables de CSS ===== */
+:root {
+    --color-primario: #315579dc; /* Cambiado */
+    --color-secundario: #b0ceeca4; /* Cambiado */
+    --color-texto: #202d3a; /* Igual */
+    --color-fondo: #c4def862; /* Cambiado */
+    --color-fondo-claro: #c1c8cfdc; /* Cambiado */
+    --transicion: 0.3s ease;
+}
 
-/* Estilos generales */
 body {
     font-family: Serif;
     margin: 0;
     padding: 0;
-    background-color: #c4def862;
+    background-color: var(--color-fondo);
 }
-
-/* Barra de navegación */
-.navbar {
-    background: linear-gradient(90deg, #1f3449, #315579); 
+.custom-navbar {
+    background: linear-gradient(90deg, #1f3449, var(--color-primario));
     color: white;
     padding: 10px 20px;
 }
 
-.navbar-brand {
+.custom-navbar .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #c1c8cfdc;
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
 
-.navbar-text {
-    color: #c1c8cfdc;
+.custom-navbar .navbar-text {
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+
+.user-icon {
+    height: 30px;
+    width: 30px;
+}
+#contenidoPrincipal {
+    margin-top: 80px;
+}
+
+main{
+    padding-top: 30px;
+    margin-top: 40px;
+
+} 
 
 .logo-container {
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 40px;
-    margin-right: 10px;
-}
-
-
-.user-icon {
-    width: 30px;
-}
 
 /* Botón flotante */
 .btn-float {
@@ -120,4 +137,58 @@ body {
     background-color: #b0ceec7e;
 }
 
+.btn-custom {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
 
+.btn-custom:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.btn-custom1 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom1:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.btn-custom2 {
+    background-color: #a01919; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom2:hover {
+    background-color: #a01919; /* Color más oscuro al pasar el cursor */
+}
+.btn-custom3 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom3:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+.hola{
+    padding-top: 10px;
+}
+
+.btn-custom4 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom4:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.coco{
+    padding-top: 100px;
+}

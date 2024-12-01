@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoHomeSharp } from "react-icons/io5";
 import { BsQuestionSquareFill } from "react-icons/bs";
 import { RiNewspaperFill } from "react-icons/ri";
@@ -8,14 +8,38 @@ import { Link } from "react-router-dom";
 
 //import logoMuni from "C:\Users\maxim\Desktop\ticket\src\imagenes\Logo_provi.png";
 
+
+
 const Sidebar = () => {
+  const [config, setConfig] = useState({ nombre_municipalidad: '', imagen: '' });
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/administrador/api/configuracion/');
+        if (response.ok) {
+          const data = await response.json();
+          setConfig(data);
+        } else {
+          console.error('Error al obtener la configuración.');
+        }
+      } catch (error) {
+        console.error('Error de conexión:', error);
+      }
+    };
+    fetchConfig();
+  }, []);
   return (
     <div className="soportebar">
       <div className="logo-container">
-        <img src="#" alt="MuniLogo" className="logo" />
+      <img
+            src={`http://localhost:8000${config.imagen}`}
+            alt="MuniLogo"
+            className="logo"
+          />
       </div>
       <div className="textoDiv">
-        <p className="logo-text">UrbanSensor</p>
+        <p className="logo-text">{config.nombre_municipalidad}</p>
       </div>
       <ul className="sidebar-menu">
         <li className="sidebar-item">

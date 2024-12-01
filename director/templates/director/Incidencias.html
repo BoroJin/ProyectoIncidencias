@@ -43,7 +43,7 @@
                         {% if i.estado == 'Asignada' %}
                             <button class="btn btn-custom btn-sm" onclick="window.location.href='{% url 'director:deshacerAsignacion' i.id %}'">Deshacer Asignación</button>
                         {% endif %}
-                        <button class="btn btn-custom btn-sm" data-toggle="modal" data-target="#rechazoModal" data-id="{{ i.id }}" data-user="{{ i.id_usuario_gestorTerritorial }}">Rechazar incidencia</button>
+                        <button class="btn btn-custom2 btn-sm" data-toggle="modal" data-target="#rechazoModal" data-id="{{ i.id }}" data-user="{{ i.id_usuario_gestorTerritorial }}">Rechazar incidencia</button>
                     </td>
                 </tr>
                 {% endfor %}
