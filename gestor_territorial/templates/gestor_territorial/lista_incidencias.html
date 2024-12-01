@@ -56,7 +56,7 @@
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <span>Lista de Incidencias rechazadas</span>
                             </div>
-    
+                
                             <div class="card-body">
                                 <div id="tableView">
                                     <table class="table table-hover">
@@ -79,9 +79,9 @@
                                                 <td>
                                                     <button class="btn btn-sm btn-detalle" data-id="{{ incidencia.id }}">Ver detalles</button>
                                                     <script type="text/javascript">
-                                                        console.log("ID de incidencia: {{ incidencia.id }}"); //  verificar que se está imprimiendo el valor correcto
+                                                        console.log("ID de incidencia: {{ incidencia.id }}"); // Verificar que se está imprimiendo el valor correcto
                                                     </script>
-                                                    <button class="btn btn-sm btn-comentario"data-id="{{ incidencia.id }}">Agregar comentario</button>
+                                                    <button class="btn btn-sm btn-comentario" data-id="{{ incidencia.id }}">Agregar comentario</button>
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -89,7 +89,7 @@
                                     </table>
                                 </div>
                                 <!-- Modal para agregar comentarios -->
-                                <div class="modal" id="modalComentario" tabindex="-1" aria-hidden="true">
+                                <div class="modal fade" id="modalComentario" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -99,7 +99,7 @@
                                             <div class="modal-body">
                                                 <form id="formComentario" method="POST">
                                                     {% csrf_token %}
-                                                    <input type="hidden" id="incidenciaId">
+                                                    <input type="hidden" id="incidenciaId" name="incidencia_id">
                                                     <div class="mb-3">
                                                         <textarea id="comentarioTexto" class="form-control" rows="4" placeholder="Escribe tu comentario aquí" required></textarea>
                                                     </div>
@@ -113,31 +113,41 @@
                                         </div>
                                     </div>
                                 </div>
-
+                
                                 <!-- Modal de Detalles -->
                                 <div class="modal fade" id="modalDetalles" tabindex="-1" aria-labelledby="modalDetallesLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title" id="modalDetallesLabel">Detalles de la Incidencia</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal-dialog modal-lg"> <!-- Puedes ajustar el tamaño del modal si es necesario -->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalDetallesLabel">Detalles de la Incidencia</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>ID:</strong> <span id="detallesId"></span></p>
+                                                <p><strong>Título:</strong> <span id="detallesTitulo"></span></p>
+                                                <p><strong>Estado:</strong> <span id="detallesEstado"></span></p>
+                                                <p><strong>Tipo:</strong> <span id="detallesTipo"></span></p>
+                                                <p><strong>Urgencia:</strong> <span id="detallesUrgencia"></span></p>
+                                                <p><strong>Fecha de Reporte:</strong> <span id="detallesFechaReporte"></span></p>
+                                                <p><strong>Descripción:</strong> <span id="detallesDescripcion"></span></p>
+                                                <p><strong>Comentarios:</strong> <span id="detallesComentarios"></span></p>
+                                                
+                                                <!-- Nueva sección para imagen asociada -->
+                                                <div>
+                                                    <strong>Imagen Asociada:</strong>
+                                                    <div class="d-flex-centered">
+                                                        <img id="detallesImagen" src="" alt="Imagen de la incidencia" style="display: none;">
+                                                    </div>
+                                                    <p id="detallesSinImagen" class="text-center" style="display: none;">No hay imagen asociada a esta incidencia.</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn custom-button1" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                        <p><strong>ID:</strong> <span id="detallesId"></span></p>
-                                        <p><strong>Título:</strong> <span id="detallesTitulo"></span></p>
-                                        <p><strong>Estado:</strong> <span id="detallesEstado"></span></p>
-                                        <p><strong>Tipo:</strong> <span id="detallesTipo"></span></p>
-                                        <p><strong>Urgencia:</strong> <span id="detallesUrgencia"></span></p>
-                                        <p><strong>Fecha de Reporte:</strong> <span id="detallesFechaReporte"></span></p>
-                                        <p><strong>Descripción:</strong> <span id="detallesDescripcion"></span></p>
-                                        <p><strong>Comentarios:</strong> <span id="detallesComentarios"></span></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn custom-button1" data-bs-dismiss="modal">Cerrar</button>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
+                
                                 <!-- Contenedor de tarjetas -->
                                 <div id="cardView" style="display: none;">
                                     <div id="incidenciasContainer" class="row">
