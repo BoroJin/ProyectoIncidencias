@@ -51,7 +51,6 @@ def rechazarIncidencia(request):
 
     id_incidencia = request.POST.get('ID_rechazo')
     justificacion = request.POST.get('justificacion')
-    #registro = RegistroAuditoria.objects.create(idIncidencia = id_incidencia1,comentario = justificacion,estado = estado, id_usuario_id = id_usuario, fecha_asignacion = fecha_asignacion)
 
     incidencia = Incidencia.objects.get(id=id_incidencia)
     crear_registro(id_incidencia,incidencia.estado,'rechazada',justificacion,user_id)

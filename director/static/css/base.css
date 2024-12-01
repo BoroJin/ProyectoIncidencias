@@ -106,7 +106,7 @@ body {
 }
 
 /* Botones personalizados */
-.btn-detalle {
+.btn-custom {
     background-color: #b0ceec;
     border: none;
     color: #315579;
@@ -116,8 +116,25 @@ body {
     border-radius: 5px;
 }
 
-.btn-detalle:hover {
+.btn-custom:hover {
     background-color: #b0ceec7e;
+}
+
+.btn-eliminar {
+    background-color: #315579dc;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-eliminar:hover {
+    background-color: #315579;
 }
 
 

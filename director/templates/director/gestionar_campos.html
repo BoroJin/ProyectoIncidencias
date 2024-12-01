@@ -9,15 +9,17 @@
     <div class="col-auto mt-3">
         <a class="btn btn-custom btn-sm" href="{% url 'director:ver_formularios' %}">Volver a Listado de Formularios</a>
     </div>
-    <div class="col-md-4 mt-3">
-        <h2 class="py-3">Gestionar Campos del Formulario: {{ formulario.nombre }}</h2>
+    <div class="col-md-4 mt-3 text-center py-5">
         <div class="card">
+            <div class="card-header">
+                <span>Gestionar Campos del Formulario: {{ formulario.nombre }}</span>
+            </div>
             <div class="card-body">
                 <form method="POST" id="formAgregarCampo">
                     {% csrf_token %}
                     <div class="form-group mt-3">
                         <label for="nombre_campo">Nombre del Campo:</label>
-                        <input type="text" name="nombre_campo" id="nombre_campo" class="form-control" required>
+                        <input type="text" name="nombre_campo" id="nombre_campo" class="form-control" placeholder="Ingrese un nombre para su campo" required>
                     </div>
                     <div class="form-group mt-3">
                         <label for="tipo_campo">Tipo de Campo:</label>
@@ -41,28 +43,43 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 py-5">
-        <h2 class="text-center">Campos Actuales</h2>
+    <div class="col-md-6 mt-3 text-center py-5">
         <div class="card">
+            <div class="card-header">
+                <span>Campos Actuales</span>
+            </div>
             <div class="card-body">
-                <div class="d-flex flex-wrap justify-content-start">
-                    {% for campo in campos %}
-                        <div class="card mb-3 mx-2" style="flex: 0 1 auto; width: auto; max-width: 18rem;">
-                            <div class="card-body">
-                                <span>{{ campo.nombre }} ({{ campo.tipo }})</span>
-                                {% for opcion in campo.opciones.all %}
-                                    <div>{{ opcion.nombre }}: {{ opcion.valor }}</div>
-                                {% endfor %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <input type="hidden" name="campo_id" value="{{ campo.id }}">
-                                        <button class="btn btn-custom" type="submit" name="eliminar">Eliminar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div id="tableView">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <!-- Encabezados de las columnas de la tabla -->
+                                <th scope="col">ID</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Itera sobre las incidencias y las muestra en la tabla -->
+                            {% for campo in campos %}
+                            <tr id="incidencia-{{ incidencia.id }}">
+                                <td>{{ campo.id }}</td> <!-- ID de la incidencia -->
+                                <td>{{ campo.nombre }}</td> <!-- Nombre de la incidencia -->
+                                <td>{{ campo.tipo }}</td> <!-- Estado de la incidencia -->
+                                <td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="hidden" name="campo_id" value="{{ campo.id }}">
+                                            <button class="btn btn-custom" type="submit" name="eliminar">Eliminar</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

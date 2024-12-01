@@ -111,7 +111,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="asignar-form">
+                <form id="asignar-form" method="post" action="{% url 'director:asignarUsuario' %}">
                     <div class="mb-3">
                         <label for="usuario-select" class="form-label">Seleccione un usuario</label>
                         <select class="form-select" id="usuario-select" name="usuario_id">

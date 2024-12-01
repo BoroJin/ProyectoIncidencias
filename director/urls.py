@@ -8,7 +8,6 @@ app_name = 'director'  # Define el nombre de la app
 urlpatterns = [
 
     path('', views.dashboard, name='dashboard'),
-    path('incidencias/', views.incidencias, name='incidencias'),
     path('asignarUsuario/', views.asignarUsuario, name='asignarUsuario'),
     path('deshacerAsignacion/<int:id>',views.deshacerAsignacion, name='deshacerAsignacion'),
     path('rechazarIncidencia/', views.rechazarIncidencia,name='rechazarIncidencia'),
