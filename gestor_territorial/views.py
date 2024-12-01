@@ -6,7 +6,8 @@ from django.template.loader import render_to_string
 from .models import Incidencia, Respuesta
 from director.models import Formulario
 from django.views.decorators.csrf import csrf_exempt
-from administrador.models import Usuario
+from administrador.models import RegistroAuditoria
+from resolutor.views import crear_registro
 
 def ver_gestor(request):
     estados_filtrados = ['finalizada']
@@ -70,7 +71,7 @@ def crear_incidencia(request):
         lng = float(longitud)
     except (ValueError, TypeError):
         return JsonResponse({'status': 'error', 'message': 'Coordenadas inválidas'}, status=400)
-
+    
     # Crear la incidencia
     incidencia = Incidencia.objects.create(
         titulo_Incidencia=titulo or 'Sin título',
@@ -80,7 +81,8 @@ def crear_incidencia(request):
         longitud=lng,
         estado='iniciada'
     )
-
+    user_id = request.COOKIES.get('user_id')
+    crear_registro(incidencia.id,"inexistente","iniciada","Incidencia iniciada y creada",user_id)
     # Procesar las respuestas dinámicas del formulario
     formulario = Formulario.objects.filter(activo=True).first()
     if formulario:
@@ -115,26 +117,60 @@ def agregar_comentario(request):
             return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})   
-    
-def cambiar_estado(request):
+
+def eliminarIncidencia(request):
+    user_id = request.COOKIES.get('user_id')
     if request.method == 'POST':
         incidencia_id = request.POST.get('incidencia_id')
-        nuevo_estado = request.POST.get('nuevo_estado')
         comentario = request.POST.get('comentario', '')
-
+        crear_registro(incidencia_id,"rechazada","eliminada",comentario,user_id)
         try:
             incidencia = Incidencia.objects.get(id=incidencia_id)
-            incidencia.estado = nuevo_estado
-
-            if nuevo_estado == 'no verificada':
-                if incidencia.comentarios:
-                    incidencia.comentarios += f"\nRazón del rechazo: {comentario}"
-                else:
-                    incidencia.comentarios = f"Razón del rechazo: {comentario}"
-
+            incidencia.estado = "eliminada"
             incidencia.save()
+             # Aquí rediriges a la URL de la vista que deseas
             return JsonResponse({'success': True})
         except Incidencia.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
 
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+def reenviarIncidencia(request):
+    user_id = request.COOKIES.get('user_id')
+    if request.method == 'POST':
+        incidencia_id = request.POST.get('incidencia_id')
+        comentario = request.POST.get('comentario', '')
+        crear_registro(incidencia_id,"rechazada","iniciada",comentario,user_id)
+        try:
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+            incidencia.estado = "iniciada"
+            incidencia.save()
+             # Aquí rediriges a la URL de la vista que deseas
+            return JsonResponse({'success': True})
+        except Incidencia.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def obtener_incidencia(request, incidencia_id):
+    ultimo_registro = RegistroAuditoria.objects.filter(
+    idIncidencia=incidencia_id,  # Filtrar por ID de incidencia
+    estado_anterior='iniciada',   # Estado anterior "iniciada"
+    estado_actual='rechazada'    # Estado actual "rechazada"
+).order_by('-fecha_cambio').first()
+    try:
+        incidencia = Incidencia.objects.get(id=incidencia_id)
+        data = {
+            'id': incidencia.id,
+            'titulo_Incidencia': incidencia.titulo_Incidencia,
+            'estado': incidencia.estado,
+            'tipo': incidencia.tipo,
+            'urgencia': incidencia.urgencia,
+            'fecha_Reporte': incidencia.fecha_Reporte.isoformat(),
+            'descripcion': incidencia.descripcion,
+            'comentarios': ultimo_registro.comentario,
+        }
+        return JsonResponse(data)
+    except Incidencia.DoesNotExist:
+        return JsonResponse({'error': 'Incidencia no encontrada'}, status=404)
