@@ -1,5 +1,5 @@
 <!-- maxi -->
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,82 +7,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Administrador</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
-    <header>
-        <!-- Barra de navegación superior -->
-        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
-            <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="{{ logo }}" alt="Logo Municipalidad" class="logo">
-                    <span class="ms-2" >{{ nombre_municipalidad }}</span>
-                </a>
-                <div class="d-flex align-items-center ms-auto">
-                    <span class="navbar-text">{{ user_name }}</span>
-                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <!-- Logo y título -->
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                <span class="ms-2">{{ nombre_municipalidad }}</span>
+            </a>
 
-    <main role="main" class="col-md-9 ">
-    <div class="container">
-        <h2 class="header-text">Seleccione una operación a realizar</h2>
-    </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
-            <div class="col">
-                <a href="{% url 'adm_actualizar_logo' %}" class="card h-100 text-decoration-none shadow-sm">
-                    <img src="https://www.svgrepo.com/show/73131/edit-button.svg" class="card-img-top mx-auto mt-3"
-                        alt="editar">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Actualizar logo</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="{% url 'adm_gestion_usuarios' %}" class="card h-100 text-decoration-none shadow-sm">
-                    <img src="https://www.svgrepo.com/show/486504/user-management-filled.svg"
-                        class="card-img-top mx-auto mt-3" alt="gestion">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Gestión de usuarios</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="{% url 'adm_ticket' %}" class="card h-100 text-decoration-none shadow-sm">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeujOaRWnmiTkG15-RkZrieVZ_JKumVf1CPQ&s"
-                        class="card-img-top mx-auto mt-3" alt="notificaciones">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Tickets</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="{% url 'registro-auditoria' %}" class="card h-100 text-decoration-none shadow-sm">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQforQ_2ChYPq7yKFMF5s7qWGlZ0uQ8iIGU6Q&s"
-                        class="card-img-top mx-auto mt-3" alt="auditoria">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Registros de auditoría</h5>
-                    </div>
-                </a>
+            <!-- Relleno flexible para empujar a la derecha -->
+            <div class="user-container ms-auto d-flex align-items-center">
+                <span class="navbar-text me-2">{{ user_name }}</span>
+                <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
             </div>
         </div>
+    </nav>
 
-    </main>
+    <!-- Barra lateral -->
+<div class="sidebar p-3" id="barraLateral">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'adm_principal' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" class="card-img-top img-small" alt="editar" width="24" height="24">
+                    <span class="ms-2">Inicio</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_actualizar_logo' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Actualizar logo</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_gestion_usuarios' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1570/1570102.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Gestión de usuarios</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_ticket' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16949/16949686.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Tickets</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'registro-auditoria' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/10811/10811965.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Registros de auditoría</span>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
 
-    <footer class="footer text-center py-4">
-    </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+
+    <div id="contenidoPrincipal">
+        <main class="row">
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Incidencias Activas</header>
+                        <div class="card-body">
+                            <canvas id="incidenciasChart" aria-label="Gráfico de incidencias activas por categorías" role="img"></canvas>
+                        </div>
+                 </div>
+            </section>  
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Tiempo Inconcluso</header>
+                        <div class="card-body">
+                            <canvas id="histogramaTiempos"></canvas>
+                        </div>
+                </div>
+        </main>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3">
+        <div class="container-fluid">
+            <span>&copy; 2024 Municipalidad. Todos los derechos reservados.</span>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Política de Privacidad</a>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Términos de Servicio</a>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Contacto</a>
+        </div>
+    </footer>
+    
+
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Leaflet JS para el mapa -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Archivos JS personalizados -->
+<script src="{% static 'js/graficos.js' %}"></script>
+<script id="incidencia-data" type="application/json">
+    {{ incidencia_counts|json_script:"incidencia-data" }}
+</script>
 </body>
-
-<!-- Enlace a jQuery y Bootstrap JS -->
-
-<!-- Leaflet JS -->
+</html>
