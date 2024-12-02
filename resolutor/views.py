@@ -28,6 +28,50 @@ def dashboard_resolutor(request):
                     'user_name': user_name,
                     "incidencias_en_proceso":incidencias_proceso})
 
+def simular_creacion_incidencias(request):
+    # Lista de ejemplos de datos simulados
+    incidencias_simuladas = [
+        {
+            "titulo_Incidencia": "Simulacion de creacion 1",
+            "estado": "iniciada",
+            "urgencia": "alta",
+            "descripcion": "Descripcion simulada 1",
+            "latitud": -33.4489,
+            "longitud": -70.6693,
+        },
+        {
+            "titulo_Incidencia": "Simulacion de creacion 2",
+            "estado": "iniciada",
+            "urgencia": "media",
+            "descripcion": "descripcion simulada 2",
+            "latitud": -33.4578,
+            "longitud": -70.6645,
+        },
+        {
+            "titulo_Incidencia": "Simulacion de creacion 3",
+            "estado": "iniciada",
+            "urgencia": "alta",
+            "descripcion": "descripcion simulada 3",
+            "latitud": -33.4600,
+            "longitud": -70.6620,
+        },
+    ]
+
+    # Crear las incidencias simuladas
+    for incidencia_data in incidencias_simuladas:
+        incidencia = Incidencia(
+            titulo_Incidencia=incidencia_data["titulo_Incidencia"],
+            estado=incidencia_data["estado"],
+            urgencia=incidencia_data["urgencia"],
+            descripcion=incidencia_data["descripcion"],
+            fecha_Reporte=now(),
+            latitud=incidencia_data["latitud"],
+            longitud=incidencia_data["longitud"],
+            resolutor_Asignado=None,  # Ningún resolutor asignado inicialmente
+        )
+        incidencia.save()
+
+    return JsonResponse({"resultado": "Incidencias simuladas creadas exitosamente."})
 
 def simular_asignacion(request):
     incidencias = Incidencia.objects.all().order_by('id')  # Ordena por el campo `id`
@@ -44,9 +88,11 @@ def simular_asignacion(request):
         print(f"Resolutor Asignado: {incidencia.resolutor_Asignado}")
         print("-" * 50)  # Línea separadora para claridad
         incidencia = Incidencia.objects.get(id=incidencia.id)
-        user_id = request.COOKIES.get('user_id')
         incidencia.resolutor_Asignado = user_id
-        incidencia.estado = 'asignada'
+        incidencia.titulo_Incidencia = "Titulo simulado"
+        incidencia.estado = "asignada"
+        incidencia.descripcion = "Descripcion simulada"
+        incidencia.fecha_Reporte = now()
         incidencia.save()
     return JsonResponse({"resultados": "Asignadas"})
 ###
@@ -58,31 +104,77 @@ def setIncidenciaEnProceso(request):
         data = json.loads(request.body)
         incidencia_id = data.get('id')
         incidencia = Incidencia.objects.get(id=incidencia_id)
-        crear_registro(incidencia_id,incidencia.estado,"en proceso","El resolutor a inciado la incidencia")
+
+        # Obtener el ID del usuario desde las cookies
+        user_id = request.COOKIES.get('user_id')  # Aquí obtienes el `id_usr_aplicacion`
+
+        # Llamar a `crear_registro` con todos los argumentos necesarios
+        crear_registro(
+            incidencia_id,
+            incidencia.estado,
+            "en proceso",
+            "El resolutor ha iniciado la incidencia",
+            user_id
+        )
+
+        # Actualizar el estado de la incidencia
         incidencia.estado = 'en proceso'
         incidencia.save()
         return JsonResponse({'message': 'Incidencia iniciada exitosamente'})
 
+
 def getIncidenciasAsigandas(request):
     user_id = request.COOKIES.get('user_id')
-    incidencias = Incidencia.objects.filter(resolutor_Asignado=user_id, estado='asignada')
-    return incidencias if incidencias.exists() else False
-
+    incidencias = Incidencia.objects.filter(resolutor_Asignado=user_id)
+    return incidencias # false si no hay asignaciones
 
 def setIncidenciaFinalizada(request):
     if request.method == 'POST':
-        incidencia_id = request.POST.get('id')
-        incidencia = Incidencia.objects.get(id=incidencia_id)
-        for archivo in request.FILES.getlist('archivos'):
-                file_name = default_storage.save(f"incidencias/{archivo.name}", archivo)
-                # Si necesitas guardar el archivo en el modelo
-                incidencia.archivos = file_name
-        crear_registro(incidencia_id,incidencia.estado,"finalizada","El resolutor a finalizado la incidencia")
-        incidencia.estado = 'finalizada'
-        incidencia.save()
-        return JsonResponse({'status': 'success', 'message': 'Archivos subidos correctamente'})
+        try:
+            # Intentar parsear el cuerpo como JSON
+            if request.headers.get('Content-Type') == 'application/json':
+                data = json.loads(request.body)  # Parsear JSON
+            else:
+                data = request.POST  # Si no es JSON, usar request.POST
 
-    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
+            incidencia_id = data.get('id')
+
+            # Validar que incidencia_id exista
+            if not incidencia_id:
+                return JsonResponse({'error': 'ID de incidencia no proporcionado'}, status=400)
+
+            # Obtener la incidencia
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+
+            # Obtener el ID del usuario desde las cookies
+            id_usr_aplicacion = request.COOKIES.get('user_id')
+
+            if not id_usr_aplicacion:
+                return JsonResponse({'error': 'El ID del usuario no está disponible'}, status=400)
+
+            # Llamar a `crear_registro` con todos los argumentos necesarios
+            crear_registro(
+                incidencia_id,
+                incidencia.estado,
+                "finalizada",
+                "El resolutor ha finalizado la incidencia",
+                id_usr_aplicacion
+            )
+
+            # Actualizar el estado de la incidencia
+            incidencia.estado = 'finalizada'
+            incidencia.save()
+
+            return JsonResponse({'message': 'Incidencia finalizada exitosamente'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Datos JSON inválidos en el cuerpo de la solicitud'}, status=400)
+
+        except Incidencia.DoesNotExist:
+            return JsonResponse({'error': 'Incidencia no encontrada'}, status=404)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
             
 def getIncidenciasProceso(request):
     incidencias = Incidencia.objects.filter(resolutor_Asignado=user_id, estado='en proceso')
@@ -155,3 +247,4 @@ def crear_registro(idIncidencia,estado,new_estado,comentario,id_usr_aplicacion):
         # Llamar a `crear_registro_auditoria` y capturar su respuesta
         crear_registro_auditoria(data_para_auditoria)
 #simular_asignacion()
+

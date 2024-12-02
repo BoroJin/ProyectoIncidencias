@@ -1,38 +1,63 @@
+/* ===== Variables de CSS ===== */
+:root {
+    --color-primario: #315579dc; /* Cambiado */
+    --color-secundario: #b0ceeca4; /* Cambiado */
+    --color-texto: #202d3a; /* Igual */
+    --color-fondo: #c4def862; /* Cambiado */
+    --color-fondo-claro: #c1c8cfdc; /* Cambiado */
+    --transicion: 0.3s ease;
+}
 
 body {
     font-family: Serif;
     margin: 0;
     padding: 0;
-    background-color: #c4def862;
+    background-color: var(--color-fondo);
 }
-
-.navbar {
-    background: linear-gradient(90deg, #1f3449, #315579); 
+.custom-navbar {
+    background: linear-gradient(90deg, #1f3449, var(--color-primario));
     color: white;
     padding: 10px 20px;
 }
 
-.navbar-brand {
+.custom-navbar .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #c1c8cfdc;
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
 
-.navbar-text {
-    color: #c1c8cfdc;
+.custom-navbar .navbar-text {
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+
+.user-icon {
+    height: 30px;
+    width: 30px;
+}
+#contenidoPrincipal {
+    margin-top: 8000px;
+}
+
+main{
+    padding-top: 30px;
+    margin-top: 40px;
+
+} 
 
 .logo-container {
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 40px;
-    margin-right: 10px;
-}
 
 .user-container {
     display: flex;
@@ -41,10 +66,6 @@ body {
 
 .user-container p {
     margin-right: 10px;
-}
-
-.user-icon {
-    width: 30px;
 }
 
 .btn-float {

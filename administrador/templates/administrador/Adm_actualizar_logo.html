@@ -13,29 +13,21 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <!-- actualizar logo de manera dinamica -->
-            <a class="navbar-brand" href="{% url 'adm_principal' %}">
-                <img src="{{ logo }}" alt="Logo Muni">
-                {{ nombre_municipalidad }}
-            </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Bienvenido Administrador
-                            <img
-                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
-                        </a>
-                    </li>
-                </ul>
+        <!-- Barra de navegación superior -->
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                    <span class="ms-2">{{ nombre_municipalidad }}</span>
+                </a>
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="navbar-text">{{ user_name }}</span>
+                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
+                </div>
             </div>
         </nav>
     </header>
+    <main>
 
     <form method="post" enctype="multipart/form-data" class="p-4 border rounded">
         {% csrf_token %}
@@ -57,7 +49,7 @@
 
         </div>
     </form>
-
+</main>
 
 
     <!-- Enlace a jQuery y Bootstrap JS -->

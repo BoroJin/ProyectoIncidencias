@@ -15,8 +15,13 @@ body {
     color: white;
     padding: 10px 20px;
 }
-
-.navbar-brand, .navbar-text {
+.navbar-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #c1c8cfdc;
+    text-decoration: none;
+}
+.navbar-brand{
     font-size: 1.5rem;
     font-weight: bold;
     color: #c1c8cfdc;
@@ -196,47 +201,26 @@ span{
     width: 30px; /* Ajusta el tamaño según sea necesario */
     height: auto; /* Mantiene la proporción de la imagen */
 }
-/* Iconos */
-.card-img-top.img-small {
-    transition: transform 0.6s ease;
-}
-/* Footer */
+
 .footer {
-    background: linear-gradient(90deg, #1f3449, #315579);
-    color: #c1c8cfdc;
-    position: relative;
-    width: calc(100% - 250px); /* Ancho completo menos el ancho de la barra lateral */
-    margin-left: 250px; /* Alineado con la barra lateral */
+    width: 100%;
+    position: relative; /* O 'absolute' según sea necesario */
     bottom: 0;
 }
 
-.footer a.footer-link {
-    color: #c1c8cfdc;
+.footer .container-fluid {
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+    flex-wrap: wrap; /* Permite que el contenido sea responsivo */
+    text-align: center;
+}
+
+.footer-link {
     text-decoration: none;
-    margin: 0 5px;
-    transition: color 0.3s ease;
+    color: #007bff; /* Color de los enlaces */
 }
 
-.footer a.footer-link:hover {
-    color: #ffffff;
+.footer-link:hover {
     text-decoration: underline;
-}
-
-.footer .row {
-    align-items: center;
-}
-
-@media (max-width: 768px) {
-    .footer {
-        width: 100%;
-        margin-left: 0;
-    }
-    .footer .col-md-6 {
-        text-align: center !important;
-        margin-bottom: 10px;
-    }
-}
-#incidenciasChart {
-    max-width: 100%;
-    height: auto;
 }

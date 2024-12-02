@@ -4,10 +4,11 @@ import "leaflet/dist/leaflet.css";
 import Card from "../components/Card";
 import "../App.css";
 import BigCard from "../components/BigCard";
-import { getAllIncidencias } from "../api/incidencias.api";
+import { getAllIncidencias, getAllRegistros } from "../api/incidencias.api";
 
 const DepartamentoObrasView = () => {
   const [incidencias, setIncidencias] = useState([]);
+  const [registros, setRegistros] = useState([]);
 
   useEffect(() => {
     initMap();
@@ -26,7 +27,17 @@ const DepartamentoObrasView = () => {
       }
     }
 
+    async function loadRegistros() {
+      try {
+        const reg = await getAllRegistros();
+        setRegistros(reg.data);
+      } catch (error) {
+        console.error("Error al cargar Registros:", error);
+      }
+    }
+
     loadIncidencias();
+    loadRegistros();
   }, []);
 
   const handleIncidenciaClick = (id) => {
@@ -34,39 +45,51 @@ const DepartamentoObrasView = () => {
   };
 
   return (
-    <div className="card-container">
-      <Card title="Mapa">
-        <div id="map"></div>
-      </Card>
-      <Card title="Últimas Notificaciones">
-        <p>Notificaciones relacionadas a progreso de las incidencias.</p>
-        <p>Incidencia #ID01 RECHAZADA.</p>
-        <p>Incidencia #ID02 COMPLETADA. Esperando Verificación.</p>
-      </Card>
+    <div className="flex-container">
+      <div className="card-wrapper">
+        <Card title="Mapa">
+          <div id="map"></div>
+        </Card>
+        <BigCard title="Incidencias" customClass="bigcard-wide">
+          <div className="bigcard-content">
+            <table className="resolutor-table separaciones-verticales">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Descripción</th>
+                  <th>Estado</th>
+                  <th>Encargado</th>
+                  <th>Comentario</th>
+                </tr>
+              </thead>
+              <tbody>
+                {incidencias.map((incidencia) => {
+                  // Filtrar el registro correspondiente a esta incidencia
+                  const registro = registros.find(
+                    (reg) => reg.idIncidencia === incidencia.id
+                  );
 
-      <BigCard title="Incidencias">
-        <div className="incidencias-header">
-          <span>ID</span>
-          <span>Título</span>
-          <span>Descripción</span>
-          <span>Estado</span>
-          <span>Encargado</span>
-        </div>
-        {incidencias.map((incidencia) => (
-          <div
-            key={incidencia.id}
-            className="incidencia-row"
-            onClick={() => handleIncidenciaClick(incidencia.id)} // Evento para manejar clic
-            style={{ cursor: "pointer" }} // Agregar estilo de puntero
-          >
-            <span>{incidencia.id}</span>
-            <span>{incidencia.titulo_Incidencia}</span>
-            <span>{incidencia.descripcion}</span>
-            <span>{incidencia.estado}</span>
-            <span>{incidencia.usuario_Asignado || "No asignado"}</span>
+                  return (
+                    <tr
+                      key={incidencia.id}
+                      onClick={() => handleIncidenciaClick(incidencia.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td>{incidencia.id}</td>
+                      <td>{incidencia.titulo_Incidencia}</td>
+                      <td>{incidencia.descripcion}</td>
+                      <td>{incidencia.estado}</td>
+                      <td>{incidencia.resolutor_Asignado || "No asignado"}</td>
+                      <td>{registro?.comentario || "Sin comentarios"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        ))}
-      </BigCard>
+        </BigCard>
+      </div>
     </div>
   );
 };

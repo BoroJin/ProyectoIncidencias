@@ -10,5 +10,5 @@ urlpatterns = [
     path('setIncidenciaFinalizada/', views.setIncidenciaFinalizada, name='setIncidenciaFinalizada'),
 
     path('simularAsignacion/', views.simular_asignacion, name='simularAsignacion'),
-
+    path('simularCreacion/', views.simular_creacion_incidencias, name='simularCreacion'),
 ]

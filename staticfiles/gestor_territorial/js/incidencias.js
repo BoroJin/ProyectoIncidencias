@@ -1,38 +1,100 @@
+// dashboard.js
 
 document.addEventListener('DOMContentLoaded', function () {
-    const container = document.getElementById('incidenciasContainer');
-    const cardView = document.getElementById('cardView');
+    // Función para obtener el token CSRF
+    function getCSRFToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.content : '';
+    }
+
+    // Función para crear una incidencia
+    function crearIncidencia(incidenciaData) {
+        const csrfToken = getCSRFToken();
+
+        fetch('crear_incidencia/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken,
+            },
+            body: new URLSearchParams({
+                lat: incidenciaData.lat,
+                lng: incidenciaData.lng,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
+                if (data.status === 'success') {
+                    alert('Incidencia creada con éxito: ID ' + data.id);
+                    location.reload();
+                } else {
+                    alert('Error al crear la incidencia: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al crear la incidencia:', error);
+            });
+    }
 
     // Manejar el clic en "Ver detalles"
     document.querySelectorAll('.btn-detalle').forEach(button => {
-        button.addEventListener('click', function() {
-            console.log("Botón de detalles presionado");  // Verifica que se ha hecho clic
-
+        button.addEventListener('click', function () {
             const incidenciaId = this.getAttribute('data-id');
-            const incidencia = incidenciasData.find(i => i.pk == incidenciaId);
 
-            console.log(incidencia);
+            // Hacer una solicitud para obtener los detalles
+            fetch(`obtener_incidencia/${incidenciaId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Cargar los detalles en el modal
+                    document.getElementById('detallesId').textContent = data.id || 'N/A';
+                    document.getElementById('detallesTitulo').textContent = data.titulo_Incidencia || 'N/A';
+                    document.getElementById('detallesEstado').textContent = data.estado || 'N/A';
+                    document.getElementById('detallesTipo').textContent = data.tipo || 'N/A';
+                    document.getElementById('detallesUrgencia').textContent = data.urgencia || 'N/A';
+                    document.getElementById('detallesFechaReporte').textContent = data.fecha_Reporte ? new Date(data.fecha_Reporte).toLocaleString() : 'N/A';
+                    document.getElementById('detallesDescripcion').textContent = data.descripcion || 'No disponible';
+                    document.getElementById('detallesComentarios').textContent = data.comentarios || 'Sin comentarios';
 
-            if (incidencia) {
-                const fields = incidencia.fields;
+                    // Manejar la imagen asociada
+                    const detallesImagen = document.getElementById('detallesImagen');
+                    const detallesSinImagen = document.getElementById('detallesSinImagen');
 
-                const card = document.createElement('div');
-                card.className = 'incidenciaCard ' + fields.estado.toLowerCase();
-                card.innerHTML = `
-                    <h4>${fields.titulo_Incidencia} (ID: ${incidencia.pk})</h4>
-                    <p><strong>Estado:</strong> ${fields.estado}</p>
-                    <p><strong>Tipo:</strong> ${fields.tipo}</p>
-                    <p><strong>Fecha de reporte:</strong> ${new Date(fields.fecha_Reporte).toLocaleDateString('es-ES')}</p>
-                    <p><strong>Descripción:</strong> ${fields.descripcion || 'No hay descripción disponible.'}</p>
-                    <!-- Puedes agregar más detalles según sea necesario -->
-                `;
+                    if (data.multimedia_gestor) {
+                        detallesImagen.src = data.multimedia_gestor;
+                        detallesImagen.style.display = 'block';
+                        detallesSinImagen.style.display = 'none';
+                    } else {
+                        detallesImagen.style.display = 'none';
+                        detallesSinImagen.style.display = 'block';
+                    }
 
-                // Mostrar la tarjeta y ocultar la tabla
-                container.innerHTML = ''; // Limpiar el contenedor de tarjetas
-                container.appendChild(card);
-                cardView.style.display = 'block';  // Mostrar la vista de tarjeta
-                document.getElementById('tableView').style.display = 'none';  // Ocultar la vista de tabla
-            }
+                    // Mostrar el modal
+                    const modal = new bootstrap.Modal(document.getElementById('modalDetalles'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error al cargar los detalles:', error);
+                    alert('No se pudieron cargar los detalles de la incidencia.');
+                });
         });
     });
+
+    // Manejar el clic en "Crear incidencia"
+    const btnCrearIncidencia = document.getElementById('btnCrearIncidencia');
+    if (btnCrearIncidencia) {
+        btnCrearIncidencia.addEventListener('click', function () {
+            const latitud = document.getElementById('latitudInput').value; 
+            const longitud = document.getElementById('longitudInput').value; 
+
+            const incidenciaData = {
+                lat: latitud,
+                lng: longitud,
+            };
+
+            console.log('Datos para crear incidencia:', incidenciaData);
+
+            crearIncidencia(incidenciaData);
+        });
+    }
 });

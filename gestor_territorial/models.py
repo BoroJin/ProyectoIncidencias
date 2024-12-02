@@ -1,5 +1,6 @@
 from django.db import models
 from director.models import Campo
+from cuenta.models import Usuario
 
 class Incidencia(models.Model):
     id = models.AutoField(primary_key=True)  # ID autoincremental
@@ -38,7 +39,7 @@ class Incidencia(models.Model):
     ]
     urgencia = models.CharField(max_length=10, choices=URGENCIA_CHOICES, default='media')  # Nivel de urgencia
     
-    resolutor_Asignado = models.CharField(max_length=100, blank=True, null=True)  # Resolutor asignado
+    resolutor_Asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)  # Resolutor asignado
     id_usuario_departamento = models.IntegerField(null=True, blank=True)
 
 class Respuesta(models.Model):

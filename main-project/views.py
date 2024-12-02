@@ -13,3 +13,4 @@ def ticket(request):
 
 def base(request):
     return render(request, 'main-project/templates/base.html')
+
