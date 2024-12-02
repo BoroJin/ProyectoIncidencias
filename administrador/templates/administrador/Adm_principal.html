@@ -31,62 +31,102 @@
     </nav>
 
     <!-- Barra lateral -->
-    <div class="sidebar p-3" id="barraLateral">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-sel" href="{% url 'adm_principal' %}">
-                    <span>Inicio</span>
-                </a>
-                <a class="nav-sel" href="{% url 'adm_actualizar_logo' %}">
-                    <img src="{% static 'images/edit-button.png' %}" class="card-img-top img-small" alt="editar">
-                    <span>Actualizar logo</span>
-                </a>
-                <a class="nav-sel" href="{% url 'adm_gestion_usuarios' %}">
-                    <img src="{% static 'images/user-management-filled.png' %}" class="card-img-top img-small" alt="gestión de usuarios">
-                    <span>Gestión de usuarios</span>
-                </a>
-                <a class="nav-sel" href="{% url 'adm_ticket' %}">
-                    <img src="{% static 'images/tickets.png' %}" class="card-img-top img-small" alt="tickets">
-                    <span>Tickets</span>
-                </a>
-                <a class="nav-sel" href="{% url 'registro-auditoria' %}">
-                    <img src="{% static 'images/auditoria.png' %}" class="card-img-top img-small" alt="registros de auditoría">
-                    <span>Registros de auditoría</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+<div class="sidebar p-3" id="barraLateral">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'adm_principal' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" class="card-img-top img-small" alt="editar" width="24" height="24">
+                    <span class="ms-2">Inicio</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_actualizar_logo' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Actualizar logo</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_gestion_usuarios' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1570/1570102.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Gestión de usuarios</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_ticket' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16949/16949686.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Tickets</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'registro-auditoria' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/10811/10811965.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Registros de auditoría</span>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+    
     
 
     <!-- Botón flotante para soporte técnico -->
     <a href="#" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
-    <!-- Contenido principal -->
     <div id="contenidoPrincipal">
-        <main role="main" class="col-md-9 ">
-            <div class="col-md-4">
-
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-md-4 mt-4">
-
+        <main class="row">
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Incidencias Activas</header>
+                        <div class="card-body">
+                            <canvas id="incidenciasChart" aria-label="Gráfico de incidencias activas por categorías" role="img"></canvas>
+                        </div>
+                 </div>
+            </section>  
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Tiempo Inconcluso</header>
+                        <div class="card-body">
+                            <canvas id="histogramaTiempos"></canvas>
+                        </div>
                 </div>
+        </main>
+    </div>
 
+
+
+    <!-- Footer -->
+<footer class="footer mt-auto py-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-start">
+                <span>&copy; 2024 Municipalidad. Todos los derechos reservados.</span>
             </div>
-    </main>
-</div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="#" class="footer-link">Política de Privacidad</a>
+                <span class="mx-2">|</span>
+                <a href="#" class="footer-link">Términos de Servicio</a>
+                <span class="mx-2">|</span>
+                <a href="#" class="footer-link">Contacto</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
 
 <!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Leaflet JS para el mapa -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Archivos JS personalizados -->
-<script src="{% static 'resolutor/js/modal.js' %}"></script>
-<script src="{% static 'resolutor/js/map.js' %}"></script>
-<script src="{% static 'resolutor/js/csrfUtils.js' %}"></script>
+<script src="{% static 'js/graficos.js' %}"></script>
+<script id="incidencia-data" type="application/json">
+    {{ incidencia_counts|json_script:"incidencia-data" }}
+</script>
 </body>
 </html>
