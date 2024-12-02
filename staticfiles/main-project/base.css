@@ -1,0 +1,240 @@
+/* ===== General Styles ===== */
+* {
+    box-sizing: border-box; /* Asegura que padding y border se incluyan en el tamaño total */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Serif;
+    background-color: rgba(196, 222, 248, 0.38); /* Usar rgba para claridad */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ===== Navbar Styles ===== */
+.navbar {
+    background: linear-gradient(90deg, #1f3449, #315579);
+    color: white;
+    padding: 0.5rem 1rem; /* Ajuste de padding para mejor alineación */
+    width: 100%;
+    /* Eliminar altura fija para permitir que el contenido determine la altura */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+    z-index: 1030; /* Asegura que la navbar esté sobre otros elementos */
+}
+
+.navbar-brand {
+    font-size: 1.2rem; /* Tamaño del texto */
+    font-weight: bold;
+    color: rgba(193, 200, 207, 0.86); /* Color con opacidad */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 40px;
+    height: auto; /* Mantiene la proporción de la imagen */
+    margin-right: 10px;
+    max-width: 50px; /* Controla el tamaño en pantallas pequeñas */
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    margin-right: 10px;
+    font-size: 1rem;
+    color: rgba(193, 200, 207, 0.86);
+}
+
+.user-icon {
+    width: 30px;
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+/* ===== Sidebar Styles ===== */
+.sidebar {
+    background-color: rgba(176, 206, 236, 0.65); /* Usar rgba para transparencia */
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px; /* Inicialmente oculta */
+    z-index: 1000;
+    height: 100vh; /* Ocupa toda la altura */
+    overflow-y: auto; /* Permite desplazamiento si el contenido es extenso */
+    transition: left 0.3s ease-in-out; /* Animación suave */
+}
+
+.sidebar.active {
+    left: 0; /* Muestra la barra lateral */
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); /* Añade sombra para dar profundidad */
+}
+
+.sidebar .nav-link {
+    font-size: 1rem; /* Tamaño del texto */
+    font-weight: bold;
+    color: #202d3a;
+    padding: 10px 15px;
+    display: block;
+    border-bottom: 1px solid #2c3e50;
+    transition: background-color 0.3s ease; /* Suaviza cambios al hover */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #b0ceec; /* Color al pasar el mouse */
+}
+
+.img-small {
+    width: 30px; /* Tamaño para íconos */
+    height: auto; /* Mantiene proporciones */
+}
+
+/* ===== Botón para ocultar/mostrar la barra lateral ===== */
+.toggle-sidebar-btn {
+    font-size: 1.5rem; /* Tamaño del ícono */
+    padding: 0.25rem 0.5rem; /* Espaciado compacto */
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    z-index: 1100; /* Asegura que esté sobre otros elementos */
+    position: relative;
+}
+
+.toggle-sidebar-btn:focus {
+    outline: none; /* Elimina el contorno al enfocar */
+}
+
+/* ===== Floating Button ===== */
+.btn-float {
+    background-color: #315579dc;
+    position: fixed;
+    color: #fffafa;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 0.5rem 1rem; /* Espaciado ajustado */
+    transition: background-color 0.3s ease; /* Animación al hover */
+    text-decoration: none; /* Elimina subrayado */
+}
+
+.btn-float:hover {
+    background-color: #3a5368; /* Color más oscuro al pasar el mouse */
+}
+
+.icono-btn {
+    width: 24px; /* Tamaño de íconos flotantes */
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* ===== Footer Styles ===== */
+.footer {
+    background: linear-gradient(90deg, #1f3449, #315579);
+    color: rgba(193, 200, 207, 0.86);
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Asegura buena disposición en pantallas pequeñas */
+}
+
+.footer a.footer-link {
+    color: rgba(193, 200, 207, 0.86);
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s ease; /* Suaviza cambios al hover */
+}
+
+.footer a.footer-link:hover {
+    color: #ffffff; /* Cambio de color al pasar el mouse */
+    text-decoration: underline;
+}
+
+.footer .row {
+    align-items: center;
+}
+
+/* ===== Main Content ===== */
+.d-flex {
+    flex-wrap: wrap; /* Permite ajustes en elementos hijos */
+}
+
+main.flex-grow-1 {
+    margin-left: 250px; /* Deja espacio para la barra lateral */
+    transition: margin-left 0.3s ease-in-out; /* Suaviza cambios cuando se oculta */
+}
+
+.sidebar:not(.active) + main {
+    margin-left: 0; /* Elimina el margen si la barra lateral está oculta */
+}
+
+/* ===== Responsiveness ===== */
+/* Para pantallas grandes */
+@media (min-width: 768px) {
+    .toggle-sidebar-btn {
+        display: none; /* Oculta el botón de la barra lateral en pantallas grandes */
+    }
+
+    .sidebar {
+        left: 0; /* Siempre visible en pantallas grandes */
+        transform: none; /* Elimina transformaciones */
+    }
+
+    main.flex-grow-1 {
+        margin-left: 250px; /* Mantiene margen en pantallas grandes */
+    }
+}
+
+/* Para pantallas medianas */
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        transform: translateX(-100%); /* Oculta fuera de pantalla */
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0); /* Muestra al activar */
+    }
+
+    main.flex-grow-1 {
+        margin-left: 0; /* Elimina el margen en pantallas pequeñas */
+    }
+
+    .navbar {
+        flex-direction: column; /* Elementos en columna */
+        align-items: flex-start; /* Alineación a la izquierda */
+    }
+
+    .user-container {
+        margin-top: 10px; /* Espaciado entre el logo y el usuario */
+    }
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 480px) {
+    .navbar-brand, .navbar-text {
+        font-size: 0.9rem; /* Reduce tamaño de texto */
+    }
+
+    .footer {
+        padding: 10px 5px; /* Espaciado más compacto */
+    }
+
+    .sidebar .nav-link {
+        font-size: 0.8rem;
+        padding: 6px 10px; /* Reduce espacio entre elementos */
+    }
+}

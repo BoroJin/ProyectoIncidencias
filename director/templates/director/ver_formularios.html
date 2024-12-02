@@ -3,31 +3,38 @@
 
 {% block body %}
 <div class="container">
-    <h1>Listado de Formularios</h1>
-    <div class="row">
-        {% for formulario in formularios %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="card-title">{{ formulario.nombre }}</h2>
-                    <p class="card-text">{{ formulario.descripcion }}</p>
-                    <p>Formulario activo: {{ formulario.activo }}</p>
-                    <a class="btn btn-custom1" href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
-                    <form action="{% url 'director:eliminar_formulario' formulario.id %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button class="btn btn-custom2" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
-                    </form>
-                    <div class="hola">
-                    <form action="{% url 'director:activar_formulario' formulario.id %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button class="btn btn-custom3" type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
-                    </form></div>
+    <div class="card">
+        <div class="card-header text-center">
+            <span><h1>Lista de Formularios</h1></span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for formulario in formularios %}
+                <div class="col-md-4 d-flex justify-content-center">
+                    <div class="card mb-4">
+                        <div class="card-header text-center">
+                            <span><h2 class="card-title">{{ formulario.nombre }}</h2></span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Descripción:</strong> {{ formulario.descripcion }}</p>
+                            <p><strong>Estado Activo:</strong> {{ formulario.activo }}</p>
+                            <a class="btn btn-custom" href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
+                            <form action="{% url 'director:activar_formulario' formulario.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button class="btn btn-custom" type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
+                            </form>
+                            <form action="{% url 'director:eliminar_formulario' formulario.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-eliminar" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+                {% empty %}
+                    <p>No hay formularios disponibles.</p>
+                {% endfor %}
             </div>
         </div>
-        {% empty %}
-            <p>No hay formularios disponibles.</p>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}
