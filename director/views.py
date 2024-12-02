@@ -56,7 +56,7 @@ def rechazarIncidencia(request):
     incidencia = Incidencia.objects.get(id=id_incidencia)
     crear_registro(id_incidencia,incidencia.estado,'rechazada',justificacion,user_id)
     incidencia.estado = 'rechazada'
-    incidencia.resolutor_Asignado = 'none'
+    incidencia.resolutor_Asignado =  None
     incidencia.save()
     return redirect('director:dashboard')
 
