@@ -4,6 +4,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: #c4def862;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Navbar */
@@ -59,7 +62,10 @@ body {
     border-bottom: 1px solid #2c3e50;
     transition: background-color 0.3s ease;
 }
-
+span{
+    margin-left: 10px;
+    font-size: 16px;
+}
 .sidebar .nav-sel {
     background-color: #b0ceec;
 }
@@ -73,7 +79,7 @@ body {
     background-color: #315579dc;
     position: fixed;
     color: #fffafa;
-    bottom: 20px;
+    bottom: 70px;
     right: 20px;
     z-index: 1000;
 }
@@ -112,6 +118,7 @@ body {
 /* Cards */
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 400px;
 }
 
 .card-header {
@@ -188,4 +195,48 @@ body {
 .img-small {
     width: 30px; /* Ajusta el tamaño según sea necesario */
     height: auto; /* Mantiene la proporción de la imagen */
+}
+/* Iconos */
+.card-img-top.img-small {
+    transition: transform 0.6s ease;
+}
+/* Footer */
+.footer {
+    background: linear-gradient(90deg, #1f3449, #315579);
+    color: #c1c8cfdc;
+    position: relative;
+    width: calc(100% - 250px); /* Ancho completo menos el ancho de la barra lateral */
+    margin-left: 250px; /* Alineado con la barra lateral */
+    bottom: 0;
+}
+
+.footer a.footer-link {
+    color: #c1c8cfdc;
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.footer a.footer-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer .row {
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        width: 100%;
+        margin-left: 0;
+    }
+    .footer .col-md-6 {
+        text-align: center !important;
+        margin-bottom: 10px;
+    }
+}
+#incidenciasChart {
+    max-width: 100%;
+    height: auto;
 }
