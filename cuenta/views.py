@@ -61,7 +61,7 @@ class LoginView(APIView):
                 elif user.rol == 'Gestor Territorial':    
                     redirect_url = 'http://127.0.0.1:8000/gestor_territorial/'
                 elif user.rol == 'Departamento de obras':      
-                    redirect_url = 'http://127.0.0.1:8000/depto-obras/'
+                    redirect_url = 'http://127.0.0.1:8000/depto-obras'
 
                 # Agregar el nombre del usuario en la respuesta
                 return Response({
@@ -112,7 +112,7 @@ def restablecer(request, user_id):
             usuario.password = nueva_contrasena 
             usuario.save()
             messages.success(request, 'Contraseña actualizada exitosamente.')
-            return redirect('http://localhost:3000/') 
+            return redirect('http://127.0.0.1:8000/') 
         else:
             messages.error(request, 'Por favor, introduce una contraseña válida.')
     return render(request, 'restablecer_contrasena.html', {'usuario': usuario})
