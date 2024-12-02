@@ -3,7 +3,7 @@ from . import views
 from .views import LoginView
 from rest_framework.routers import DefaultRouter
 from cuenta.views import TicketsViewSet  # Asegúrate de que el nombre del import sea correcto
-from cuenta.views import MensajeViewSet
+from cuenta.views import MensajeViewSet, UsuarioView
 
 # Configura tu router de DRF para incluir las vistas de la API de Tickets
 router = DefaultRouter()
@@ -16,5 +16,6 @@ urlpatterns = [
     path('recuperar/', views.restablecer_contra, name='recuperar'),
     path('restablecer/<int:user_id>/', views.restablecer, name='restablecer'),
     path('api/', include(router.urls)),  
+    path('api/usuario/', UsuarioView.as_view(), name='usuario'), 
 
 ]

@@ -12,8 +12,19 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .serializer import TicketsSerializer,MensajeSerializer
+from .serializer import TicketsSerializer,MensajeSerializer, UsuarioSerializer
 from .models import Mensaje
+from rest_framework.permissions import IsAuthenticated
+
+
+class UsuarioView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        usuario = request.user  # Obtén el usuario autenticado
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+
 
 class TicketsViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
@@ -61,7 +72,7 @@ class LoginView(APIView):
                 elif user.rol == 'Gestor Territorial':    
                     redirect_url = 'http://127.0.0.1:8000/gestor_territorial/'
                 elif user.rol == 'Departamento de obras':      
-                    redirect_url = 'http://127.0.0.1:8000/depto-obras'
+                    redirect_url = 'http://127.0.0.1:8000/depto-obras/'
 
                 # Agregar el nombre del usuario en la respuesta
                 return Response({
@@ -112,7 +123,7 @@ def restablecer(request, user_id):
             usuario.password = nueva_contrasena 
             usuario.save()
             messages.success(request, 'Contraseña actualizada exitosamente.')
-            return redirect('http://127.0.0.1:8000/') 
+            return redirect('http://localhost:3000/') 
         else:
             messages.error(request, 'Por favor, introduce una contraseña válida.')
     return render(request, 'restablecer_contrasena.html', {'usuario': usuario})
