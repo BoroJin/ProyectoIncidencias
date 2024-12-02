@@ -12,15 +12,16 @@
                     <h2 class="card-title">{{ formulario.nombre }}</h2>
                     <p class="card-text">{{ formulario.descripcion }}</p>
                     <p>Formulario activo: {{ formulario.activo }}</p>
-                    <a class="btn btn-custom" href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
+                    <a class="btn btn-custom1" href="{% url 'director:gestionar_campos' formulario.id %}">Editar Campos</a>
                     <form action="{% url 'director:eliminar_formulario' formulario.id %}" method="post" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-custom" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
+                        <button class="btn btn-custom2" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este formulario y todos sus campos asociados?');">Eliminar Formulario</button>
                     </form>
+                    <div class="hola">
                     <form action="{% url 'director:activar_formulario' formulario.id %}" method="post" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-custom" type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
-                    </form>
+                        <button class="btn btn-custom3" type="submit" {% if formulario.activo %}disabled{% endif %}>Activar</button>
+                    </form></div>
                 </div>
             </div>
         </div>

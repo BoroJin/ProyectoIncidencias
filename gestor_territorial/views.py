@@ -34,7 +34,7 @@ def ver_listaIncidencias(request):
         data = serialize('json', incidencias)  # Serializar los datos
         return JsonResponse({'status': 'success', 'incidencias': data})
 
-    return render(request, 'gestor_territorial/lista_incidencias.html', {'incidencias': incidencias})
+    return render(request, 'gestor_territorial/lista_incidencias.html', {'incidencias': incidencias,'user_name': user_name})
 
 def mostrar_formulario(request):
     try:

@@ -55,19 +55,17 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 
 class Ticket(models.Model):
-    ESTADOS = [
-        ('abierto', 'Abierto'),
-        ('en_proceso', 'En proceso'),
-        ('resuelto', 'Resuelto'),
-        ('cerrado', 'Cerrado'),
-    ]
-
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="tickets")
-    asunto = models.CharField(max_length=255)
+    titulo = models.CharField(max_length=255)
     descripcion = models.TextField()
-    estado = models.CharField(max_length=20, choices=ESTADOS, default='abierto')
-    fecha_creacion = models.DateTimeField(default=now)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    fecha = models.DateField()
 
     def __str__(self):
-        return f"Ticket #{self.id} - {self.asunto}"
+        return f"Ticket #{self.id} - {self.titulo}"
+    
+class Mensaje(models.Model):
+    mensaje_usuario = models.TextField(null=True, blank=True)
+    mensaje_soporte = models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"Mensaje {self.id}"

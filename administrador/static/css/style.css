@@ -12,8 +12,13 @@ body {
     color: white;
     padding: 10px 20px;
 }
-
-.navbar-brand, .navbar-text {
+.navbar-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #c1c8cfdc;
+    text-decoration: none;
+}
+.navbar-brand{
     font-size: 1.5rem;
     font-weight: bold;
     color: #c1c8cfdc;
@@ -188,4 +193,27 @@ body {
 .img-small {
     width: 30px; /* Ajusta el tamaño según sea necesario */
     height: auto; /* Mantiene la proporción de la imagen */
+}
+
+.footer {
+    width: 100%;
+    position: relative; /* O 'absolute' según sea necesario */
+    bottom: 0;
+}
+
+.footer .container-fluid {
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+    flex-wrap: wrap; /* Permite que el contenido sea responsivo */
+    text-align: center;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: #007bff; /* Color de los enlaces */
+}
+
+.footer-link:hover {
+    text-decoration: underline;
 }

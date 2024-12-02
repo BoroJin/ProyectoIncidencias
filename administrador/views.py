@@ -1,29 +1,30 @@
 #maxi
 from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
+from .models import Logo,Incidencia, RegistroAuditoria  # Suponiendo que tienes un modelo llamado Usuario
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ConfiguracionMunicipalidadSerializer
 import csv
-from django.http import JsonResponse, Http404,HttpResponse
+from django.http import JsonResponse, Http404
+from django.http import HttpResponse
 from cuenta.models import Usuario, Ticket
-from .models import RegistroAuditoria, Incidencia, Logo
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import RegistroAuditoria, Usuario, Incidencia
 from django.core.paginator import Paginator
-
-
-
 
 def adm_principal(request):
     global user_id, user_name
     user_id = request.COOKIES.get('user_id')
     user_name = request.COOKIES.get('user_name')
-    return render(request, 'administrador/Adm_principal.html',{'user_name': user_name})
+    return render(request, 'administrador/Adm_principal.html', {'user_name': user_name})
 
 def adm_ticket(request):
     tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
-    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets})
+    return render(request, 'administrador/Adm_ticket.html', {'tickets': tickets,'user_name': user_name})
 
 def adm_gestion_usuarios(request):
     if request.method == 'POST':  # Si es un POST, significa que el formulario fue enviado
@@ -41,10 +42,10 @@ def adm_gestion_usuarios(request):
     # Obtener todos los usuarios de la base de datos
     usuarios = Usuario.objects.all()
 
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuarios': usuarios})
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuarios': usuarios,'user_name': user_name})
 
 def adm_cargar_masiva(request):
-    return render(request, 'administrador/Adm_cargar_masiva.html')
+    return render(request, 'administrador/Adm_cargar_masiva.html',{'user_name': user_name})
 
 def adm_actualizar_logo(request):
     logo = Logo.objects.first()
@@ -67,7 +68,8 @@ def adm_actualizar_logo(request):
         return redirect('adm_principal')
 
     context = {
-        'form': logo  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
+        'form': logo,  # Pasamos el objeto `logo` que contiene el nombre y la imagen actuales
+        'user_name': user_name
     }
     return render(request, 'administrador/Adm_actualizar_logo.html', context)
 
@@ -92,7 +94,7 @@ def editar_usuario(request, usuario_id):
         messages.success(request, 'Usuario actualizado correctamente.')
         return redirect('adm_gestion_usuarios')
     
-    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario})
+    return render(request, 'administrador/Adm_gestion_usuarios.html', {'usuario': usuario, 'user_name': user_name})
 
 class ConfiguracionMunicipalidadView(APIView):
     def get(self, request):
@@ -101,13 +103,12 @@ class ConfiguracionMunicipalidadView(APIView):
         return Response(serializer.data)
       
 def importar_usr_vista(request):
-    return render(request, 'administrador/importar_usr_vista.html')
+    return render(request, 'administrador/importar_usr_vista.html',{'user_name': user_name})
 
 def exportar_usr_vista(request):
-    return render(request, 'administrador/exportar_usr_vista.html')
+    return render(request, 'administrador/exportar_usr_vista.html',{'user_name': user_name})
 
-    # De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
-
+# De esta funcion, se espera recibir un archivo csv, validar que el que el archivo este correcto
 def recibir_y_validar_csv(request):
     if request.method == 'POST' and request.FILES.get('file'):
         try:
@@ -141,8 +142,7 @@ def recibir_y_validar_csv(request):
     #Luego de confirmar esto, quiero que se redirija a "Adm_cargar_masiva.html", con un mensaje que diga(no popup) "x usuarios creados con exito"
     #Si no tuvo exito, que notifique el error en este mensaje
     
-    # Esta funcion busca leer la tabla de usuarios y escribirlos en un csv, y retortnar el csv para descargar
-
+# Esta funcion busca leer la tabla de usuarios y escribirlos en un csv, y retortnar el csv para descargar
 def exportar_csv(request):
     # Crea la respuesta como archivo CSV
     response = HttpResponse(content_type='text/csv')
@@ -157,7 +157,7 @@ def exportar_csv(request):
         writer.writerow([usuario.nombre,usuario.password,usuario.correo_electronico,usuario.rol])
     return response #Retorna el csv para descargar
 
-    # #Esta funcion busca validar nombres de usuarios, en aspectos como:
+# #Esta funcion busca validar nombres de usuarios, en aspectos como:
     #- nombre de usuario:
     #   - Longitud, entre maxima y minima
     #   - Solo permite caracteres y numeros
@@ -167,7 +167,6 @@ def exportar_csv(request):
     #    -Si tiene un punto luego del arroba
     # - Rol
     #    -Que el rol, sea valido (Administrador)(Gestor Territorial)(Director)(Departamento de obras)(Resolutor)
-
 def validar_csv_entrada(ruta,longitud_max=1000,longitud_min=3):
     #Obtener una lista de los usuarios en uso
     usuarios_en_uso = Usuario.objects.values_list('nombre', flat=True)
@@ -305,6 +304,8 @@ def registros_de_incidencia(request, incidencia_id):
     }
     return JsonResponse(data)
 
+
+
 def registro_auditoria(request):
     user_id = request.COOKIES.get('user_id')
     user_name = request.COOKIES.get('user_name')
@@ -318,18 +319,18 @@ def registro_auditoria(request):
     page_obj = paginator.get_page(page_number)
     
     # Convertimos las incidencias en un formato que incluya la fecha de reporte
-    #incidencias_data = [
-    #    {
-    #        'id': incidencia.id,
-    #        'titulo': incidencia.titulo_Incidencia,
-    #        'estado': incidencia.get_estado_display(),
-    #        'urgencia': incidencia.get_urgencia_display(),
-    #        'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
-    #    }
-    #    for incidencia in page_obj
-    #]
+    incidencias_data = [
+        {
+            'id': incidencia.id,
+            'titulo': incidencia.titulo_Incidencia,
+            'estado': incidencia.get_estado_display(),
+            'urgencia': incidencia.get_urgencia_display(),
+            'fecha_reporte': incidencia.fecha_Reporte.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        for incidencia in page_obj
+    ]
     
     return render(request, 'administrador/registroAuditoria.html', {
-        'page_obj': page_obj,
+        'page_obj': incidencias_data,
         'user_name': user_name,
     })

@@ -17,9 +17,9 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <!-- Logo y título -->
-            <a class="navbar-brand d-flex align-items-center logo-container" href="#">
-                <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
-                <span class="ms-2">Municipalidad</span>
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                <span class="ms-2">{{ nombre_municipalidad }}</span>
             </a>
 
             <!-- Relleno flexible para empujar a la derecha -->
@@ -69,12 +69,7 @@
 </div>
 
     
-    
 
-    <!-- Botón flotante para soporte técnico -->
-    <a href="#" class="btn btn-float">
-        <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
-    </a>
     <div id="contenidoPrincipal">
         <main class="row">
             <section class="col-md-5">
@@ -98,22 +93,18 @@
 
 
     <!-- Footer -->
-<footer class="footer mt-auto py-3">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 text-center text-md-start">
-                <span>&copy; 2024 Municipalidad. Todos los derechos reservados.</span>
-            </div>
-            <div class="col-md-6 text-center text-md-end">
-                <a href="#" class="footer-link">Política de Privacidad</a>
-                <span class="mx-2">|</span>
-                <a href="#" class="footer-link">Términos de Servicio</a>
-                <span class="mx-2">|</span>
-                <a href="#" class="footer-link">Contacto</a>
-            </div>
+    <footer class="footer mt-auto py-3">
+        <div class="container-fluid">
+            <span>&copy; 2024 Municipalidad. Todos los derechos reservados.</span>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Política de Privacidad</a>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Términos de Servicio</a>
+            <span class="mx-2">|</span>
+            <a href="#" class="footer-link">Contacto</a>
         </div>
-    </div>
-</footer>
+    </footer>
+    
 
 
 <!-- Bootstrap JS y dependencias -->

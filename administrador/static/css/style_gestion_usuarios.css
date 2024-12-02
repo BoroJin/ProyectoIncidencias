@@ -1,32 +1,56 @@
+/* ===== Variables de CSS ===== */
+:root {
+    --color-primario: #315579dc; /* Cambiado */
+    --color-secundario: #b0ceeca4; /* Cambiado */
+    --color-texto: #202d3a; /* Igual */
+    --color-fondo: #c4def862; /* Cambiado */
+    --color-fondo-claro: #c1c8cfdc; /* Cambiado */
+    --transicion: 0.3s ease;
+}
+
 body {
     font-family: Serif;
-    background-color: #e6f7ff;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-fondo);
+}
+.custom-navbar {
+    background: linear-gradient(90deg, #1f3449, var(--color-primario));
+    color: white;
+    padding: 10px 20px;
 }
 
-.navbar {
-    background-color: #0d639c;
+.custom-navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-fondo-claro);
+    text-decoration: none;
 }
 
-.navbar-brand {
-    color: #ffffff !important;
-    font-size: 30px;
+.custom-navbar .navbar-text {
+    color: var(--color-fondo-claro);
+    text-decoration: none;
 }
 
-.navbar-brand img {
-    width: 65px;
-    height: 65px;
+.logo {
+    width: 40px;
+    height: 40px;
     margin-right: 10px;
 }
 
-.nav-link {
-    color: #ffffff !important;
-    font-size: 18px;
+
+.user-icon {
+    height: 30px;
+    width: 30px;
+}
+#contenidoPrincipal {
+    margin-top: 80px;
 }
 
-.nav-link img {
-    width: 45px;
-    height: 45px;
-    margin-left: 10px;
+main{
+    padding: 20px;
+    margin-top: 30px;
+
 }
 
 h2 {
@@ -53,21 +77,21 @@ h2 {
     color: #ffffff;
 }
 .btn-2-1{
-    background-color: #00ff59;
+    background-color: #005073;
     border-color: #005073;
     margin-right: 10px; 
     white-space: nowrap;
 }
 .boton-a{
-    background-color: #00ff59;
-    border-color: #005073;
+    background-color: #005073;
+    border-color: #000000;
     margin-right: 10px; 
 }
 
 
 .boton-b{
-    background-color: #0aaff5;
-    border-color: #005073;
+    background-color: #5a6b73;
+    border-color: #5d6e75;
 }
 
 .btn-info{

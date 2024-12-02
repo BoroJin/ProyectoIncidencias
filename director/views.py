@@ -14,7 +14,7 @@ from administrador.models import RegistroAuditoria
 def incidencias(request):
     incidencia = Incidencia.objects.all()
     usuarios = Usuario.objects.filter(rol='dep')
-    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios})
+    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios, 'user_name': user_name})
 
 
 def asignarUsuario (request):
@@ -73,7 +73,7 @@ def crear_formulario(request):
         formulario = Formulario(nombre=nombre, descripcion=descripcion)
         formulario.save()
         return redirect('director:gestionar_campos', formulario_id=formulario.id)  # Redirige a la vista de gestión de campos
-    return render(request, 'director/crear_formulario.html')
+    return render(request, 'director/crear_formulario.html',{'user_name': user_name})
 
 def gestionar_campos(request, formulario_id):
     formulario = Formulario.objects.get(id=formulario_id)
@@ -96,11 +96,11 @@ def gestionar_campos(request, formulario_id):
             campo_id = request.POST.get('campo_id')
             Campo.objects.get(id=campo_id).delete()
     
-    return render(request, 'director/gestionar_campos.html', {'formulario': formulario, 'campos': campos})
+    return render(request, 'director/gestionar_campos.html', {'formulario': formulario, 'campos': campos, 'user_name': user_name})
 
 def ver_formularios(request):
     formularios = Formulario.objects.all()
-    return render(request, 'director/ver_formularios.html', {'formularios': formularios})
+    return render(request, 'director/ver_formularios.html', {'formularios': formularios, 'user_name': user_name})
 
 def activar_formulario(request, formulario_id):
     if request.method == 'POST':
@@ -155,6 +155,7 @@ def dashboard(request):
         'usuarios_departamento': usuarios_departamento,
         'incidencias': incidencias,  # Pasa las incidencias al template
         'map': initial_map._repr_html_(),  # Mapa convertido a HTML para insertar en el template
+        'user_name': user_name,
     }
     return render(request, 'director/dashboard.html', context)
 

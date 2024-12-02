@@ -1,0 +1,28 @@
+Version de pytgon utilizada: python = 3.11.8
+
+-Librerias de python 
+
+django-extensions
+asgiref
+Django
+pillow
+psycopg2
+psycopg2-binary
+sqlparse
+tzdata
+djangorestframework
+django-cors-headers
+python-dotenv
+djangorestframework-simplejwt
+folium
+drf_spectacular
+
+-Librerias de Java
+
+axios
+folium
+socket.io-client react-icons react-router-dom bootstrap
+
+Este TXT no es para usar con el requirements para instalar librerias es de vista para llevar el cuento de librerias
+utilizadas hasta el momento
+

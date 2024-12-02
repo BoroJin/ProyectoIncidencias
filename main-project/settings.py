@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Puerto de tu frontend en React
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -53,11 +55,15 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Permite acceso sin autenticación
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
 
 AUTH_USER_MODEL = 'cuenta.Usuario'
 
@@ -91,9 +97,9 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Desarrolloweb1',
+        'NAME': 'coco',
         'USER': 'postgres',
-        'PASSWORD': 'lolandmine1',
+        'PASSWORD': 'operacion7',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -144,7 +150,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resolutor', 'static', 'resolutor'),
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
     os.path.join(BASE_DIR, 'DepartamentoObras', 'dist'),
-    
+    os.path.join(BASE_DIR, 'ticket', 'build', 'static'),
+
     ]
 
 
@@ -158,3 +165,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'recuperar123456789hola@gmail.com'        
+EMAIL_HOST_PASSWORD = 'bgvy jwai wgka fxaq'         
+

@@ -1,52 +1,65 @@
+/* ===== Variables de CSS ===== */
+:root {
+    --color-primario: #315579dc; /* Cambiado */
+    --color-secundario: #b0ceeca4; /* Cambiado */
+    --color-texto: #202d3a; /* Igual */
+    --color-fondo: #c4def862; /* Cambiado */
+    --color-fondo-claro: #c1c8cfdc; /* Cambiado */
+    --transicion: 0.3s ease;
+}
 
 body {
     font-family: Serif;
     margin: 0;
     padding: 0;
-    background-color: #c4def862;
+    background-color: var(--color-fondo);
 }
-
-.navbar {
-    background: linear-gradient(90deg, #1f3449, #315579); 
+.custom-navbar {
+    background: linear-gradient(90deg, #1f3449, var(--color-primario));
     color: white;
     padding: 10px 20px;
 }
 
-.navbar-brand {
+.custom-navbar .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #c1c8cfdc;
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
 
-.navbar-text {
-    color: #c1c8cfdc;
+.custom-navbar .navbar-text {
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+
+.user-icon {
+    height: 30px;
+    width: 30px;
+}
+#contenidoPrincipal {
+    margin-top: 80px;
+}
+
+main{
+    padding-top: 30px;
+    margin-top: 40px;
+
+} 
 
 .logo-container {
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 40px;
-    margin-right: 10px;
-}
 
-.user-container {
-    display: flex;
-    align-items: center;
-}
-
-.user-container p {
-    margin-right: 10px;
-}
-
-.user-icon {
-    width: 30px;
-}
-
+/* Botón flotante */
 .btn-float {
     background-color: #315579dc;
     position: fixed;
@@ -63,12 +76,14 @@ body {
     vertical-align: middle;
 }
 
+/* Barra lateral */
 .sidebar {
     background-color: #b0ceeca4;
     height: 100vh;
 }
 
-.sidebar .nav-link {
+.sidebar .nav-link,
+.sidebar .nav-sel {
     font-size: 1.1rem;
     font-weight: bold;
     color: #202d3a;
@@ -76,89 +91,30 @@ body {
     display: block;
     border-bottom: 1px solid #2c3e50;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
 .sidebar .nav-sel {
     background-color: #b0ceec;
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #202d3a;
-    padding: 10px 20px;
-    display: block;
-    border-bottom: 1px solid #2c3e50;
-    transition: background-color 0.3s ease;
 }
 
 .sidebar .nav-link:hover {
     background-color: #b0ceec;
 }
 
-#map {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 300px;
-}
-
-#buttons { 
-    color: white;
-    border: none;
-    margin-top: 10px; 
-    display: none;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.custom-button1 {
-    background-color: #315579dc;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-}
-
-.custom-button1:hover {
-    background-color: #3a5368;
-}
-
-.custom-button2 {
-    background-color:#b0ceec;
-    color: #315579;
-    border: none;
-    border-radius: 6px;
-    text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-}
-
-.custom-button2:hover {
-    background-color: #b0ceec7e;
-}
-
+/* Estilos de la tarjeta y tabla */
 .card-header {
     background-color: #c4def86e;
     font-weight: bold;
     color: #202d3a;
 }
 
-.card-body img {
-    border-radius: 10px;
-}
-
 .card-body ul {
+    border-radius: 10px;
     list-style-type: none;
     padding-left: 0;
-}
-
-.card-body ul li {
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
-}
-
-.card-body ul li:last-child {
     border-bottom: none;
 }
 
@@ -166,47 +122,73 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.popup {
-    display: none;
-    position: fixed;
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+/* Botones personalizados */
+.btn-detalle {
+    background-color: #b0ceec;
+    border: none;
+    color: #315579;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 5px;
 }
 
-.popup-contenido {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.cerrar {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.cerrar:hover,
-.cerrar:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+.btn-detalle:hover {
+    background-color: #b0ceec7e;
 }
 
 .btn-custom {
-    background-color: #315579dc;
-    color: white;
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
 }
 
 .btn-custom:hover {
-    background-color: #315579;
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.btn-custom1 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom1:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.btn-custom2 {
+    background-color: #a01919; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom2:hover {
+    background-color: #a01919; /* Color más oscuro al pasar el cursor */
+}
+.btn-custom3 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom3:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+.hola{
+    padding-top: 10px;
+}
+
+.btn-custom4 {
+    background-color: #0056b3; /* Cambia este código de color al que desees */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin borde */
+}
+
+.btn-custom4:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+}
+
+.coco{
+    padding-top: 100px;
 }

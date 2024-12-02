@@ -1,38 +1,63 @@
+/* ===== Variables de CSS ===== */
+:root {
+    --color-primario: #315579dc; /* Cambiado */
+    --color-secundario: #b0ceeca4; /* Cambiado */
+    --color-texto: #202d3a; /* Igual */
+    --color-fondo: #c4def862; /* Cambiado */
+    --color-fondo-claro: #c1c8cfdc; /* Cambiado */
+    --transicion: 0.3s ease;
+}
 
 body {
     font-family: Serif;
     margin: 0;
     padding: 0;
-    background-color: #c4def862;
+    background-color: var(--color-fondo);
 }
-
-.navbar {
-    background: linear-gradient(90deg, #1f3449, #315579); 
+.custom-navbar {
+    background: linear-gradient(90deg, #1f3449, var(--color-primario));
     color: white;
     padding: 10px 20px;
 }
 
-.navbar-brand {
+.custom-navbar .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #c1c8cfdc;
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
 
-.navbar-text {
-    color: #c1c8cfdc;
+.custom-navbar .navbar-text {
+    color: var(--color-fondo-claro);
     text-decoration: none;
 }
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+
+.user-icon {
+    height: 30px;
+    width: 30px;
+}
+#contenidoPrincipal {
+    margin-top: 8000px;
+}
+
+main{
+    padding-top: 30px;
+    margin-top: 40px;
+
+} 
 
 .logo-container {
     display: flex;
     align-items: center;
 }
 
-.logo {
-    width: 40px;
-    margin-right: 10px;
-}
 
 .user-container {
     display: flex;
@@ -41,10 +66,6 @@ body {
 
 .user-container p {
     margin-right: 10px;
-}
-
-.user-icon {
-    width: 30px;
 }
 
 .btn-float {
@@ -94,6 +115,7 @@ body {
     background-color: #b0ceec;
 }
 
+
 #map {
     position: relative;
     z-index: 1;
@@ -122,11 +144,12 @@ body {
 
 .custom-button1:hover {
     background-color: #3a5368;
+    color: white;
 }
 
 .custom-button2 {
     background-color:#b0ceec;
-    color: #315579;
+    color: #1a2d41;
     border: none;
     border-radius: 6px;
     text-align: center;
@@ -136,6 +159,23 @@ body {
 
 .custom-button2:hover {
     background-color: #b0ceec7e;
+}
+
+.custom-enviar {
+    background-color: #315579dc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-top: 10px; 
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.custom-enviar:hover {
+    background-color: #3a5368;
+    color: white;
 }
 
 .card-header {
@@ -181,26 +221,25 @@ body {
 }
 
 .popup-contenido {
+    position: relative;
     background-color: #fff;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 500px;
+    max-width: 800px;
     text-align: center;
 }
 
-
 .cerrar {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 15px;
     font-size: 24px;
     font-weight: bold;
     color: #333;
     cursor: pointer;
-    z-index: 1000;
 }
 
 .cerrar:hover,
@@ -217,4 +256,192 @@ body {
 
 .btn-custom:hover {
     background-color: #315579;
+}
+
+.btn-custom {
+    background-color: #315579dc;
+    color: white;
+}
+
+.btn-custom:hover {
+    background-color: #315579;
+}
+
+
+.btn-detalle {
+    background-color: #b0ceec;
+    border: none;
+    color: #315579;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-detalle:hover {
+    background-color: #b0ceec7e;
+}
+
+.btn-comentario {
+    background-color: #315579dc;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-comentario:hover {
+    background-color: #315579;
+}
+
+.btn-verificar {
+    background-color: #315579dc;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-verificar:hover {
+    background-color: #315579;
+}
+
+.btn-confirmar {
+    background-color: #315579dc;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-confirmar:hover {
+    background-color: #315579;
+}
+
+.btn-rechazar {
+    background-color: rgb(216, 45, 45);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 5px;
+}
+
+.btn-rechazarr:hover {
+    background-color: #315579;
+}
+/* Estilos generales para el formulario */
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    max-height: 70vh;  /* Limitar la altura del formulario a un 70% del alto de la ventana */
+    overflow-y: auto;  /* Habilitar barra de desplazamiento solo cuando sea necesario */
+}
+
+/* Estilo para los campos del formulario */
+fieldset {
+    border: none;
+    margin-bottom: 20px;
+}
+
+legend {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+/* Estilo para las etiquetas */
+label {
+    font-size: 1.1em;
+    color: #34495e;
+}
+
+/* Estilo para los inputs de texto, select y textarea */
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    font-size: 1em;
+}
+
+/* Estilo para los botones */
+button.btn {
+    background-color: #2980b9;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+}
+
+button.btn:hover {
+    background-color: #3498db;
+}
+
+/* Estilo para las opciones checkbox */
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-label {
+    font-size: 1em;
+    color: #34495e;
+}
+
+/* Estilo para los campos obligatorios */
+input[required], textarea[required], select[required] {
+    background-color: #f4f6f7;
+    border: 1px solid #bdc3c7;
+}
+
+/* Estilo para el contenedor de errores */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+/* Personalización del modal de formulario */
+.popup-contenido {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cerrar {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.5em;
+    color: #333;
+    cursor: pointer;
 }

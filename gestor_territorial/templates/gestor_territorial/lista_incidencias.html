@@ -13,21 +13,22 @@
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <div class="logo-container">
-                <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
-                <a class="navbar-brand" href="#">Municipalidad X</a>
-            </div>
-            <div class="ms-auto d-flex align-items-center">
-                <a class="navbar-text" href="#">User name</a>
-                <div class="user-container">
+    <header>
+        <!-- Barra de navegación superior -->
+        <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                    <span class="ms-2">{{ nombre_municipalidad }}</span>
+                </a>
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="navbar-text">{{ user_name }}</span>
                     <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
+    <main></main>
 
     <div class="container-fluid">
         <div class="row">
@@ -162,10 +163,10 @@
         </div>
     </div>
 
-    <a href="#" class="btn btn-float">
+    <a href="http://127.0.0.1:8000/ticket/" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
-     
+</main>
     <!-- Pasar las incidencias a JavaScript -->
     <script type="text/javascript">
         const incidenciasData = JSON.parse('{{ incidencias|escapejs }}');

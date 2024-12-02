@@ -1,0 +1,75 @@
+.soportebar {
+  background-color: #005073 !important;
+  padding: 20px;
+  display: flex !important;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda la altura de la ventana */
+  width: 100%;
+  overflow-y: auto;
+  box-sizing: border-box; /* Asegura que el padding no afecte la altura */
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+}
+
+.logo-text {
+  color: white !important;
+  font-size: 30px;
+  text-align: center;
+  font-style: oblique;
+  display: flex;
+  margin-bottom: 0 !important;
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar-menu {
+  margin-top: 20%;
+  list-style: none;
+  padding: 10px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sidebar-item {
+  margin-top: 10%;
+  margin-bottom: 10%;
+  padding: 10px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+}
+
+.sidebar-item:hover {
+  background-color: #34495e;
+  padding-left: 10px;
+  transition: 0.3s;
+}
+
+.sidebar-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-text {
+  display: flex;
+}
+
+.textItem {
+  display: flex;
+  align-items: center;
+}
+
+.textoS {
+  align-self: center;
+  margin-bottom: 0 !important;
+  margin-left: 5px;
+}
