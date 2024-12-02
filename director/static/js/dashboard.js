@@ -1,6 +1,21 @@
 // dashboard.js
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     // Inicialización de modales
     const incidenciaModalElement = document.getElementById('incidenciaModal');
     const incidenciaModal = new bootstrap.Modal(incidenciaModalElement);
@@ -64,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Manejo del botón "Confirmar Asignación"
     const confirmarAsignacionBtn = document.getElementById('confirmar-asignacion-btn');
     if (confirmarAsignacionBtn) {
         confirmarAsignacionBtn.addEventListener('click', function () {
@@ -76,15 +90,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Aquí puedes realizar una solicitud AJAX para asignar el usuario al backend
-            // Por ahora, solo se muestra en la consola
+
             console.log(`Asignación: Incidencia ID: ${incidenciaId}, Usuario ID: ${usuarioSeleccionado}`);
 
-            // Opcional: Mostrar una notificación al usuario
-            alert(`Usuario asignado correctamente a la incidencia ${incidenciaId}.`);
-
-            // Cerrar el modal
-            asignarUsuarioModal.hide();
+            fetch('/director/asignarUsuario/', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    ID_asignar: incidenciaId,
+                    usuario_id: usuarioSeleccionado
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                asignarUsuarioModal.hide();
+                window.location.reload();
+            })
+            .catch(error => {
+                alert(`Error en la solicitud: ${error.message}`);
+            });
         });
     }
 

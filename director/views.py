@@ -9,29 +9,49 @@ from cuenta.models import Usuario
 import folium
 from django.http import JsonResponse, Http404
 from administrador.models import RegistroAuditoria
+import json
 
 
-def incidencias(request):
-    incidencia = Incidencia.objects.all()
-    usuarios = Usuario.objects.filter(rol='dep')
-    return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios})
+def asignarUsuario(request):
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del cuerpo de la solicitud
+            data = json.loads(request.body)  # Cargar los datos JSON enviados
+            id_asignar = data.get('ID_asignar')
+            usuario_id = data.get('usuario_id')
 
+            # Verificar que los datos no sean None o vacíos
+            if not id_asignar or not usuario_id:
+                return JsonResponse({'error': 'Faltan datos'}, status=400)
 
-def asignarUsuario (request):
-    user_id = request.COOKIES.get('user_id')
-    id_incidencia = request.POST.get('ID_asignar')
+            # Intentar convertir los datos a enteros
+            try:
+                id_asignar = int(id_asignar)
+                usuario_id = int(usuario_id)
+            except ValueError:
+                return JsonResponse({'error': 'ID_asignar y usuario_id deben ser números enteros'}, status=400)
 
-    usuario_id = request.POST.get('usuario_id')
+            # Buscar la incidencia
+            try:
+                incidencia = Incidencia.objects.get(id=id_asignar)
+            except Incidencia.DoesNotExist:
+                return JsonResponse({'error': 'Incidencia no encontrada'}, status=404)
 
-    incidencia = Incidencia.objects.get(id=id_incidencia)
-    crear_registro(id_incidencia,incidencia.estado,'asignada',"La incidencia se ah asginado",user_id)
+            # Actualizar la incidencia
+            crear_registro(id_asignar,incidencia.estado,'asignada',"La incidencia se ha asignado",user_id)
+            incidencia.id_usuario_departamento = usuario_id
+            incidencia.estado = 'asignada'
+            incidencia.save()
 
-    incidencia.id_usuario_departamento = usuario_id
-    incidencia.estado = 'asignada'
+            return JsonResponse({'message': 'Usuario asignado correctamente'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Error al procesar JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
     
-    incidencia.save()
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-    return redirect('director:incidencias')
 
 def deshacerAsignacion(request,id):
     user_id = request.COOKIES.get('user_id')
@@ -44,7 +64,7 @@ def deshacerAsignacion(request,id):
     incidencia.estado = 'iniciada'
     incidencia.save()
 
-    return redirect('director:incidencias')
+    return redirect('director:dashboard')
 
 
 def rechazarIncidencia(request):
@@ -117,9 +137,9 @@ def dashboard(request):
     user_name = request.COOKIES.get('user_name')
     
     # Filtrar incidencias con estado 'iniciada' y optimizar consultas
-    incidencias = Incidencia.objects.filter(estado='iniciada')\
-                                    .select_related()\
-                                    .prefetch_related('registros_auditoria__idUsuario')
+    incidencias = Incidencia.objects.exclude(estado='rechazada')\
+        .select_related()\
+        .prefetch_related('registros_auditoria__idUsuario')
     
     usuarios_departamento = Usuario.objects.filter(rol='Departamento de obras')
     

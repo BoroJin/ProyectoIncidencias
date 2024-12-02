@@ -15,7 +15,7 @@
                 <!-- Contenedor de la Tabla -->
                 <div class="card flex-fill me-3">
                     <div class="card-header">
-                        <span>Incidencias Iniciadas</span>
+                        <span>Incidencias</span>
                     </div>
                     <div class="card-body">
                         <div class="list-group">
@@ -93,9 +93,9 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="asignar-btn" data-bs-toggle="modal" data-bs-target="#asignarUsuarioModal">Asignar</button>
-                <button type="button" class="btn btn-danger" id="rechazar-btn" data-bs-toggle="modal" data-bs-target="#rechazarConfirmacionModal">Rechazar</button>
+                <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-custom" id="asignar-btn" data-bs-toggle="modal" data-bs-target="#asignarUsuarioModal">Asignar</button>
+                <button type="button" class="btn btn-eliminar" id="rechazar-btn" data-bs-toggle="modal" data-bs-target="#rechazarConfirmacionModal">Rechazar</button>
             </div>
         </div>
     </div>
@@ -107,11 +107,11 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="asignarUsuarioLabel">Asignar Resolutor</h5>
+                <h5 class="modal-title" id="asignarUsuarioLabel">Asignar Departamento de obras</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="asignar-form" method="post" action="{% url 'director:asignarUsuario' %}">
+                <form id="asignar-form">
                     <div class="mb-3">
                         <label for="usuario-select" class="form-label">Seleccione un usuario</label>
                         <select class="form-select" id="usuario-select" name="usuario_id">
