@@ -13,88 +13,120 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light sidebar">
-            <!-- actualizar logo de manera dinamica -->
-            <a class="navbar-brand" href="{% url 'adm_principal' %}">
-                <img src="{{ logo }}" alt="Logo Muni">
-                {{ nombre_municipalidad }}
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <!-- Logo y título -->
+            <a class="navbar-brand d-flex align-items-center logo-container" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/2228/2228497.png" alt="Logo Municipalidad" class="logo">
+                <span class="ms-2">Municipalidad</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Bienvenido Administrador
-                            <img
-                                src="https://icons.veryicon.com/png/o/miscellaneous/icon-the-back-office-management-system/administrator-role-management.png">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-    <div class="container text-center mt-4">
-        <h2>Seleccione una operacion a realizar</h2>
+            <!-- Relleno flexible para empujar a la derecha -->
+            <div class="user-container ms-auto d-flex align-items-center">
+                <span class="navbar-text me-2">{{ user_name }}</span>
+                <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Barra lateral -->
+<div class="sidebar p-3" id="barraLateral">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'adm_principal' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" class="card-img-top img-small" alt="editar" width="24" height="24">
+                    <span class="ms-2">Inicio</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_actualizar_logo' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Actualizar logo</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_gestion_usuarios' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1570/1570102.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Gestión de usuarios</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'adm_ticket' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16949/16949686.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Tickets</span>
+                </div>
+            </a>
+            <a class="nav-link" href="{% url 'registro-auditoria' %}">
+                <div class="d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/10811/10811965.png" class="card-img-top img-small" width="24" height="24">
+                    <span class="ms-2">Registros de auditoría</span>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+    
+    
+
+    <!-- Botón flotante para soporte técnico -->
+    <a href="#" class="btn btn-float">
+        <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
+    </a>
+    <div id="contenidoPrincipal">
+        <main class="row">
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Incidencias Activas</header>
+                        <div class="card-body">
+                            <canvas id="incidenciasChart" aria-label="Gráfico de incidencias activas por categorías" role="img"></canvas>
+                        </div>
+                 </div>
+            </section>  
+            <section class="col-md-5">
+                <div class="card">
+                    <header class="card-header">Gráfico de Tiempo Inconcluso</header>
+                        <div class="card-body">
+                            <canvas id="histogramaTiempos"></canvas>
+                        </div>
+                </div>
+        </main>
     </div>
 
-    <main role="main" class="col-md-9 ">
+
+
+    <!-- Footer -->
+<footer class="footer mt-auto py-3">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-
-                <a href="{% url 'adm_actualizar_logo' %}" class="card mb-4 text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/73131/edit-button.svg" class="card-img-top" alt="editar">
-                    <div class="card-body">
-                        <h5 class="card-title">Actualizar logo</h5>
-                    </div>
-                </a>
+            <div class="col-md-6 text-center text-md-start">
+                <span>&copy; 2024 Municipalidad. Todos los derechos reservados.</span>
             </div>
-            <div class="col-md-4">
-
-                <a href="{% url 'adm_gestion_usuarios' %}" class="card mb-4 text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/486504/user-management-filled.svg" class="card-img-top"
-                        alt="gestion">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestion de usuarios</h5>
-                    </div>
-                </a>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="#" class="footer-link">Política de Privacidad</a>
+                <span class="mx-2">|</span>
+                <a href="#" class="footer-link">Términos de Servicio</a>
+                <span class="mx-2">|</span>
+                <a href="#" class="footer-link">Contacto</a>
             </div>
-            <div class="col-md-4">
+        </div>
+    </div>
+</footer>
 
-                <a href="{% url 'adm_ticket' %}" class="card mb-4 text-decoration-none">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeujOaRWnmiTkG15-RkZrieVZ_JKumVf1CPQ&s"
-                        class="card-img-top" alt="notificaciones">
-                    <div class="card-body">
-                        <h5 class="card-title">Tickets</h5>
-                    </div>
-                </a>
-            </div>
 
-            <div class="row justify-content-center">
-                <div class="col-md-4 mt-4">
-                    <a href="{% url 'registro-auditoria' %}" class="card mb-4 text-decoration-none">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQforQ_2ChYPq7yKFMF5s7qWGlZ0uQ8iIGU6Q&s"
-                            class="card-img-top" alt="auditoria">
-                        <div class="card-body">
-                            <h5 class="card-title">Registros de auditoría</h5>
-                        </div>
-                    </a>
-                </div>
+<!-- Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            </div>
-    </main>
+<!-- Leaflet JS para el mapa -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <footer class="footer text-center py-4">
-        <p>Si puede leer esto es que funcionó :D</p>
-        <p>si no, Error de capa 8 D:</p>
-    </footer>
+<!-- Archivos JS personalizados -->
+<script src="{% static 'js/graficos.js' %}"></script>
+<script id="incidencia-data" type="application/json">
+    {{ incidencia_counts|json_script:"incidencia-data" }}
+</script>
 </body>
-
-<!-- Enlace a jQuery y Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

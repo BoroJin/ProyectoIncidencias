@@ -16,7 +16,10 @@ from django.core.paginator import Paginator
 
 
 def adm_principal(request):
-    return render(request, 'administrador/Adm_principal.html')
+    global user_id, user_name
+    user_id = request.COOKIES.get('user_id')
+    user_name = request.COOKIES.get('user_name')
+    return render(request, 'administrador/Adm_principal.html',{'user_name': user_name})
 
 def adm_ticket(request):
     tickets = Ticket.objects.select_related('usuario').all()  # Incluye datos del usuario relacionado
