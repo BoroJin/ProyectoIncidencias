@@ -11,6 +11,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const rechazarConfirmacionModalElement = document.getElementById('rechazarConfirmacionModal');
     const rechazarConfirmacionModal = new bootstrap.Modal(rechazarConfirmacionModalElement);
 
+    // Función para obtener el CSRF token desde las cookies
+    function getCSRFToken() {
+        let cookieValue = null;
+        const name = 'csrftoken';
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     // Referencias a elementos del modal de incidencia
     const modalElements = {
         id: incidenciaModalElement.querySelector('#modal-id'),
@@ -76,15 +92,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Aquí puedes realizar una solicitud AJAX para asignar el usuario al backend
-            // Por ahora, solo se muestra en la consola
-            console.log(`Asignación: Incidencia ID: ${incidenciaId}, Usuario ID: ${usuarioSeleccionado}`);
+            // Configura los datos que deseas enviar
+            const formData = new FormData();
+            formData.append('ID_asignar', incidenciaId);  // Asegúrate de que el nombre coincida con lo esperado en la vista
+            formData.append('usuario_id', usuarioSeleccionado);
 
-            // Opcional: Mostrar una notificación al usuario
-            alert(`Usuario asignado correctamente a la incidencia ${incidenciaId}.`);
-
-            // Cerrar el modal
-            asignarUsuarioModal.hide();
+            // Realiza una solicitud AJAX usando fetch
+            fetch('/director/asignar-usuario/', {  // Ajusta la URL según tus rutas
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(), // Incluye el CSRF token para seguridad
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Respuesta del servidor:', data.message);
+                    alert(`Usuario asignado correctamente a la incidencia ${incidenciaId}.`);
+                    asignarUsuarioModal.hide();
+                    // Opcional: Actualiza la lista de incidencias o el estado en la UI
+                    location.reload(); // Recarga la página para reflejar los cambios
+                } else {
+                    console.error('Error del servidor:', data.message);
+                    alert(`Error: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+                alert('Hubo un problema al asignar el usuario.');
+            });
         });
     }
 

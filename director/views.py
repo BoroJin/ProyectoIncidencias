@@ -17,21 +17,28 @@ def incidencias(request):
     return render(request,'director/incidencias.html',{'incidencia':incidencia, 'usuarios':usuarios, 'user_name': user_name})
 
 
-def asignarUsuario (request):
-    user_id = request.COOKIES.get('user_id')
-    id_incidencia = request.POST.get('ID_asignar')
-
+def asignarUsuario(request):
+    # Obtener datos del POST
+    id_incidencia = request.POST.get('ID_asignar')  # Asegúrate de enviar 'ID_asignar' desde JS
     usuario_id = request.POST.get('usuario_id')
+    user_id = request.COOKIES.get('user_id')  # Considera obtener el user_id de request.user si usas autenticación
 
-    incidencia = Incidencia.objects.get(id=id_incidencia)
-    crear_registro(id_incidencia,incidencia.estado,'asignada',"La incidencia se ah asginado",user_id)
+    # Validar datos
+    if not id_incidencia or not usuario_id:
+        return JsonResponse({'status': 'error', 'message': 'Datos incompletos.'}, status=400)
 
+    # Obtener la incidencia o devolver error 404
+    incidencia = get_object_or_404(Incidencia, id=id_incidencia)
+
+    # Asignar el usuario y actualizar el estado
     incidencia.id_usuario_departamento = usuario_id
     incidencia.estado = 'asignada'
-    
     incidencia.save()
 
-    return redirect('director:incidencias')
+    # Crear un registro de la asignación (implementa tu propia lógica)
+    crear_registro(id_incidencia, incidencia.estado, 'asignada', "La incidencia ha sido asignada", user_id)
+
+    return JsonResponse({'status': 'success', 'message': 'Usuario asignado correctamente.'})
 
 def deshacerAsignacion(request,id):
     user_id = request.COOKIES.get('user_id')
@@ -109,8 +116,6 @@ def activar_formulario(request, formulario_id):
         formulario.save()
         return redirect('director:ver_formularios')
 
-from django.shortcuts import render
-import folium
 
 def dashboard(request):
     global user_id, user_name
