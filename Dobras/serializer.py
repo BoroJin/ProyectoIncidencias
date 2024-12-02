@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from.models import Usuario, Incidencia, RegistroAsignacion
+from gestor_territorial.models import Incidencia
+from cuenta.models import Usuario
+from administrador.models import RegistroAuditoria
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,7 +17,6 @@ class IncidenciaSerializer(serializers.ModelSerializer):
 
 class RegistroAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RegistroAsignacion
+        model = RegistroAuditoria
         fields = '__all__'
         read_only_fields = ['id']
-

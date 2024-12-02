@@ -4,7 +4,7 @@ import "../App.css";
 import Card from "../components/Card";
 import BigCard from "../components/BigCard";
 import { getAllIncidencias, assignResolutor } from "../api/incidencias.api";
-import { initMap } from "../api/mapa";
+import { initMap, addMarkers, focusMarker } from "../api/mapa"; // Asegúrate de importar las funciones necesarias.
 
 const AsignarResolutor = () => {
   const [incidencias, setIncidencias] = useState([]);
@@ -18,18 +18,27 @@ const AsignarResolutor = () => {
 
     async function fetchIncidencias() {
       const res = await getAllIncidencias();
-      setIncidencias(res.data.filter((i) => i.estado === "aprobada"));
+      setIncidencias(res.data);
+
+      // Agregar marcadores al mapa.
+      if (res.data.length > 0) {
+        addMarkers(res.data); // Agregar marcadores para las incidencias.
+      }
     }
+
     fetchIncidencias();
 
     async function fetchResolutores() {
       try {
-        const res = await fetch("http://127.0.0.1:8000/urls/resolutores/");
+        const res = await fetch("http://127.0.0.1:8000/urls/api/v1/usuarios/");
         if (!res.ok) {
           throw new Error(`Error en la solicitud: ${res.statusText}`);
         }
         const data = await res.json();
-        setResolutores(data);
+        const resolutoresFiltrados = data.filter(
+          (usuario) => usuario.rol === "Resolutor"
+        );
+        setResolutores(resolutoresFiltrados);
       } catch (error) {
         console.error("Error al cargar resolutores:", error);
       }
@@ -68,6 +77,10 @@ const AsignarResolutor = () => {
     });
   };
 
+  const handleIncidenciaClick = (id) => {
+    focusMarker(id); // Centra el mapa en el marcador correspondiente.
+  };
+
   return (
     <div className="flex-container">
       <div className="card-wrapper">
@@ -92,7 +105,11 @@ const AsignarResolutor = () => {
               </thead>
               <tbody>
                 {incidencias.map((incidencia) => (
-                  <tr key={incidencia.id}>
+                  <tr
+                    key={incidencia.id}
+                    onClick={() => handleIncidenciaClick(incidencia.id)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>{incidencia.id}</td>
                     <td>{incidencia.titulo_Incidencia}</td>
                     <td>
