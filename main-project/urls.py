@@ -33,6 +33,8 @@ urlpatterns = [
     path('director/', include('director.urls')),
     path('urls/', include('Dobras.urls')),
     path('depto-obras/', views.departamentoObra, name='depto-obras'),
+    path('ticket/', views.ticket, name='ticket'),
+    path('base/', views.base, name='base'),
     path('', views.login, name='login'),
 ]
 if settings.DEBUG:
