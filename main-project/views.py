@@ -10,3 +10,7 @@ def departamentoObra(request):
 
 def ticket(request):
     return render(request, 'ticket/build/index.html')
+
+def base(request):
+    return render(request, 'main-project/templates/base.html')
+

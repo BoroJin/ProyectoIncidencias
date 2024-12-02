@@ -97,9 +97,9 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mega',
+        'NAME': 'Desarrolloweb1',
         'USER': 'postgres',
-        'PASSWORD': 'operacion7',
+        'PASSWORD': 'lolandmine1',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -151,7 +151,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
     os.path.join(BASE_DIR, 'DepartamentoObras', 'dist'),
     os.path.join(BASE_DIR, 'ticket', 'build', 'static'),
-
+    os.path.join(BASE_DIR, 'main-project', 'static'),
+    
     ]
 
 
@@ -172,4 +173,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'recuperar123456789hola@gmail.com'        
 EMAIL_HOST_PASSWORD = 'bgvy jwai wgka fxaq'         
+      
 
