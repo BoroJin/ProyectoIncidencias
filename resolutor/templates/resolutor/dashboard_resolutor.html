@@ -42,7 +42,7 @@
     </div>
 
     <!-- Botón flotante para soporte técnico -->
-    <a href="http://127.0.0.1:8000/ticket/" class="btn btn-float">
+    <a href="{% url 'simularAsignacion' %}" class="btn btn-float">
         <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
     </a>
 
@@ -150,7 +150,7 @@
     
 
     <!-- Modal de Incidencia en proceso -->
-    <div class="modal fade" id="incidenciaModalProceso" tabindex="-1" aria-labelledby="incidenciaModalProceso" aria-hidden="true">
+    <<div class="modal fade" id="incidenciaModalProceso" tabindex="-1" aria-labelledby="incidenciaModalProceso" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="incidenciaForm" enctype="multipart/form-data">
@@ -177,10 +177,10 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-warning me-2" id="btnInconcluso">Inconcluso</button>
-                        <button type="button" class="btn btn-success me-2" id="btnFinalizado">Finalizado</button>
-                        <button type="submit" class="btn btn-primary d-none" id="btnEnviar" >Enviar</button>
+                        <button type="button" class="btn-custom" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn-custom" id="btnInconcluso">Inconcluso</button>
+                        <button type="button" class="btn-custom" id="btnFinalizado">Finalizado</button>
+                        <button type="submit" class="btn-custom d-none" id="btnEnviar">Enviar</button>
                     </div>
                 </form>
             </div>

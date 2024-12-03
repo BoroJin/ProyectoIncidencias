@@ -26,6 +26,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const rechazarConfirmacionModalElement = document.getElementById('rechazarConfirmacionModal');
     const rechazarConfirmacionModal = new bootstrap.Modal(rechazarConfirmacionModalElement);
 
+    // Función para obtener el CSRF token desde las cookies
+    function getCSRFToken() {
+        let cookieValue = null;
+        const name = 'csrftoken';
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     // Referencias a elementos del modal de incidencia
     const modalElements = {
         id: incidenciaModalElement.querySelector('#modal-id'),

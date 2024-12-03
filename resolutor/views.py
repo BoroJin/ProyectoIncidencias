@@ -13,7 +13,9 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from administrador.views import crear_registro_auditoria
 from django.utils.dateformat import format
+from django.contrib.auth import get_user_model
 import json
+from random import uniform
 
 def dashboard_resolutor(request):
     global user_id, user_name
@@ -72,29 +74,54 @@ def simular_creacion_incidencias(request):
         incidencia.save()
 
     return JsonResponse({"resultado": "Incidencias simuladas creadas exitosamente."})
+User = get_user_model()
 
 def simular_asignacion(request):
-    incidencias = Incidencia.objects.all().order_by('id')  # Ordena por el campo `id`
-    
+    user_id = request.COOKIES.get('user_id')
+    # Validar que el usuario asignado exista
+    try:
+        resolutor = User.objects.get(id=user_id, rol='Resolutor')  # Asegurarse de que sea un Resolutor
+    except User.DoesNotExist:
+        return JsonResponse({"error": "El usuario resolutor no existe o no tiene el rol adecuado"}, status=400)
+
+    # Crear 3 incidencias simuladas si no existen
+    if not Incidencia.objects.exists():
+        for i in range(3):
+            Incidencia.objects.create(
+                titulo=f"Incidencia {i + 1}",
+                descripcion=f"Descripción de la incidencia {i + 1}",
+                urgencia="Media",
+                estado="pendiente",
+                fecha_reporte=now(),
+                latitud=uniform(-90, 90),  # Generar una latitud aleatoria
+                longitud=uniform(-180, 180),  # Generar una longitud aleatoria
+                resolutor_asignado=None  # No asignado inicialmente
+            )
+
+    # Obtener todas las incidencias para simular la asignación
+    incidencias = Incidencia.objects.all().order_by('id')
+
     for incidencia in incidencias:
         print(f"ID: {incidencia.id}")
-        print(f"Título: {incidencia.titulo_Incidencia}")
+        print(f"Título: {incidencia.titulo}")
         print(f"Estado: {incidencia.estado}")
         print(f"Urgencia: {incidencia.urgencia}")
         print(f"Descripción: {incidencia.descripcion}")
-        print(f"Fecha de Reporte: {incidencia.fecha_Reporte}")
+        print(f"Fecha de Reporte: {incidencia.fecha_reporte}")
         print(f"Latitud: {incidencia.latitud}")
         print(f"Longitud: {incidencia.longitud}")
-        print(f"Resolutor Asignado: {incidencia.resolutor_Asignado}")
+        print(f"Resolutor Asignado: {incidencia.resolutor_asignado}")
         print("-" * 50)  # Línea separadora para claridad
-        incidencia = Incidencia.objects.get(id=incidencia.id)
-        incidencia.resolutor_Asignado = user_id
-        incidencia.titulo_Incidencia = "Titulo simulado"
+
+        # Actualizar la incidencia con datos simulados
+        incidencia.resolutor_asignado = resolutor
+        incidencia.titulo = "Título simulado"
         incidencia.estado = "asignada"
-        incidencia.descripcion = "Descripcion simulada"
-        incidencia.fecha_Reporte = now()
+        incidencia.descripcion = "Descripción simulada"
+        incidencia.fecha_reporte = now()
         incidencia.save()
-    return JsonResponse({"resultados": "Asignadas"})
+
+    return JsonResponse({"resultados": "Incidencias asignadas con éxito"})
 ###
 # 
 # 
