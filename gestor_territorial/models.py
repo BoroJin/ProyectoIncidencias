@@ -8,6 +8,7 @@ class Incidencia(models.Model):
     multimedia_gestor= models.FileField(upload_to='incidencias/adjuntos/gestor', blank=True, null=True)  # Archivos adjuntos
     id_usuario_gestorTerritorial = models.IntegerField(null=True, blank=True)
     titulo_Incidencia = models.CharField(max_length=200)
+    comentarios = models.TextField(blank=True, null=True)
     
     # Actualización de ESTADO_CHOICES con las nuevas opciones
     ESTADO_CHOICES = [

@@ -12,4 +12,5 @@ urlpatterns = [
     path('lista_incidencias/obtener_incidencia/<int:incidencia_id>/', views.obtener_incidencia, name='obtener_incidencia'),
     path('obtener_incidencia/<int:incidencia_id>/', views.obtener_incidencia, name='obtener_incidencia'),
     path('reenviarIncidencia/', views.reenviarIncidencia, name='reenviarIncidencia'),
+    path('cambiar_estado/', views.cambiar_estado, name='cambiar_estado'),
 ]

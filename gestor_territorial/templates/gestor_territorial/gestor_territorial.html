@@ -1,11 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es"></html>
+<html lang="es">
+
+</html>
 
 <head>
     <!-- Meta tags para la configuración del documento -->
-    <meta charset="UTF-8"> <!-- Define la codificación de caracteres como UTF-8, importante para la correcta visualización de caracteres especiales -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que el sitio sea responsive (ajustable en dispositivos móviles) -->
+    <meta charset="UTF-8">
+    <!-- Define la codificación de caracteres como UTF-8, importante para la correcta visualización de caracteres especiales -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Hace que el sitio sea responsive (ajustable en dispositivos móviles) -->
     <meta name="csrf-token" content="{{ csrf_token }}"> <!-- Token CSRF para protección contra ataques CSRF -->
     <title>Gestor Territorial</title> <!-- Título de la página que se muestra en la pestaña del navegador -->
 
@@ -27,134 +31,222 @@
         <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="{{ logo }}"alt="Logo Municipalidad" class="logo">
+                    <img src="{{ logo }}" alt="Logo Municipalidad" class="logo">
                     <span class="ms-2">{{ nombre_municipalidad }}</span>
                 </a>
                 <div class="d-flex align-items-center ms-auto">
                     <span class="navbar-text">{{ user_name }}</span>
-                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario" class="user-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="Icono Usuario"
+                        class="user-icon">
                 </div>
             </div>
         </nav>
     </header>
 
-    
+
     <main>
 
-    <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-            <!-- Sidebar de navegación lateral -->
-            <div class="col-md-3 col-lg-2 sidebar p-3">
-                <a class="nav-sel" href="#">Inicio</a> <!-- Enlace al inicio -->
-                <ul class="nav flex-column">
-                    <!-- Enlace a la lista de incidencias -->
-                    <a class="nav-link" href="{% url 'lista_incidencias' %}">Lista de Incidencias rechazadas</a>
-                </ul>
-            </div>
-
-            <!-- Formulario emergente (popup) para ingresar incidencias -->
-            <div id="formulario" class="popup" style="display: none;">
-                <div class="popup-contenido">
-                    <h2>Formulario de Incidencias</h2> <!-- Título del formulario emergente -->
-                    <div id="formulario-contenido">
-                        <!-- Token CSRF para evitar ataques -->
-                        {% csrf_token %}
-                        <!-- Se incluirá el formulario de incidencias -->
-                        {% include './partials/formulario.html' %}
-                    </div>
-                    <!-- Botón para cerrar el formulario emergente -->
-                    <span class="cerrar" onclick="closeFormPopup()">&times;</span>
+                <!-- Sidebar de navegación lateral -->
+                <div class="col-md-3 col-lg-2 sidebar p-3">
+                    <a class="nav-sel" href="#">Inicio</a> <!-- Enlace al inicio -->
+                    <ul class="nav flex-column">
+                        <!-- Enlace a la lista de incidencias -->
+                        <a class="nav-link" href="{% url 'lista_incidencias' %}">Lista de Incidencias rechazadas</a>
+                    </ul>
                 </div>
-            </div>
 
-            <!-- Contenedor principal de contenido -->
-            <div class="col-md-9 col-lg-10 p-4">
-                <div class="row">
+                <!-- Formulario emergente (popup) para ingresar incidencias -->
+                <div id="formulario" class="popup" style="display: none;">
+                    <div class="popup-contenido">
+                        <h2>Formulario de Incidencias</h2> <!-- Título del formulario emergente -->
+                        <div id="formulario-contenido">
+                            <!-- Token CSRF para evitar ataques -->
+                            {% csrf_token %}
+                            <!-- Se incluirá el formulario de incidencias -->
+                            {% include './partials/formulario.html' %}
+                        </div>
+                        <!-- Botón para cerrar el formulario emergente -->
+                        <span class="cerrar" onclick="closeFormPopup()">&times;</span>
+                    </div>
+                </div>
 
-                    <!-- Sección del mapa -->
-                    <div class="col-md-12">
-                        <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span>Mapa</span> <!-- Título del mapa -->
-                                <div>
-                                    <!-- Instrucción para añadir un marcador al mapa -->
-                                    <span>[Haga click para añadir un marcador]</span>
+                <!-- Contenedor principal de contenido -->
+                <div class="col-md-9 col-lg-10 p-4">
+                    <div class="row">
+
+                        <!-- Sección del mapa -->
+                        <div class="col-md-12">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>Mapa</span> <!-- Título del mapa -->
+                                    <div>
+                                        <!-- Instrucción para añadir un marcador al mapa -->
+                                        <span>[Haga click para añadir un marcador]</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <!-- Contenedor del mapa -->
-                                <div id="map"></div>
-                                <div id="buttons">
-                                    <!-- Botón para eliminar un marcador del mapa -->
-                                    <button id="removeMarker" class="custom-button1">Eliminar Marcador</button>
-                                    <!-- Botón para abrir el formulario emergente -->
-                                    <button id="openPopup" class="custom-button2">Rellenar Formulario</button>
+                                <div class="card-body">
+                                    <!-- Contenedor del mapa -->
+                                    <div id="map"></div>
+                                    <div id="buttons">
+                                        <!-- Botón para eliminar un marcador del mapa -->
+                                        <button id="removeMarker" class="custom-button1">Eliminar Marcador</button>
+                                        <!-- Botón para abrir el formulario emergente -->
+                                        <button id="openPopup" class="custom-button2">Rellenar Formulario</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                <!-- Tabla de incidencias -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span>Incidencias POR VERIFICAR</span> <!-- Título de la tabla de incidencias -->
-                            </div>
+                        <!-- Tabla de incidencias -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Incidencias POR VERIFICAR</span>
+                                        <!-- Título de la tabla de incidencias -->
+                                    </div>
 
-                            <div class="card-body">
-                                <div id="tableView">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <!-- Encabezados de las columnas de la tabla -->
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Nombre de Incidencia</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Tipo</th>
-                                                <th scope="col">Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Itera sobre las incidencias y las muestra en la tabla -->
-                                            {% for incidencia in incidencias %}
-                                            <tr id="incidencia-{{ incidencia.id }}">
-                                                <td>{{ incidencia.id }}</td> <!-- ID de la incidencia -->
-                                                <td>{{ incidencia.titulo_Incidencia }}</td> <!-- Nombre de la incidencia -->
-                                                <td>{{ incidencia.estado }}</td> <!-- Estado de la incidencia -->
-                                                <td>{{ incidencia.tipo }}</td> <!-- Tipo de incidencia -->
-                                                <td>
-                                                    <!-- Botón para ver los detalles de la incidencia -->
-                                                    <button class="btn btn-sm btn-detalle" data-id="{{ incidencia.id }}">Ver detalles</button>
-                                                    <script type="text/javascript">
-                                                        console.log("ID de incidencia: {{ incidencia.id }}"); //  verificar que se está imprimiendo el valor correcto
-                                                    </script>
-                                                    <!-- Botón para verificar la incidencia -->
-                                                    <button class="btn btn-sm btn-verificar" data-id="{{ incidencia.id }}">Verificación</button>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                                    <div class="card-body">
+                                        <div id="tableView">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- Encabezados de las columnas de la tabla -->
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">Nombre de Incidencia</th>
+                                                        <th scope="col">Estado</th>
+                                                        <th scope="col">Tipo</th>
+                                                        <th scope="col">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Itera sobre las incidencias y las muestra en la tabla -->
+                                                    {% for incidencia in incidencias %}
+                                                    <tr id="incidencia-{{ incidencia.id }}">
+                                                        <td>{{ incidencia.id }}</td> <!-- ID de la incidencia -->
+                                                        <td>{{ incidencia.titulo_Incidencia }}</td>
+                                                        <!-- Nombre de la incidencia -->
+                                                        <td>{{ incidencia.estado }}</td>
+                                                        <!-- Estado de la incidencia -->
+                                                        <td>{{ incidencia.tipo }}</td> <!-- Tipo de incidencia -->
+                                                        <td>
+                                                            <!-- Botón para ver los detalles de la incidencia -->
+                                                            <button class="btn btn-sm btn-detalle"
+                                                                data-id="{{ incidencia.id }}">Ver detalles</button>
+                                                            <script type="text/javascript">
+                                                                console.log("ID de incidencia: {{ incidencia.id }}"); //  verificar que se está imprimiendo el valor correcto
+                                                            </script>
+                                                            <!-- Botón para verificar la incidencia -->
+                                                            <button class="btn btn-sm btn-verificar"
+                                                                data-id="{{ incidencia.id }}">Verificación</button>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- Modal para verificación -->
+                                        <div class="modal" id="modalVerificacion" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Verificar incidencia</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>¿Desea verificar o rechazar esta solución?</p>
+                                                        <button id="btnRechazar"
+                                                            class="btn btn-rechazar">Rechazar</button>
+                                                        <button id="btnVerificar"
+                                                            class="btn btn-confirmar">Verificar</button>
+
+                                                        <!-- Formulario de rechazo -->
+                                                        <div id="formRechazo" class="mt-3" style="display: none;">
+                                                            {% csrf_token %}
+                                                            <textarea id="razonRechazo" class="form-control" rows="4"
+                                                                placeholder="Escriba la razón del rechazo aquí"></textarea>
+                                                            <button id="btnEnviarRechazo"
+                                                                class="btn custom-button1 mt-3">Enviar razón de
+                                                                rechazo</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal de Detalles -->
+                                        <div class="modal fade" id="modalDetalles" tabindex="-1"
+                                            aria-labelledby="modalDetallesLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <!-- Puedes ajustar el tamaño del modal si es necesario -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalDetallesLabel">Detalles de la
+                                                            Incidencia</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>ID:</strong> <span id="detallesId"></span></p>
+                                                        <p><strong>Título:</strong> <span id="detallesTitulo"></span>
+                                                        </p>
+                                                        <p><strong>Estado:</strong> <span id="detallesEstado"></span>
+                                                        </p>
+                                                        <p><strong>Tipo:</strong> <span id="detallesTipo"></span></p>
+                                                        <p><strong>Urgencia:</strong> <span
+                                                                id="detallesUrgencia"></span></p>
+                                                        <p><strong>Fecha de Reporte:</strong> <span
+                                                                id="detallesFechaReporte"></span></p>
+                                                        <p><strong>Descripción:</strong> <span
+                                                                id="detallesDescripcion"></span></p>
+                                                        <p><strong>Comentarios:</strong> <span
+                                                                id="detallesComentarios"></span></p>
+
+                                                        <!-- Nueva sección para imagen asociada -->
+                                                        <div>
+                                                            <strong>Imagen Asociada:</strong>
+                                                            <div class="d-flex-centered">
+                                                                <img id="detallesImagen" src=""
+                                                                    alt="Imagen de la incidencia"
+                                                                    style="display: none;">
+                                                            </div>
+                                                            <p id="detallesSinImagen" class="text-center"
+                                                                style="display: none;">No hay imagen asociada a esta
+                                                                incidencia.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn custom-button1"
+                                                            data-bs-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                    
-            </div>
-            
 
-    <!-- Botón flotante de soporte técnico -->
-    <a href="http://127.0.0.1:8000/ticket/" class="btn btn-float">
-        <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn"> Soporte técnico
-    </a>
-</main>
+                    </div>
+                    <!-- Botón flotante de soporte técnico -->
+                    <a href="http://127.0.0.1:8000/ticket/" class="btn btn-float">
+                        <img src="https://cdn-icons-png.freepik.com/512/2593/2593342.png" alt="Ícono" class="icono-btn">
+                        Soporte técnico
+                    </a>
+    </main>
     <!-- Carga de scripts necesarios -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Script de Bootstrap para funcionalidad -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script> <!-- Script de Leaflet para crear el mapa -->
-    <script src="{% static 'gestor_territorial/js/mapa.js' %}"></script> <!-- Script personalizado para funcionalidades del mapa -->
-    <script src="{% static 'gestor_territorial/js/gestor_territorial.js' %}"></script> <!-- Script personalizado para el gestor territorial -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script de Bootstrap para funcionalidad -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- Script de Leaflet para crear el mapa -->
+    <script src="{% static 'gestor_territorial/js/mapa.js' %}"></script>
+    <!-- Script personalizado para funcionalidades del mapa -->
+    <script src="{% static 'gestor_territorial/js/gestor_territorial.js' %}"></script>
+    <!-- Script personalizado para el gestor territorial -->
+    <script src="{% static 'gestor_territorial/js/incidencias.js' %}"></script> <!-- Script de las incidencias -->
 </body>
+
 </html>

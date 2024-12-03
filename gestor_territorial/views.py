@@ -203,9 +203,32 @@ def obtener_incidencia(request, incidencia_id):
             'urgencia': incidencia.urgencia,
             'fecha_Reporte': incidencia.fecha_Reporte.isoformat(),
             'descripcion': incidencia.descripcion,
-            'comentarios': ultimo_registro.comentario,
+            'comentarios': ultimo_registro.comentario if ultimo_registro else '',  # Manejar el caso donde no hay registro
             'multimedia_gestor': incidencia.multimedia_gestor.url if incidencia.multimedia_gestor else '',
         }
         return JsonResponse(data)
     except Incidencia.DoesNotExist:
         return JsonResponse({'error': 'Incidencia no encontrada'}, status=404)
+    
+def cambiar_estado(request):
+    if request.method == 'POST':
+        incidencia_id = request.POST.get('incidencia_id')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        comentario = request.POST.get('comentario', '')
+
+        try:
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+            incidencia.estado = nuevo_estado
+
+            if nuevo_estado == 'no verificada':
+                if incidencia.comentarios:
+                    incidencia.comentarios += f"\nRazón del rechazo: {comentario}"
+                else:
+                    incidencia.comentarios = f"Razón del rechazo: {comentario}"
+
+            incidencia.save()
+            return JsonResponse({'success': True})
+        except Incidencia.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Incidencia no encontrada'})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
