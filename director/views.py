@@ -52,7 +52,6 @@ def asignarUsuario(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-
 def deshacerAsignacion(request,id):
     user_id = request.COOKIES.get('user_id')
 
@@ -66,7 +65,6 @@ def deshacerAsignacion(request,id):
 
     return redirect('director:dashboard')
 
-
 def rechazarIncidencia(request):
 
     id_incidencia = request.POST.get('ID_rechazo')
@@ -78,7 +76,6 @@ def rechazarIncidencia(request):
     incidencia.resolutor_Asignado = None
     incidencia.save()
     return redirect('director:dashboard')
-
 
 def eliminar_formulario(request, formulario_id):
     formulario = Formulario.objects.get(id=formulario_id)
@@ -128,7 +125,6 @@ def activar_formulario(request, formulario_id):
         formulario.save()
         return redirect('director:ver_formularios')
 
-
 def dashboard(request):
     global user_id, user_name
     user_id = request.COOKIES.get('user_id')
@@ -174,7 +170,6 @@ def dashboard(request):
         'map': initial_map._repr_html_(),  # Mapa convertido a HTML para insertar en el template
     }
     return render(request, 'director/dashboard.html', context)
-
 
 def comentario_ultimo_registro(request, incidencia_id):
     incidencia = get_object_or_404(Incidencia, pk=incidencia_id)

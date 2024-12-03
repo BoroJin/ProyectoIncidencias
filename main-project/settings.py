@@ -97,9 +97,9 @@ WSGI_APPLICATION = 'main-project.wsgi.application'
 DATABASES = {  #base de datos para postgres /#aqui modificar a la de cada uno
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'xx',
+        'NAME': 'Desarrolloweb1',
         'USER': 'postgres',
-        'PASSWORD': 'operacion7',
+        'PASSWORD': 'lolandmine1',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -147,7 +147,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'resolutor', 'static', 'resolutor'),
+    os.path.join(BASE_DIR, 'resolutor', 'static','resolutor'),
     os.path.join(BASE_DIR, 'login', 'build', 'static'),
     os.path.join(BASE_DIR, 'DepartamentoObras', 'dist'),
     os.path.join(BASE_DIR, 'ticket', 'build', 'static'),
