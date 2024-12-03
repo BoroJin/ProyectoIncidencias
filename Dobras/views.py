@@ -15,7 +15,7 @@ class UsuarioView(viewsets.ModelViewSet):
 
 class IncidenciaView(viewsets.ModelViewSet):
     serializer_class = IncidenciaSerializer
-    queryset = Incidencia.objects.filter(estado="iniciada")
+    queryset = Incidencia.objects.filter(estado="asignada")
 
 class RegistroAuditoriaView(viewsets.ModelViewSet):
     serializer_class = RegistroAsignacionSerializer
