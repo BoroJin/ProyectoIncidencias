@@ -54,8 +54,8 @@ const ManualUsuario = () => {
                   etc.
                 </li>
                 <li className="listaItem">
-                  Director de obras: El director es el encargado de gestionar
-                  los equipos de trabajo de la aplicación. El será el
+                  Departamento de obras: El departamento es el encargado de
+                  gestionar los equipos de trabajo de la aplicación. El será el
                   responsable de designar al respectivo equipo resolutor
                   capacitado para cada incidencia.
                 </li>
@@ -70,6 +70,11 @@ const ManualUsuario = () => {
                   la misma, para finalmente ser revisada por el departamento y
                   definir si es que el cierre corresponde o si aún falta para
                   darla por finalizada.
+                </li>
+                <li className="listaItem">
+                  Director: Director es aquel que crea los formularios
+                  dinámicos, para su posterior uso por los gestores. Tambien
+                  puede visualizar las incidencias y rechazarlas.
                 </li>
               </ul>
             </div>
