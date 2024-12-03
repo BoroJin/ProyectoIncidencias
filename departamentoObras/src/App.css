@@ -21,7 +21,7 @@ body {
   /* top: 0; */
   /* left: 0; */
   width: 100%;
-  background: #315579;
+  background: linear-gradient(90deg, #1f3449, #315579); 
   color: white;
   padding: 10px 20px;
   /*z-index: 1000; */
