@@ -1,6 +1,21 @@
 // dashboard.js
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     // Inicialización de modales
     const incidenciaModalElement = document.getElementById('incidenciaModal');
     const incidenciaModal = new bootstrap.Modal(incidenciaModalElement);
@@ -80,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Manejo del botón "Confirmar Asignación"
     const confirmarAsignacionBtn = document.getElementById('confirmar-asignacion-btn');
     if (confirmarAsignacionBtn) {
         confirmarAsignacionBtn.addEventListener('click', function () {
@@ -92,35 +106,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Configura los datos que deseas enviar
-            const formData = new FormData();
-            formData.append('ID_asignar', incidenciaId);  // Asegúrate de que el nombre coincida con lo esperado en la vista
-            formData.append('usuario_id', usuarioSeleccionado);
 
-            // Realiza una solicitud AJAX usando fetch
-            fetch('/director/asignar-usuario/', {  // Ajusta la URL según tus rutas
+            console.log(`Asignación: Incidencia ID: ${incidenciaId}, Usuario ID: ${usuarioSeleccionado}`);
+
+            fetch('/director/asignarUsuario/', { 
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCSRFToken(), // Incluye el CSRF token para seguridad
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: formData
+                body: JSON.stringify({
+                    ID_asignar: incidenciaId,
+                    usuario_id: usuarioSeleccionado
+                })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    console.log('Respuesta del servidor:', data.message);
-                    alert(`Usuario asignado correctamente a la incidencia ${incidenciaId}.`);
-                    asignarUsuarioModal.hide();
-                    // Opcional: Actualiza la lista de incidencias o el estado en la UI
-                    location.reload(); // Recarga la página para reflejar los cambios
-                } else {
-                    console.error('Error del servidor:', data.message);
-                    alert(`Error: ${data.message}`);
-                }
+                asignarUsuarioModal.hide();
+                window.location.reload();
             })
             .catch(error => {
-                console.error('Error en la solicitud:', error);
-                alert('Hubo un problema al asignar el usuario.');
+                alert(`Error en la solicitud: ${error.message}`);
             });
         });
     }

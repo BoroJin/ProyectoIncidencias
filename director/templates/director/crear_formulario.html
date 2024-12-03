@@ -2,23 +2,27 @@
 {% block title %} Crear Formulario {% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Crear nuevo formulario</h1>
-    <div class="card-body">
-        <form method="POST" action="{% url 'director:crear_formulario' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="nombre">Nombre del formulario:</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
-            </div>
-            <div class="form-group text-center">
-                <button class="btn btn-custom btn-block" type="submit">Crear Formulario</button>
-            </div>
-        </form>
-    </div>
+<div class="container col-md-6 offset-md-3">
+    <div class="card">
+        <div class="card-header text-center">
+            <span>Crear nuevo formulario</span>
+        </div>
+        <div class="card-body text-center">
+            <form method="POST" action="{% url 'director:crear_formulario' %}">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingrese el nombre del formulario" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="descripcion">Descripción</label>
+                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Ingrese una descripción para su formulario"></textarea>
+                </div>
+                <div class="form-group text-center mb-3">
+                    <button class="btn btn-custom btn-block" type="submit">Crear Formulario</button>
+                </div>
+            </form>
+        </div>
+        </div>
 </div>
 {% endblock %}
