@@ -54,3 +54,9 @@
 .inputAsunto {
   margin-top: 0.7rem;
 }
+
+#listaManuales {
+  margin-top: 1rem;
+  font-size: 20px;
+  font-weight: 550;
+}

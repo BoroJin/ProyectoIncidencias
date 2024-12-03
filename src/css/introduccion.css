@@ -13,7 +13,7 @@
 }
 
 .textoTit {
-  font-family: "Playfair Display", serif;
+  font-family: Serif !important;
   font-size: 25px;
   letter-spacing: 2px;
   position: relative;

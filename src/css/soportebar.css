@@ -25,13 +25,13 @@
 }
 
 .sidebar-menu {
-  margin-top: 20%;
   list-style: none;
   padding: 10px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: center;
 }
 
 .sidebar-item {
@@ -60,6 +60,7 @@
 
 .logo-text {
   display: flex;
+  height: 100%;
 }
 
 .textItem {

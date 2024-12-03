@@ -8,14 +8,14 @@ import PreguntasFr from "./componentes/preguntasFr.js";
 import Tickets from "./componentes/tickets.js";
 import ChatUser from "./componentes/chatUsuario.js";
 import ChatWindow from "./componentes/chatSoporte.js";
-import Documentacion from "./componentes/documentacion.js";
-import manualUsuario from "./componentes/manualUsuario.js";
+import ManualUsuario from "./componentes/manuales.js";
 import "./css/soportebar.css";
 import "./css/introduccion.css";
 import "./css/aplicacion.css";
 import "./css/preguntasFr.css";
 import "./css/ticket.css";
 import "./css/chats.css";
+import "./css/manuales.css";
 function App() {
   return (
     <Router>
@@ -31,8 +31,7 @@ function App() {
             <Route path="/tickets" element={<Tickets />} />
             <Route path="/chatUsuario" element={<ChatUser />} />
             <Route path="/chatSoporte" element={<ChatWindow />} />
-            <Route path="/documentacion" element={<Documentacion />} />
-            <Route path="/manualUsuario" element={<manualUsuario />} />
+            <Route path="/manuales" element={<ManualUsuario />} />
           </Routes>
         </div>
       </div>
