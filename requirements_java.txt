@@ -1,0 +1,2 @@
+folium
+axios socket.io-client react-icons react-router-dom bootstrap

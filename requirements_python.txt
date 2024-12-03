@@ -1,0 +1,14 @@
+django-extensions
+asgiref
+Django
+pillow
+psycopg2
+psycopg2-binary
+sqlparse
+tzdata
+djangorestframework
+django-cors-headers
+python-dotenv
+djangorestframework-simplejwt
+folium
+drf_spectacular
