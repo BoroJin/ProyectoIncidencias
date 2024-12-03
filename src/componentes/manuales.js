@@ -16,6 +16,14 @@ const ManualUsuario = () => {
     enlace.click();
   };
 
+  const descargarPDFgestor = () => {
+    const rutaPDF = "/manuales/manualgestor.pdf"; // Ruta desde public
+    const enlace = document.createElement("a");
+    enlace.href = rutaPDF;
+    enlace.download = "ManualGestor.pdf";
+    enlace.click();
+  };
+
   const descargarPDFdirector = () => {
     const rutaPDF = "/manuales/manualdirector.pdf"; // Ruta desde public
     const enlace = document.createElement("a");
@@ -86,7 +94,7 @@ const ManualUsuario = () => {
             <button className="btn" onClick={descargarPDFdepa}>
               Descargar Manual de Departamento de obras
             </button>
-            <button className="btn" onClick={descargarPDFadmin}>
+            <button className="btn" onClick={descargarPDFgestor}>
               Descargar Manual de Gestor Territorial
             </button>
             <button className="btn" onClick={descargarPDFresolutor}>
