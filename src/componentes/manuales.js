@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const ManualUsuario = () => {
   const descargarPDFadmin = () => {
@@ -9,11 +8,27 @@ const ManualUsuario = () => {
     enlace.download = "ManualAdministrador.pdf";
     enlace.click();
   };
+  const descargarPDFdepa = () => {
+    const rutaPDF = "/manuales/manualdepartamento.pdf"; // Ruta desde public
+    const enlace = document.createElement("a");
+    enlace.href = rutaPDF;
+    enlace.download = "ManualDepartamento.pdf";
+    enlace.click();
+  };
+
   const descargarPDFdirector = () => {
     const rutaPDF = "/manuales/manualdirector.pdf"; // Ruta desde public
     const enlace = document.createElement("a");
     enlace.href = rutaPDF;
     enlace.download = "ManualDirector.pdf";
+    enlace.click();
+  };
+
+  const descargarPDFresolutor = () => {
+    const rutaPDF = "/manuales/manualresolutor.pdf"; // Ruta desde public
+    const enlace = document.createElement("a");
+    enlace.href = rutaPDF;
+    enlace.download = "ManualResolutor.pdf";
     enlace.click();
   };
   return (
@@ -63,14 +78,17 @@ const ManualUsuario = () => {
             <button className="btn" onClick={descargarPDFadmin}>
               Descargar Manual de Administrador
             </button>
-            <button className="btn" onClick={descargarPDFdirector}>
-              Descargar Manual de Director de Obras
+            <button className="btn" onClick={descargarPDFdepa}>
+              Descargar Manual de Departamento de obras
             </button>
             <button className="btn" onClick={descargarPDFadmin}>
               Descargar Manual de Gestor Territorial
             </button>
-            <button className="btn" onClick={descargarPDFadmin}>
+            <button className="btn" onClick={descargarPDFresolutor}>
               Descargar Manual de Resolutor
+            </button>
+            <button className="btn" onClick={descargarPDFdirector}>
+              Descargar Manual de Director
             </button>
           </div>
         </div>
