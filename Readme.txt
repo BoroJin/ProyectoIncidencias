@@ -1,61 +1,60 @@
-Primero debe de crearse un entorno en anaconda con el siguiente comando:
 
-conda create --name proyecto python==3.11.8
+Creación del entorno:
 
-luego de crear el entorno y activarlo con:
+Tener instalado anaconda
+Abrir la ubicación de el archivo en Anaconda Prompt, crear un entorno y activarlo con los siguientes comandos:
+    conda create -n elizabeth python==3.7
+    conda activate elizabeth
 
-conda activare proyecto
+Instalar los requerimentos:
+    pip install -r requirements_python.
+    npm install axios socket.io-client react-icons react-router-dom bootstrap
 
-se debe instalar las dependencias necesarias donde en el archivo requirements_python estaran todas las
-dependencias de Python utilizadas y en consola se debe poner:
+Creación y configuración de la base de datos:
 
-pip install -r requirements_python.txt
+Tener instalado PgAdmin
+Crear una base de datos
+Tener instalado Visual Studio Code y abrir la carpeta del proyecto
+Configurar la base de datos en el archivo settings.py (dentro de la carpeta main-project)
+    con las configuraciones de la base creada, por ejemplo:
 
-y para instalar las de java se debe utilizar, se deben instalar manualmente las cuales son:
+    DATABASES = {
+        'default': {
+            'HOST':'localhost',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'equipo 1', # Nombre de la base de datos
+            'USER':'postgres', # Nombre del usuario de la bd
+            'PASSWORD':'password123', # Contraseña del usuario de la bd
+        }
+    }
+En el ejemplo se configuró una base de datos con nombre "equipo 1" y usuario "postgres" con su respectiva contraseña
 
-npm install axios socket.io-client react-icons react-router-dom bootstrap
-npm install folium
+Ejecución del proyecto:
 
-Una vez instaladas todas las dependencias necesarias, en la carpeta de proyecto, en la raiz donde se 
-encuentre el archivo manage.py, en settings se debe configurar la base de datos a utilizar, donde se 
-utilizara postgreSQL.
-Ya puesto esos datos debe correr los siguientes comandos:
+Primero se ejecutarán los componentes con React.
 
-py manage.py makemigrations
-py manage.py migrate
+Abrir una terminal en Visual Studio Code o en Anaconda Prompt, en ambos casos debe estar activado el entorno.
 
-Para poder migrar todas las tablas creadas en los models de cada una de las carpetas de Django.
-Luego para poder correr el programa en las carpetas de React en cada una se debe correr el siguiente codigo
+Dirigirse a la carpeta del proyecto en la terminal y escribir los siguientes comandos:
+    cd login
+    npm run build
 
-npm run build
+Abrir otra terminal y dirigirse a la carpeta del proyecto en esta, ejecutar los siguientes comandos:
+    cd departamentoObras
+    npm run build
 
-Donde primero se comienza con:
+Abrir otra terminal y dirigirse a la carpeta del proyecto en esta, ejecutar los siguientes comandos:
+    cd ticket
+    npm run build
 
-cd login
-npm run build
-
-En otra terminal:
-
-cd departamentoObras
-npm run build
-
-y en una ultima terminal:
-
-cd ticket
-npm run build
-
-una vez hecho esos comandos, volvemos a la raiz de la carpeta donde se encuentra el manage.py, y ejecutamos el 
-siguiente comando
-
-py manage.py collectstatic 
+Abrir una ultima terminal y dirigirse a la raiz del proyecto, donde se encuentra manage.py
+Ejecutar el siguiente comando:
+    python manage.py collectstatic
 
 Una vez realizado todos esos comandos, nos dirigimos a la aplicacion de pgadmin para poder ingresar usuarios bases al sistema, donde se ejecutara el archivo SQL "insertar_usuarios" para poder ingresar usuarios al sistema.
-Ya teniendo todo eso listo nos dirijimos a la raiz donde se encuentra el manage.py y ejecutamos la aplicacion con:
 
-py manage.py runserver
+Una vez que todo lo anterior está listo, en la ultima terminal que se abrió anteriormente (en la raiz del proyecto)
+Ejecutar el siguiente comando:
+    python manage.py runserver
 
-Y con eso el programa deberia funcionar correctamente.
-
-
-
-
+Siguiendo todos los pasos el programa deberia estar funcionando correctamente,por lo que debera abrir en un navegador el link que se muestra en la terminal de comandos
