@@ -1,12 +1,11 @@
 .soportebar {
-  background-color: #005073 !important;
+  background-color: #0d639c !important;
   padding: 20px;
   display: flex !important;
   flex-direction: column;
-  height: 100%; /* Ocupa toda la altura de la ventana */
+  height: 100%;
   width: 100%;
   overflow-y: auto;
-  box-sizing: border-box; /* Asegura que el padding no afecte la altura */
 }
 
 .logo {
@@ -26,13 +25,13 @@
 }
 
 .sidebar-menu {
-  margin-top: 20%;
   list-style: none;
   padding: 10px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: center;
 }
 
 .sidebar-item {
@@ -61,6 +60,7 @@
 
 .logo-text {
   display: flex;
+  height: 100%;
 }
 
 .textItem {

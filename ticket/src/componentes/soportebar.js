@@ -60,7 +60,7 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="sidebar-item">
-          <Link className="textItem" to="/manualUsuario">
+          <Link className="textItem" to="/manuales">
             <RiNewspaperFill /> <p className="textoS">Manual de usuario</p>
           </Link>
         </li>
